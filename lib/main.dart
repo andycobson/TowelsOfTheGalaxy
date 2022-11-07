@@ -1,4 +1,8 @@
-import 'package:baby_tracks/register_login_view.dart';
+import 'package:baby_tracks/view/app_home.dart';
+import 'package:baby_tracks/view/nav_views/list_view.dart';
+import 'package:baby_tracks/view/register_view.dart';
+import 'package:baby_tracks/view/login_view.dart';
+import 'package:baby_tracks/view/verify_view.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,6 +25,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
+      routes: {
+        '/login/': (context) => const LoginView(),
+        '/register/': (context) => const RegisterView(),
+      },
     );
   }
 }
@@ -30,28 +38,30 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Home Page')),
-        body: FutureBuilder(
-            future: Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform,
-            ),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  final FirebaseAuth auth = FirebaseAuth.instance;
-                  final user = auth.currentUser;
-
-                  if (user?.emailVerified ?? false) {
-                    print('You are a verified user.');
+    return Container(
+      //padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+      child: FutureBuilder(
+          future: Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          ),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  if (user.emailVerified) {
+                    print('Email is verified.');
                   } else {
-                    print('You need to verify your email first');
+                    return const VerifyEmailView();
                   }
-
-                  return const Text("Done");
-                default:
-                  return const Text("loading...");
-              }
-            }));
+                } else {
+                  return const LoginView();
+                }
+                return const AppHomePage();
+              default:
+                return const Text("loading...");
+            }
+          }),
+    );
   }
 }
