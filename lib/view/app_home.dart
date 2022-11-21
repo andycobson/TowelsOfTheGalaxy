@@ -1,3 +1,6 @@
+import 'package:baby_tracks/constants/routes.dart';
+import 'package:baby_tracks/view/login_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../component/navigation_handling.dart';
@@ -10,12 +13,12 @@ class AppHomePage extends StatefulWidget {
 }
 
 class _AppHomePageState extends State<AppHomePage> {
-  String _currentPage = "Home";
-  List<String> pageKeys = ["Home", "Metrics", "Settings"];
+  String _currentPage = appListViewRoute;
+  List<String> pageKeys = [appListViewRoute, metricsRoute, settingsRoute];
   final Map<String, GlobalKey<NavigatorState>> _navigationKeys = {
-    "Home": GlobalKey<NavigatorState>(),
-    "Metrics": GlobalKey<NavigatorState>(),
-    "Settings": GlobalKey<NavigatorState>(),
+    appListViewRoute: GlobalKey<NavigatorState>(),
+    metricsRoute: GlobalKey<NavigatorState>(),
+    settingsRoute: GlobalKey<NavigatorState>(),
   };
 
   int _selectedIndex = 0;
@@ -40,8 +43,8 @@ class _AppHomePageState extends State<AppHomePage> {
         final isFirstRouteInCurrentTab =
             !await _navigationKeys[_currentPage]!.currentState!.maybePop();
         if (isFirstRouteInCurrentTab) {
-          if (_currentPage != "Home") {
-            _selectTab("Home", 1);
+          if (_currentPage != appListViewRoute) {
+            _selectTab(appListViewRoute, 1);
 
             return false;
           }
@@ -50,16 +53,19 @@ class _AppHomePageState extends State<AppHomePage> {
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            _buildOffstageNavigator("Home"),
-            _buildOffstageNavigator("Metrics"),
-            _buildOffstageNavigator("Settings")
-          ],
+        body: Container(
+          color: Color.fromARGB(214, 3, 3, 26),
+          child: Stack(
+            children: <Widget>[
+              _buildOffstageNavigator(appListViewRoute),
+              _buildOffstageNavigator(metricsRoute),
+              _buildOffstageNavigator(settingsRoute)
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange,
-          selectedItemColor: Colors.blueAccent,
+          backgroundColor: Color.fromARGB(255, 124, 123, 223),
+          selectedItemColor: Color.fromARGB(255, 255, 255, 255),
           onTap: (int index) {
             _selectTab(pageKeys[index], index);
           },
@@ -81,9 +87,15 @@ class _AppHomePageState extends State<AppHomePage> {
     return Offstage(
       offstage: _currentPage != tabItem,
       child: TabNavigator(
-        navigatorKey: _navigationKeys[tabItem]!,
-        tabItem: tabItem,
-      ),
+          navigatorKey: _navigationKeys[tabItem]!,
+          tabItem: tabItem,
+          callB: () => _logout()),
     );
+  }
+
+  void _logout() {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginView()),
+        (Route<dynamic> route) => false);
   }
 }

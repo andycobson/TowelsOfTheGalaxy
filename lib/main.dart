@@ -1,9 +1,9 @@
 import 'package:baby_tracks/view/app_home.dart';
-import 'package:baby_tracks/view/nav_views/list_view.dart';
 import 'package:baby_tracks/view/register_view.dart';
 import 'package:baby_tracks/view/login_view.dart';
 import 'package:baby_tracks/view/verify_view.dart';
 import 'package:flutter/material.dart';
+import 'constants/routes.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,8 +26,10 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        apphomeRoute: (context) => const AppHomePage(),
+        verifyEmailRoute: (context) => const VerifyEmailView(),
       },
     );
   }

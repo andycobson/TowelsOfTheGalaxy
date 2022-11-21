@@ -10,6 +10,13 @@ class FoodView extends StatefulWidget {
 class _FoodViewState extends State<FoodView> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: const Text('Food'));
+    return Container(
+      child: const Center(
+        child: Text(
+          'Food',
+          style: TextStyle(color: Colors.white, fontSize: 20.0),
+        ),
+      ),
+    );
   }
 }

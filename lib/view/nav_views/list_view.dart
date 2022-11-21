@@ -20,11 +20,12 @@ class _AppListViewPageState extends State<AppListViewPage> {
       itemBuilder: (context, index) {
         final tile = tiles[index];
         String keyTitle = tiles[index].title;
+        String route = tiles[index].route;
 
         return Card(
           child: InkWell(
             splashColor: tile.color,
-            onTap: () => widget.onPush?.call(keyTitle),
+            onTap: () => widget.onPush?.call(route),
             child: Container(
               child: Padding(
                 padding: EdgeInsets.all(22.0),

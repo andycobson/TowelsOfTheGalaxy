@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DiaperView extends StatefulWidget {
-  const DiaperView({super.key});
+class GrowthView extends StatefulWidget {
+  const GrowthView({super.key});
 
   @override
-  State<DiaperView> createState() => _DiaperViewState();
+  State<GrowthView> createState() => _GrowthViewState();
 }
 
-class _DiaperViewState extends State<DiaperView> {
+class _GrowthViewState extends State<GrowthView> {
   TimeOfDay time = TimeOfDay.now();
 
   @override
