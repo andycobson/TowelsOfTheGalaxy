@@ -1,4 +1,5 @@
 import 'package:baby_tracks/view/app_home.dart';
+import 'package:baby_tracks/view/loading_view.dart';
 import 'package:baby_tracks/view/register_view.dart';
 import 'package:baby_tracks/view/login_view.dart';
 import 'package:baby_tracks/view/verify_view.dart';
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
                 }
                 return const AppHomePage();
               default:
-                return const Text("loading...");
+                return const LoadingPage();
             }
           }),
     );

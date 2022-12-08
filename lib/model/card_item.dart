@@ -16,9 +16,12 @@ class CardItem {
 
   static List<CardItem> builder() {
     return [
-      CardItem('FOOD', Colors.white, FoodView(), foodRoute),
-      CardItem('SLEEP', Colors.red, SleepView(), sleepRoute),
-      CardItem('DIAPER', Colors.blue, DiaperView(), diaperRoute),
+      CardItem('FOOD', const Color.fromARGB(255, 231, 255, 172), FoodView(),
+          foodRoute),
+      CardItem('SLEEP', const Color.fromARGB(255, 137, 207, 240), SleepView(),
+          sleepRoute),
+      CardItem('DIAPER', const Color.fromARGB(255, 182, 225, 80), DiaperView(),
+          diaperRoute),
       CardItem('GROWTH', Colors.orange, GrowthView(), growthRoute)
     ];
   }
