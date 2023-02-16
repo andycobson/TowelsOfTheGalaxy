@@ -4,6 +4,7 @@ import 'package:baby_tracks/view/metric_views/diaper_view.dart';
 import 'package:baby_tracks/view/metric_views/food_view.dart';
 import 'package:baby_tracks/view/metric_views/growth_view.dart';
 import 'package:baby_tracks/view/metric_views/sleep_view.dart';
+import 'package:baby_tracks/view/metric_views/temperature_view.dart';
 import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class TabNavigator extends StatelessWidget {
       sleepRoute: (context) => SleepView(),
       loginRoute: (context) => LoginView(),
       growthRoute: (context) => GrowthView(),
+      temperatureRoute: (context) => TemperatureView(),
     };
   }
 

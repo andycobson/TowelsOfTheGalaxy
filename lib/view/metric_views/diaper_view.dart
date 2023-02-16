@@ -18,6 +18,7 @@ class _DiaperViewState extends State<DiaperView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Diaper'),
         backgroundColor: ColorPalette.backgroundRGB,
         elevation: 0,
       ),
@@ -108,6 +109,35 @@ class _DiaperViewState extends State<DiaperView> {
                 ),
               ],
             ),
+            Container(
+              //This container's Send button only affects this container
+              height: 300,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  const Expanded(
+                    child: TextField(
+                      style: TextStyle(
+                        color: ColorPalette.lightAccent,
+                      ),
+                      decoration: InputDecoration(labelText: 'Enter Message'),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      expands: true, // <-- SEE HERE
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                ],
+              ),
+            ) //
           ],
         ),
       ),

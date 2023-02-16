@@ -9,3 +9,4 @@ const diaperRoute = '/diaper';
 const sleepRoute = '/sleep';
 const growthRoute = '/growth';
 const verifyEmailRoute = '/verify-email';
+const temperatureRoute = '/temperature';

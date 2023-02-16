@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:baby_tracks/constants/palette.dart';
 
 class GrowthView extends StatefulWidget {
   const GrowthView({super.key});
@@ -10,10 +11,20 @@ class GrowthView extends StatefulWidget {
 
 class _GrowthViewState extends State<GrowthView> {
   TimeOfDay time = TimeOfDay.now();
+  static const List<String> lengthList = <String>['cm', 'in'];
+  static const List<String> weightList = <String>['lb', 'kg'];
+  String lengthDropDown = lengthList.first;
+  String weightDropDown = weightList.first;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Growth'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: ColorPalette.backgroundRGB,
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 50.0),
         child: Column(
@@ -21,14 +32,26 @@ class _GrowthViewState extends State<GrowthView> {
             Row(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                const Text('Time'),
+                const Text(
+                  'Time',
+                  style: TextStyle(
+                    color: ColorPalette.lightAccent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
                 const Expanded(
                   child: Divider(
+                    color: ColorPalette.lightAccent,
                     thickness: 2.0,
                   ),
                 ),
               ],
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -48,6 +71,192 @@ class _GrowthViewState extends State<GrowthView> {
                 ),
               ],
             ),
+            Row(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                const Text(
+                  'Weight',
+                  style: TextStyle(
+                    color: ColorPalette.lightAccent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                const Expanded(
+                  child: Divider(
+                    color: ColorPalette.lightAccent,
+                    thickness: 2.0,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                DropdownButton<String>(
+                  value: weightDropDown,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: ColorPalette.background),
+                  onChanged: (String? value) {
+                    setState(() {
+                      weightDropDown = value!;
+                    });
+                  },
+                  items:
+                      weightList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )
+              ],
+            ),
+            Row(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                const Text(
+                  'Length',
+                  style: TextStyle(
+                    color: ColorPalette.lightAccent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                const Expanded(
+                  child: Divider(
+                    color: ColorPalette.lightAccent,
+                    thickness: 2.0,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                DropdownButton<String>(
+                  value: lengthDropDown,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: ColorPalette.background),
+                  onChanged: (String? value) {
+                    setState(() {
+                      lengthDropDown = value!;
+                    });
+                  },
+                  items:
+                      lengthList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )
+              ],
+            ),
+            Row(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                const Text(
+                  'Head Circumference',
+                  style: TextStyle(
+                    color: ColorPalette.lightAccent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                const Expanded(
+                  child: Divider(
+                    color: ColorPalette.lightAccent,
+                    thickness: 2.0,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                DropdownButton<String>(
+                  value: lengthDropDown,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: ColorPalette.background),
+                  onChanged: (String? value) {
+                    setState(() {
+                      lengthDropDown = value!;
+                    });
+                  },
+                  items:
+                      lengthList.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                )
+              ],
+            ),
+            Row(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                const Text(
+                  'Notes',
+                  style: TextStyle(
+                    color: ColorPalette.lightAccent,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                const Expanded(
+                  child: Divider(
+                    color: ColorPalette.lightAccent,
+                    thickness: 2.0,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              //This container's Send button only affects this container
+              height: 300,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  const Expanded(
+                    child: TextField(
+                      style: TextStyle(
+                        color: ColorPalette.lightAccent,
+                      ),
+                      decoration: InputDecoration(labelText: 'Enter Message'),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      expands: true, // <-- SEE HERE
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                ],
+              ),
+            ) //
           ],
         ),
       ),
