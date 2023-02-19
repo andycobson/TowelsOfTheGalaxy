@@ -1,5 +1,5 @@
-import 'package:baby_tracks/constants/routes.dart';
-import 'package:baby_tracks/view/login_view.dart';
+import 'package:babytracks/constants/routes.dart';
+import 'package:babytracks/view/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

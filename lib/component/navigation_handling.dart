@@ -1,11 +1,11 @@
-import 'package:baby_tracks/constants/routes.dart';
-import 'package:baby_tracks/view/login_view.dart';
-import 'package:baby_tracks/view/metric_views/diaper_view.dart';
-import 'package:baby_tracks/view/metric_views/food_view.dart';
-import 'package:baby_tracks/view/metric_views/growth_view.dart';
-import 'package:baby_tracks/view/metric_views/sleep_view.dart';
-import 'package:baby_tracks/view/nav_views/metrics_view.dart';
-import 'package:baby_tracks/view/nav_views/settings_view.dart';
+import 'package:babytracks/constants/routes.dart';
+import 'package:babytracks/view/login_view.dart';
+import 'package:babytracks/view/metric_views/diaper_view.dart';
+import 'package:babytracks/view/metric_views/food_view.dart';
+import 'package:babytracks/view/metric_views/growth_view.dart';
+import 'package:babytracks/view/metric_views/sleep_view.dart';
+import 'package:babytracks/view/nav_views/metrics_view.dart';
+import 'package:babytracks/view/nav_views/settings_view.dart';
 import 'package:flutter/material.dart';
 import '../view/nav_views/list_view.dart';
 

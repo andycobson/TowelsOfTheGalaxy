@@ -9,8 +9,6 @@
 .history
 .svn/
 migrate_working_dir/
-.vscode
-*.env
 
 # IntelliJ related
 *.iml
@@ -44,11 +42,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-#keys exposed
-/android/app/google-services.json
-/ios/Runner/GoogleService-info.plist
-.metadata
-ios/firebase_app_id_file.json
-lib/firebase_options.dart
-pubspec.lock

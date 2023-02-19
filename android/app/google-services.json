@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "20234382448",
+    "firebase_url": "https://baby-tracks-totg-default-rtdb.firebaseio.com",
+    "project_id": "baby-tracks-totg",
+    "storage_bucket": "baby-tracks-totg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20234382448:android:91691e2eeb02f4d49518b5",
+        "android_client_info": {
+          "package_name": "com.example.babytracks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20234382448-d5hmqr3p9p8r4juosi4521gipp79ra9p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9ysCc_xf3aL8Rfey5Ycbz3uZO1p4O8S4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20234382448-d5hmqr3p9p8r4juosi4521gipp79ra9p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "20234382448-5bcqklrois7fp2q3odajms646mrg6ajs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.babytracks"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20234382448:android:0a281673b07475a69518b5",
+        "android_client_info": {
+          "package_name": "com.towelsofthegalaxy.baby_tracks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20234382448-d5hmqr3p9p8r4juosi4521gipp79ra9p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9ysCc_xf3aL8Rfey5Ycbz3uZO1p4O8S4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20234382448-d5hmqr3p9p8r4juosi4521gipp79ra9p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "20234382448-5bcqklrois7fp2q3odajms646mrg6ajs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.babytracks"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

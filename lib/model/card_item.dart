@@ -1,7 +1,7 @@
-import 'package:baby_tracks/view/metric_views/diaper_view.dart';
-import 'package:baby_tracks/view/metric_views/food_view.dart';
-import 'package:baby_tracks/view/metric_views/growth_view.dart';
-import 'package:baby_tracks/view/metric_views/sleep_view.dart';
+import 'package:babytracks/view/metric_views/diaper_view.dart';
+import 'package:babytracks/view/metric_views/food_view.dart';
+import 'package:babytracks/view/metric_views/growth_view.dart';
+import 'package:babytracks/view/metric_views/sleep_view.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/routes.dart';
@@ -16,12 +16,9 @@ class CardItem {
 
   static List<CardItem> builder() {
     return [
-      CardItem('FOOD', const Color.fromARGB(255, 231, 255, 172), FoodView(),
-          foodRoute),
-      CardItem('SLEEP', const Color.fromARGB(255, 137, 207, 240), SleepView(),
-          sleepRoute),
-      CardItem('DIAPER', const Color.fromARGB(255, 182, 225, 80), DiaperView(),
-          diaperRoute),
+      CardItem('FOOD', Colors.white, FoodView(), foodRoute),
+      CardItem('SLEEP', Colors.red, SleepView(), sleepRoute),
+      CardItem('DIAPER', Colors.blue, DiaperView(), diaperRoute),
       CardItem('GROWTH', Colors.orange, GrowthView(), growthRoute)
     ];
   }

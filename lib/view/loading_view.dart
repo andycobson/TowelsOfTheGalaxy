@@ -1,5 +1,7 @@
-import 'package:baby_tracks/constants/palette.dart';
+
 import 'package:flutter/material.dart';
+
+import '../constants/palette.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({super.key});

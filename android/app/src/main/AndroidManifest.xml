@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.towelsofthegalaxy.baby_tracks">
+    package="com.example.babytracks">
    <application
-        android:label="baby_tracks"
+        android:label="babytracks"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

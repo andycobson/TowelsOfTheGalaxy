@@ -1,5 +1,4 @@
-import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/constants/routes.dart';
+import 'package:babytracks/constants/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,27 +15,19 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorPalette.backgroundRGB,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-      ),
-      backgroundColor: ColorPalette.backgroundRGB,
       body: Column(
         children: [
-          Center(
-            child: ElevatedButton(
-              child: const Text('Log Out'),
-              onPressed: () async {
-                final shouldLogout = await showLogOutDialog(context);
-                print(FirebaseAuth.instance.currentUser.toString());
-                print(shouldLogout);
-                if (shouldLogout) {
-                  await FirebaseAuth.instance.signOut();
-                  widget.onPush();
-                }
-              },
-            ),
+          ElevatedButton(
+            child: const Text('Log Out'),
+            onPressed: () async {
+              final shouldLogout = await showLogOutDialog(context);
+              print(FirebaseAuth.instance.currentUser.toString());
+              print(shouldLogout);
+              if (shouldLogout) {
+                await FirebaseAuth.instance.signOut();
+                widget.onPush();
+              }
+            },
           ),
         ],
       ),
