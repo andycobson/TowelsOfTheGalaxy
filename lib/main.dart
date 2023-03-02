@@ -1,19 +1,16 @@
-import 'package:babytracks/view/app_home.dart';
-import 'package:babytracks/view/register_view.dart';
-import 'package:babytracks/view/login_view.dart';
-import 'package:babytracks/view/verify_view.dart';
+import 'package:baby_tracks/view/app_home.dart';
+import 'package:baby_tracks/view/loading_view.dart';
+import 'package:baby_tracks/view/register_view.dart';
+import 'package:baby_tracks/view/login_view.dart';
+import 'package:baby_tracks/view/verify_view.dart';
 import 'package:flutter/material.dart';
 import 'constants/routes.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-Future main() async {
-
- WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
+void main() {
+  WidgetsFlutterBinding.ensureInitialized;
   runApp(const MyApp());
 }
 
@@ -42,7 +39,7 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  @override  
+  @override
   Widget build(BuildContext context) {
     return Container(
       //padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
@@ -54,20 +51,26 @@ class HomePage extends StatelessWidget {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 final user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
-                  if (user.emailVerified) {
-                    print('Email is verified.');
-                  } else {
-                    return const VerifyEmailView();
-                  }
-                } else {
+                if (user == null) {
                   return const LoginView();
                 }
                 return const AppHomePage();
               default:
-                return const Text("loading...");
+                return const LoadingPage();
+              //   if (user != null) {
+              //     if (user.emailVerified) {
+              //       print('Email is verified.');
+              //     } else {
+              //       return const VerifyEmailView();
+              //     }
+              //   } else {
+              //     return const LoginView();
+              //   }
+              //   return const AppHomePage();
+              // default:
+              //   return const LoadingPage();
             }
           }),
-    ); 
+    );
   }
 }
