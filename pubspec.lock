@@ -5,7 +5,11 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
+<<<<<<< HEAD
       sha256: f175bc1414e4edf8c5b83372c98eeabecf8353f39c9da423c2cfdf1f1f508788
+=======
+      sha256: "6607e2a4774a97751a5739ce6e63f948c6654d059eeed918dcf10eb58554db7f"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
@@ -45,7 +49,11 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_firestore
+<<<<<<< HEAD
       sha256: "3a2dba23d7d084a2d3c2dfd240d2122908cca40bab2d142f7e107f40df174ab5"
+=======
+      sha256: "4b506eb4eaa60e4447c64e13c1656349401eae56a446dd2bc3730045d71f870a"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "4.5.0"
@@ -53,7 +61,11 @@ packages:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
+<<<<<<< HEAD
       sha256: "29349a0687bc31290ab81d1de2b1cdadb40d0ea3ab30d247323c6c5be0d4c6fc"
+=======
+      sha256: f80783c1533075d048376bf4e0cfb3e3b338babfa4f6bb8c1630ad615d9a2a96
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "5.12.0"
@@ -61,7 +73,11 @@ packages:
     dependency: transitive
     description:
       name: cloud_firestore_web
+<<<<<<< HEAD
       sha256: bc1fbcd6287acedded1139c9b13cfd47e792d5198f130f98759464839ea510a7
+=======
+      sha256: c099c1afc29e5bb154da17ddf9f8146db22a6c39bd1c41c748d167c278a66eee
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "3.4.0"
@@ -117,7 +133,11 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_auth
+<<<<<<< HEAD
       sha256: "3d33d6646f08407122cd2cbd292d274b98035d93f59c9e341ba992ebefd59ffa"
+=======
+      sha256: "7904bae489281e9d81be3882d942dd9586ccc974105a6ead6fe7c9031e624c18"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "4.4.0"
@@ -125,7 +145,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
+<<<<<<< HEAD
       sha256: "5d5f283517ba34afd69ef448cc81ea23bcf8887393bedae4f70f45060b045fb9"
+=======
+      sha256: a3882743513d91f0ec17afaf93623f34222eb430f5730c87821628d965dc3025
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "6.13.0"
@@ -133,7 +157,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_auth_web
+<<<<<<< HEAD
       sha256: f50f7026b95c62dba3f0b28bdb3ab3601ea402b4908c1469103f16ae2b0f5281
+=======
+      sha256: "7577f82f5cd9573a78a5cb46cfa0d3b32180810de8422c8113a3625ab31c07d7"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "5.3.0"
@@ -141,7 +169,11 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
+<<<<<<< HEAD
       sha256: ed611fb8e67e43ecc7956f242cecca383d87cf71aace27287aa5dd4bdba4ac07
+=======
+      sha256: "8421b0d06b6a39fabd5937857250ab97b3de1e9b28aeb91fc5fc6ac6dce8b92f"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "2.9.0"
@@ -149,7 +181,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
+<<<<<<< HEAD
       sha256: "0df0a064ab0cad7f8836291ca6f3272edd7b83ad5b3540478ee46a0849d8022b"
+=======
+      sha256: "5615b30c36f55b2777d0533771deda7e5730e769e5d3cb7fda79e9bed86cfa55"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "4.6.0"
@@ -157,7 +193,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_core_web
+<<<<<<< HEAD
       sha256: "347351a8f0518f3343d79a9a0690fa67ad232fc32e2ea270677791949eac792b"
+=======
+      sha256: "0684787baee0a65848fa3a3831f525b42832ab3850257bae7245be1ad4af8ca3"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
@@ -165,7 +205,11 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_database
+<<<<<<< HEAD
       sha256: d437ccb3537485cbcf92df60c493b1601e93bce579518a9874c8d7be5408231e
+=======
+      sha256: d0f2120159f3e9c31f69daf24c23ef10c4e68c39d1f054211c0775d4231ba29a
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "10.1.0"
@@ -173,7 +217,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_database_platform_interface
+<<<<<<< HEAD
       sha256: "509351811777e8bcd643f295ae096d8e7741d9bf845467d3626e086d1ac89848"
+=======
+      sha256: "65c91253891d37d08c6c9f0bdfeecff117afc402e18fb4d3b462e68141b49189"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "0.2.3"
@@ -181,7 +229,11 @@ packages:
     dependency: transitive
     description:
       name: firebase_database_web
+<<<<<<< HEAD
       sha256: d4a319e7923380f6adc7a46de331ce372aeafe101ae0ec684fef0540d41821bb
+=======
+      sha256: fb577e723b69d638074ae2a8a8817ef4398900459206cadd90339f52517a0aba
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
@@ -276,10 +328,17 @@ packages:
     dependency: transitive
     description:
       name: path_provider_linux
+<<<<<<< HEAD
       sha256: "2ae08f2216225427e64ad224a24354221c2c7907e448e6e0e8b57b1eb9f10ad1"
       url: "https://pub.dev"
     source: hosted
     version: "2.1.10"
+=======
+      sha256: "525ad5e07622d19447ad740b1ed5070031f7a5437f44355ae915ff56e986429a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.9"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   path_provider_platform_interface:
     dependency: transitive
     description:
@@ -292,10 +351,17 @@ packages:
     dependency: transitive
     description:
       name: path_provider_windows
+<<<<<<< HEAD
       sha256: f53720498d5a543f9607db4b0e997c4b5438884de25b0f73098cc2671a51b130
       url: "https://pub.dev"
     source: hosted
     version: "2.1.5"
+=======
+      sha256: "642ddf65fde5404f83267e8459ddb4556316d3ee6d511ed193357e25caa3632d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   platform:
     dependency: transitive
     description:
@@ -308,10 +374,17 @@ packages:
     dependency: transitive
     description:
       name: plugin_platform_interface
+<<<<<<< HEAD
       sha256: "6a2128648c854906c53fa8e33986fc0247a1116122f9534dd20e3ab9e16a32bc"
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+=======
+      sha256: dbf0f707c78beedc9200146ad3cb0ab4d5da13c246336987be6940f026500d3a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.3"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   process:
     dependency: transitive
     description:
@@ -324,58 +397,107 @@ packages:
     dependency: "direct main"
     description:
       name: shared_preferences
+<<<<<<< HEAD
       sha256: "858aaa72d8f61637d64e776aca82e1c67e6d9ee07979123c5d17115031c1b13b"
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+=======
+      sha256: ee6257848f822b8481691f20c3e6d2bfee2e9eccb2a3d249907fcfb198c55b41
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.18"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   shared_preferences_android:
     dependency: transitive
     description:
       name: shared_preferences_android
+<<<<<<< HEAD
       sha256: "8304d8a1f7d21a429f91dee552792249362b68a331ac5c3c1caf370f658873f6"
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+=======
+      sha256: a51a4f9375097f94df1c6e0a49c0374440d31ab026b59d58a7e7660675879db4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.16"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   shared_preferences_foundation:
     dependency: transitive
     description:
       name: shared_preferences_foundation
+<<<<<<< HEAD
       sha256: cf2a42fb20148502022861f71698db12d937c7459345a1bdaa88fc91a91b3603
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+=======
+      sha256: "6b84fdf06b32bb336f972d373cd38b63734f3461ba56ac2ba01b56d052796259"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   shared_preferences_linux:
     dependency: transitive
     description:
       name: shared_preferences_linux
+<<<<<<< HEAD
       sha256: "9d387433ca65717bbf1be88f4d5bb18f10508917a8fa2fb02e0fd0d7479a9afa"
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+=======
+      sha256: d7fb71e6e20cd3dfffcc823a28da3539b392e53ed5fc5c2b90b55fdaa8a7e8fa
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   shared_preferences_platform_interface:
     dependency: transitive
     description:
       name: shared_preferences_platform_interface
+<<<<<<< HEAD
       sha256: fb5cf25c0235df2d0640ac1b1174f6466bd311f621574997ac59018a6664548d
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+=======
+      sha256: "824bfd02713e37603b2bdade0842e47d56e7db32b1dcdd1cae533fb88e2913fc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   shared_preferences_web:
     dependency: transitive
     description:
       name: shared_preferences_web
+<<<<<<< HEAD
       sha256: "74083203a8eae241e0de4a0d597dbedab3b8fef5563f33cf3c12d7e93c655ca5"
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+=======
+      sha256: "6737b757e49ba93de2a233df229d0b6a87728cea1684da828cbc718b65dcf9d7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   shared_preferences_windows:
     dependency: transitive
     description:
       name: shared_preferences_windows
+<<<<<<< HEAD
       sha256: "5e588e2efef56916a3b229c3bfe81e6a525665a454519ca51dbcc4236a274173"
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+=======
+      sha256: bd014168e8484837c39ef21065b78f305810ceabc1d4f90be6e3b392ce81b46d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
+>>>>>>> 6098eb8 (Andrews additions of persistence data and toggle bar.)
   sky_engine:
     dependency: transitive
     description: flutter
