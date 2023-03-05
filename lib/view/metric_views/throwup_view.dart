@@ -1,58 +1,55 @@
-import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
+import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/model/AppUser.dart';
-import 'package:baby_tracks/model/FoodMetricModel.dart';
+import 'package:baby_tracks/model/ThrowUpMetricModel.dart';
 import 'package:baby_tracks/service/auth.dart';
 import 'package:baby_tracks/service/database.dart';
-import 'package:baby_tracks/view/nav_views/list_view.dart';
 import 'package:flutter/material.dart';
-import '../../constants/palette.dart';
 
-class FoodView extends StatefulWidget {
-  const FoodView({super.key});
+class ThrowUpView extends StatefulWidget {
+  const ThrowUpView({super.key});
 
   @override
-  State<FoodView> createState() => _FoodViewState();
+  State<ThrowUpView> createState() => _ThrowUpViewState();
 }
 
-class _FoodViewState extends State<FoodView> {
+class _ThrowUpViewState extends State<ThrowUpView> {
   TimeOfDay time = TimeOfDay.now();
-  TimeOfDay startTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now();
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  static const List<String> metricTypeList = <String>['oz', 'ml'];
-  static const List<String> feedingTypeList = <String>[
-    'Nursing',
-    'Feeding',
-    'Both'
-  ];
-  String dropdownMetricValue = metricTypeList.first;
-  String dropdownFoodValue = feedingTypeList.first;
-  String note = "";
-  String duration = "";
-  String amount = "";
-  String feedingType = "";
-  String babyId = "";
 
-  late final TextEditingController _amount;
-  late final TextEditingController _feedingType;
-  late final TextEditingController _duration;
+  String notes = "";
+  String amount = "";
+  String throwUpColor = "";
+  String babyId = "";
+  static const List<String> amountList = <String>[
+    'A lot',
+    'Slightly above normal',
+    'Normal amount',
+    'Slightly below normal',
+    'A little'
+  ];
+
+  String dropdownAmountValue = amountList.first;
+
   late final TextEditingController _note;
+  late final TextEditingController _color;
+  late final TextEditingController _amount;
   late final ScrollController _noteScroller;
+  late final ScrollController _colorScroller;
 
   late final AuthService _auth;
   late final DatabaseService _service;
 
   @override
   void initState() {
-    _amount = TextEditingController();
-    _feedingType = TextEditingController();
-    _duration = TextEditingController();
     _note = TextEditingController();
+    _color = TextEditingController();
     _noteScroller = ScrollController();
+    _amount = TextEditingController();
     _auth = AuthService();
     _service = DatabaseService();
+    _colorScroller = ScrollController();
 
     AppUser? user = _auth.currentUser;
     if (user != null) {
@@ -64,34 +61,27 @@ class _FoodViewState extends State<FoodView> {
 
   @override
   void dispose() {
-    _amount.dispose();
-    _feedingType.dispose();
-    _duration.dispose();
     _note.dispose();
     _noteScroller.dispose();
+    _amount.dispose();
+    _colorScroller.dispose();
+    _color.dispose();
     super.dispose();
   }
 
   Future createInstance() async {
-    note = _note.text;
-    feedingType = dropdownFoodValue;
-    amount = _amount.text;
-    duration = _duration.text;
+    notes = _note.text;
+    amount = dropdownAmountValue;
+
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    DateTime startDateTime = DateTime(
-        date.year, date.month, date.day, startTime.hour, startTime.minute);
-    DateTime endDateTime =
-        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
-    FoodMetricModel model = FoodMetricModel(
+    ThrowUpMetricModel model = ThrowUpMetricModel(
         babyId: babyId,
         timeCreated: when,
-        startTime: startDateTime,
-        endTime: endDateTime,
-        feedingType: feedingType,
+        startTime: when,
+        throwUpColor: throwUpColor,
         amount: amount,
-        duration: duration,
-        notes: note);
+        notes: notes);
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -112,14 +102,14 @@ class _FoodViewState extends State<FoodView> {
       ),
     );
 
-    await _service.updateFooodMetric(model);
+    await _service.updateThrowUpMetric(model);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Food'),
+        title: const Text('ThrowUp'),
         backgroundColor: ColorPalette.backgroundRGB,
         elevation: 0,
       ),
@@ -130,44 +120,6 @@ class _FoodViewState extends State<FoodView> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const TextDivider(text: 'Amount'),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                DecimalInput(controller: _amount),
-                Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                        color: Colors.black,
-                        style: BorderStyle.solid,
-                        width: 0.80),
-                  ),
-                  child: DropdownButton<String>(
-                    value: dropdownMetricValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: ColorPalette.background),
-                    onChanged: (String? value) {
-                      setState(() {
-                        dropdownMetricValue = value!;
-                      });
-                    },
-                    items: metricTypeList
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ]),
-              const SizedBox(
-                height: 20,
-              ),
               const TextDivider(text: 'Time'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -175,64 +127,62 @@ class _FoodViewState extends State<FoodView> {
                   const Text('Start Time'),
                   TextButton(
                     child: Text(
-                      startTime.format(context),
+                      time.format(context),
                     ),
                     onPressed: () async {
                       TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: startTime);
+                          context: context, initialTime: time);
 
                       if (newTime == null) return;
 
                       setState(() {
-                        startTime = newTime;
+                        time = newTime;
                       });
                     },
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text('End Time'),
-                  TextButton(
-                    child: Text(
-                      endTime.format(context),
-                    ),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: endTime);
 
-                      if (newTime == null) return;
-
+              const TextDivider(text: 'Color'),
+              SizedBox(
+                height: 100,
+                child: Scrollbar(
+                  controller: _colorScroller,
+                  child: TextField(
+                    style: const TextStyle(color: Colors.white),
+                    scrollController: _colorScroller,
+                    autofocus: false,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    controller: _color,
+                    onChanged: (String value) {
                       setState(() {
-                        endTime = newTime;
+                        throwUpColor = value;
                       });
                     },
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter Color',
+                      contentPadding: EdgeInsets.all(8),
+                    ),
                   ),
-                ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text('Duration'),
-                  DecimalInput(controller: _duration),
-                ],
-              ),
-              const TextDivider(text: 'Feeding Type'),
+              const TextDivider(text: 'Amount'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   DropdownButton<String>(
-                    value: dropdownFoodValue,
+                    value: dropdownAmountValue,
                     icon: const Icon(Icons.arrow_downward),
                     elevation: 16,
                     style: const TextStyle(color: ColorPalette.background),
                     onChanged: (String? value) {
                       setState(() {
-                        dropdownFoodValue = value!;
+                        dropdownAmountValue = value!;
                       });
                     },
-                    items: feedingTypeList
+                    items: amountList
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -242,6 +192,7 @@ class _FoodViewState extends State<FoodView> {
                   ),
                 ],
               ),
+
               const TextDivider(text: 'Notes'),
               SizedBox(
                 height: 100,
@@ -254,6 +205,11 @@ class _FoodViewState extends State<FoodView> {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _note,
+                    onChanged: (String value) {
+                      setState(() {
+                        notes = value;
+                      });
+                    },
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Add notes',
@@ -276,7 +232,7 @@ class _FoodViewState extends State<FoodView> {
                   },
                   child: const Text('Submit'),
                 ),
-              ),
+              ), //
             ],
           ),
         ),

@@ -11,8 +11,8 @@ class _AppMetricPageState extends State<AppMetricPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Center(
-        child: const Text(
+      child: const Center(
+        child: Text(
           'Metrics - Coming Soon',
           style: TextStyle(
             fontSize: 28,
