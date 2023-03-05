@@ -102,6 +102,7 @@ class _GrowthViewState extends State<GrowthView> {
     );
 
     await _service.updateGrowthMetric(model);
+    // MaterialRoutePage
   }
 
   @override
