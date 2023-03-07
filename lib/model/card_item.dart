@@ -6,6 +6,9 @@ import 'package:baby_tracks/view/metric_views/temperature_view.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/routes.dart';
+import '../view/entries_views/CustomFilter.dart';
+import '../view/entries_views/PastSvnDays.dart';
+import '../view/entries_views/TodaysEntrys.dart';
 import '../view/metric_views/throwup_view.dart';
 import '../view/metric_views/Vaccine_view.dart';
 
@@ -37,3 +40,30 @@ class CardItem {
     
   }
 }
+
+class CardItemB {
+  String title = "";
+  Color color = Colors.black;
+  StatefulWidget pageview = DaysView();
+  String route = "";
+
+  CardItemB(this.title, this.color, this.pageview, this.route);
+
+  static List<CardItemB> builder() {
+    return [
+      CardItemB('TODAYS ENTRIES', const Color.fromARGB(255, 231, 255, 172), DaysView(),
+          dayRoute),
+      CardItemB('THIS WEEKS ENTRIES', const Color.fromARGB(255, 137, 207, 240), WeeksView(),
+          weekRoute),
+      CardItemB('CUSTOM FILTER ENTRIES', const Color.fromARGB(255, 182, 225, 80), CustomView(),
+          customRoute),
+
+    ];
+    
+    
+  }
+}
+
+
+
+
