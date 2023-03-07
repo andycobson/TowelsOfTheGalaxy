@@ -10,6 +10,9 @@ import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:baby_tracks/view/metric_views/Vaccine_view.dart';
 import 'package:flutter/material.dart';
+import '../view/entries_views/CustomFilter.dart';
+import '../view/entries_views/PastSvnDays.dart';
+import '../view/entries_views/TodaysEntrys.dart';
 import '../view/nav_views/list_view.dart';
 
 class TabNavigator extends StatelessWidget {
@@ -39,7 +42,9 @@ class TabNavigator extends StatelessWidget {
       appListViewRoute: (context) => AppListViewPage(
             onPush: (defaultRoot) => _push(context, defaultRoot: defaultRoot),
           ),
-      metricsRoute: (context) => AppMetricPage(),
+      metricsRoute: (context) => AppMetricPage(
+        onPush: (defaultRoot) => _push(context, defaultRoot: defaultRoot),
+      ),
       settingsRoute: (context) => AppSettingsPage(
             onPush: callB,
           ),
@@ -50,7 +55,12 @@ class TabNavigator extends StatelessWidget {
       growthRoute: (context) => GrowthView(),
       temperatureRoute: (context) => TemperatureView(),
       throwupRoute: (context) => ThrowUpView(),
-      vaccineRoute:(context) => VaccineView()
+      vaccineRoute:(context) => VaccineView(),
+      dayRoute:(context) => DaysView(),
+      weekRoute:(context) => WeeksView(),
+      customRoute:(context) => CustomView(),
+      
+ 
     };
   }
 
