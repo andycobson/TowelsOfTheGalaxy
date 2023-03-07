@@ -60,3 +60,4 @@ class GrowthMetric extends Equatable {
   List<Object?> get props =>
       [babyId, timeCreated, height, weight, headCircumference, notes];
 }
+ 
