@@ -33,6 +33,7 @@ class _FoodViewState extends State<FoodView> {
   String amount = "";
   String feedingType = "";
   String babyId = "";
+  String metricType = "";
 
   late final TextEditingController _amount;
   late final TextEditingController _feedingType;
@@ -74,6 +75,7 @@ class _FoodViewState extends State<FoodView> {
   Future createInstance() async {
     note = _note.text;
     feedingType = dropdownFoodValue;
+    metricType = dropdownMetricValue;
     amount = _amount.text;
     duration = _duration.text;
     DateTime when =
@@ -88,6 +90,7 @@ class _FoodViewState extends State<FoodView> {
         startTime: startDateTime,
         endTime: endDateTime,
         feedingType: feedingType,
+        metricType: metricType,
         amount: amount,
         duration: duration,
         notes: note);
@@ -171,7 +174,7 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Start Time'),
+                  const Text('Nursing Start Time'),
                   TextButton(
                     child: Text(
                       startTime.format(context),
@@ -192,7 +195,7 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('End Time'),
+                  const Text('Nursing End Timet'),
                   TextButton(
                     child: Text(
                       endTime.format(context),
@@ -213,7 +216,7 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Duration'),
+                  const Text('Nursing Duration in Minutes'),
                   DecimalInput(controller: _duration),
                 ],
               ),
