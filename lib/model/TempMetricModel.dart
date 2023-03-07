@@ -64,3 +64,4 @@ class TempMetric extends Equatable {
   List<Object?> get props =>
       [babyId, timeCreated,  TempTime,/**, endTime,*/ temperature, tempType, notes];
 }
+ 
