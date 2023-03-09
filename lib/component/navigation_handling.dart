@@ -10,11 +10,12 @@ import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:baby_tracks/view/metric_views/Vaccine_view.dart';
 import 'package:baby_tracks/view/metric_views/test_view.dart';
-import 'package:baby_tracks/view/metric_views/Vaccine_view.dart';
+
 import 'package:flutter/material.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
 import '../view/entries_views/TodaysEntrys.dart';
+import '../view/metric_views/vaccine_view.dart';
 import '../view/nav_views/list_view.dart';
 
 class TabNavigator extends StatelessWidget {

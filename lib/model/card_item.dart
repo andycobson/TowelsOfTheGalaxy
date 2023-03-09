@@ -7,7 +7,6 @@ import 'package:baby_tracks/view/metric_views/throwup_view.dart';
 import 'package:baby_tracks/view/metric_views/vaccine_view.dart';
 import 'package:baby_tracks/view/metric_views/test_view.dart';
 import 'package:flutter/material.dart';
-
 import '../constants/routes.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
