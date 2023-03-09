@@ -101,6 +101,7 @@ class _TestViewState extends State<TestView> {
         startTime: startDateTime,
         endTime: endDateTime,
         feedingType: feedingType,
+        metricType: dropdownMetricValue.value,
         amount: amount,
         duration: duration,
         notes: note);
