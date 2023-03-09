@@ -4,7 +4,6 @@ import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/FoodMetricModel.dart';
 import 'package:baby_tracks/service/auth.dart';
 import 'package:baby_tracks/service/database.dart';
-import 'package:baby_tracks/view/nav_views/list_view.dart';
 import 'package:flutter/material.dart';
 import '../../constants/palette.dart';
 
@@ -89,6 +88,7 @@ class _FoodViewState extends State<FoodView> {
         startTime: startDateTime,
         endTime: endDateTime,
         feedingType: feedingType,
+        metricType: dropdownMetricValue,
         amount: amount,
         duration: duration,
         notes: note);

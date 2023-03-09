@@ -4,16 +4,14 @@ class TempMetricModel extends TempMetric {
   const TempMetricModel({
     required String babyId,
     required DateTime timeCreated,
-    required DateTime startTime,
-    required DateTime endTime,
+    required DateTime tempTime,
     required String temperature,
     required String tempType,
     required String notes,
   }) : super(
           babyId: babyId,
           timeCreated: timeCreated,
-          startTime: startTime,
-          endTime: endTime,
+          tempTime: tempTime,
           temperature: temperature,
           tempType: tempType,
           notes: notes,
@@ -23,8 +21,7 @@ class TempMetricModel extends TempMetric {
     return TempMetricModel(
       babyId: json['babyId'],
       timeCreated: json['timeCreated'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
+      tempTime: json['tempTime'],
       temperature: json['temperature'],
       tempType: json['tempType'],
       notes: json['notes'],
@@ -34,8 +31,7 @@ class TempMetricModel extends TempMetric {
   Map<String, dynamic> toJson() => {
         'babyId': babyId,
         'timeCreated': timeCreated,
-        'startTime': startTime,
-        'endTime': endTime,
+        'tempTime': tempTime,
         'temperature': double.parse('0' + temperature),
         'tempType': tempType,
         'notes': notes,
@@ -45,8 +41,7 @@ class TempMetricModel extends TempMetric {
 class TempMetric extends Equatable {
   final String babyId;
   final DateTime timeCreated;
-  final DateTime startTime;
-  final DateTime endTime;
+  final DateTime tempTime;
   final String temperature;
   final String tempType;
   final String notes;
@@ -54,13 +49,12 @@ class TempMetric extends Equatable {
   const TempMetric(
       {required this.babyId,
       required this.timeCreated,
-      required this.startTime,
-      required this.endTime,
+      required this.tempTime,
       required this.temperature,
       required this.tempType,
       required this.notes});
 
   @override
   List<Object?> get props =>
-      [babyId, timeCreated, startTime, endTime, temperature, tempType, notes];
+      [babyId, timeCreated, tempTime, temperature, tempType, notes];
 }

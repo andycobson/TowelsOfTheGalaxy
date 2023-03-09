@@ -73,8 +73,7 @@ class _TemperatureViewState extends State<TemperatureView> {
     TempMetricModel model = TempMetricModel(
         babyId: babyId,
         timeCreated: when,
-        startTime: start,
-        endTime: end,
+        tempTime: start,
         temperature: temperature,
         tempType: tempType,
         notes: note);
@@ -120,26 +119,7 @@ class _TemperatureViewState extends State<TemperatureView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Start Time'),
-                  TextButton(
-                    child: Text(time.format(context)),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: time);
-
-                      if (newTime == null) return;
-
-                      setState(() {
-                        time = newTime;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text('End Time'),
+                  const Text('Temperature Time'),
                   TextButton(
                     child: Text(time.format(context)),
                     onPressed: () async {

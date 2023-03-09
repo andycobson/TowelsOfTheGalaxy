@@ -12,3 +12,6 @@ const verifyEmailRoute = '/verify-email';
 const throwupRoute = '/throwup';
 const temperatureRoute = '/temperature';
 const vaccineRoute = '/vaccine';
+const dayRoute = '/days';
+const weekRoute = '/week';
+const customRoute = '/custom';

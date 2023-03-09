@@ -7,6 +7,7 @@ class FoodMetricModel extends FoodMetric {
     required DateTime startTime,
     required DateTime endTime,
     required String feedingType,
+    required String metricType,
     required String amount,
     required String duration,
     required String notes,
@@ -16,6 +17,7 @@ class FoodMetricModel extends FoodMetric {
           startTime: startTime,
           endTime: endTime,
           feedingType: feedingType,
+          metricType: metricType,
           amount: amount,
           duration: duration,
           notes: notes,
@@ -28,6 +30,7 @@ class FoodMetricModel extends FoodMetric {
       startTime: json['startTime'],
       endTime: json['endTime'],
       feedingType: json['feedingType'],
+      metricType: json['metricType'],
       amount: json['amount'],
       duration: json['duration'],
       notes: json['notes'],
@@ -40,6 +43,7 @@ class FoodMetricModel extends FoodMetric {
         'startTime': startTime,
         'endTime': endTime,
         'feedingType': feedingType,
+        'metricType': metricType,
         'amount': double.parse('0' + amount),
         'duration': double.parse('0' + duration),
         'notes': notes,
@@ -52,6 +56,7 @@ class FoodMetric extends Equatable {
   final DateTime startTime;
   final DateTime endTime;
   final String feedingType;
+  final String metricType;
   final String amount;
   final String duration;
   final String notes;
@@ -62,6 +67,7 @@ class FoodMetric extends Equatable {
     required this.startTime,
     required this.endTime,
     required this.feedingType,
+    required this.metricType,
     required this.amount,
     required this.duration,
     required this.notes,
@@ -74,6 +80,7 @@ class FoodMetric extends Equatable {
         startTime,
         endTime,
         feedingType,
+        metricType,
         amount,
         duration,
         notes
