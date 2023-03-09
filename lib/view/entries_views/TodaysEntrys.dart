@@ -58,7 +58,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Diaper Entry'),  
               const TextDivider(text: 'Occured at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -121,7 +121,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Food Entry'),  
               const TextDivider(text: 'Occured at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -196,7 +196,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Growth Entry'),  
               const TextDivider(text: 'Occured at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -271,7 +271,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Sleep Entry'),  
               const TextDivider(text: 'Entry posted at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -339,7 +339,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Temperature Entry'),  
               const TextDivider(text: 'Entry posted at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -407,7 +407,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Throw Up Entry'),  
               const TextDivider(text: 'Entry Created at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -475,7 +475,7 @@ Widget build(BuildContext context) {
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Entry'),  
+              const TextDivider(text: 'New Vaccine Entry'),  
               const TextDivider(text: 'Entry Created at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
