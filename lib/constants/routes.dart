@@ -16,3 +16,4 @@ const dayRoute = '/days';
 const weekRoute = '/week';
 const customRoute = '/custom';
 const testRoute = '/test';
+const babycreateRoute = '/babycreate';

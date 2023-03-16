@@ -9,7 +9,7 @@ import 'package:baby_tracks/view/metric_views/throwup_view.dart';
 import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:baby_tracks/view/metric_views/test_view.dart';
-
+import 'package:baby_tracks/view/metric_views/babycreate_view.dart';
 import 'package:flutter/material.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
@@ -61,6 +61,7 @@ class TabNavigator extends StatelessWidget {
       dayRoute: (context) => DaysView(),
       weekRoute: (context) => WeeksView(),
       customRoute: (context) => CustomView(),
+      babycreateRoute: (context) => BabyCreateView(),
       testRoute: (context) => TestView(),
     };
   }
