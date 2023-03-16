@@ -1,3 +1,4 @@
+import 'package:baby_tracks/view/metric_views/babycreate_view.dart';
 import 'package:baby_tracks/view/metric_views/diaper_view.dart';
 import 'package:baby_tracks/view/metric_views/food_view.dart';
 import 'package:baby_tracks/view/metric_views/growth_view.dart';
@@ -26,6 +27,7 @@ class CardItem {
       CardItem('GROWTH', Colors.orange, GrowthView(), growthRoute),
       CardItem('TEMPERATURE', Colors.deepPurpleAccent, TemperatureView(),
           temperatureRoute),
+      CardItem('BABY+', Colors.blue, BabyCreateView(), babycreateRoute),
     ];
   }
 }
