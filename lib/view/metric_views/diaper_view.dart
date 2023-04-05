@@ -1,20 +1,31 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/DiaperMetricModel.dart';
 import 'package:baby_tracks/service/auth.dart';
 import 'package:baby_tracks/service/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 
 class DiaperView extends StatefulWidget {
-  const DiaperView({super.key});
+  String id = "";
+
+  DiaperView(String arg) {
+    id = arg;
+  }
 
   @override
-  State<DiaperView> createState() => _DiaperViewState();
+  State<DiaperView> createState() => _DiaperViewState(id);
 }
 
 class _DiaperViewState extends State<DiaperView> {
+  String id = "";
+  int isUpdate = 0;
   TimeOfDay time = TimeOfDay.now();
+
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   static const List<String> list = <String>['Pee', 'Poo', 'Both'];
@@ -30,6 +41,14 @@ class _DiaperViewState extends State<DiaperView> {
   late final AuthService _auth;
   late final DatabaseService _service;
 
+  _DiaperViewState(String arg) {
+    if (arg == "") {
+      log("create");
+    } else {
+      id = arg;
+      isUpdate = 1;
+    }
+  }
   @override
   void initState() {
     _note = TextEditingController();
@@ -58,6 +77,7 @@ class _DiaperViewState extends State<DiaperView> {
 
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
+
     DiaperMetricModel model = DiaperMetricModel(
         babyId: babyId,
         timeCreated: when,
@@ -84,8 +104,13 @@ class _DiaperViewState extends State<DiaperView> {
     //   ),
     // );
 
-    await _service.createDiaperMetric(model);
-    Navigator.pop(context);
+    if (isUpdate == 0) {
+      await _service.createDiaperMetric(model);
+      Navigator.pop(context);
+    } else {
+      log("should Edit");
+      await _service.editDiaperMetric(model, id);
+    }
   }
 
   @override
