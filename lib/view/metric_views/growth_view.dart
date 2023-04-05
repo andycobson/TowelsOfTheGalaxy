@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/AppUser.dart';
@@ -8,13 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
 
 class GrowthView extends StatefulWidget {
-  const GrowthView({super.key});
+  String id = "";
+
+  GrowthView(String arg) {
+    id = arg;
+  }
 
   @override
-  State<GrowthView> createState() => _GrowthViewState();
+  State<GrowthView> createState() => _GrowthViewState(id);
 }
 
 class _GrowthViewState extends State<GrowthView> {
+  String id = "";
+  int isUpdate = 0;
   TimeOfDay time = TimeOfDay.now();
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -37,6 +45,15 @@ class _GrowthViewState extends State<GrowthView> {
 
   late final AuthService _auth;
   late final DatabaseService _service;
+
+  _GrowthViewState(String arg) {
+    if (arg == "") {
+      log("create");
+    } else {
+      id = arg;
+      isUpdate = 1;
+    }
+  }
 
   @override
   void initState() {
@@ -101,9 +118,13 @@ class _GrowthViewState extends State<GrowthView> {
     //   ),
     // );
 
-    await _service.createGrowthMetric(model);
-    Navigator.pop(context);
-    // MaterialRoutePage
+    if (isUpdate == 0) {
+      await _service.createGrowthMetric(model);
+      Navigator.pop(context);
+    } else {
+      log("should Edit");
+      await _service.editGrowthMetric(model, id);
+    }
   }
 
   @override
