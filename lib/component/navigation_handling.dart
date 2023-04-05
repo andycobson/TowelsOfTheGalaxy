@@ -43,22 +43,24 @@ class TabNavigator extends StatelessWidget {
             onPush: (defaultRoot) => _push(context, defaultRoot: defaultRoot),
           ),
       metricsRoute: (context) => AppMetricPage(
-            onPush: (defaultRoot) => _push(context, defaultRoot: defaultRoot),
-          ),
+        onPush: (defaultRoot) => _push(context, defaultRoot: defaultRoot),
+      ),
       settingsRoute: (context) => AppSettingsPage(
             onPush: callB,
           ),
-      foodRoute: (context) => FoodView(),
-      diaperRoute: (context) => DiaperView(),
-      sleepRoute: (context) => SleepView(),
+      foodRoute: (context) => FoodView(""),
+      diaperRoute: (context) => DiaperView(""),
+      sleepRoute: (context) => SleepView(""),
       loginRoute: (context) => LoginView(),
-      growthRoute: (context) => GrowthView(),
-      temperatureRoute: (context) => TemperatureView(),
-      throwupRoute: (context) => ThrowUpView(),
-      vaccineRoute: (context) => VaccineView(),
-      dayRoute: (context) => DaysView(),
-      weekRoute: (context) => WeeksView(),
-      customRoute: (context) => CustomView(),
+      growthRoute: (context) => GrowthView(""),
+      temperatureRoute: (context) => TemperatureView(""),
+      throwupRoute: (context) => ThrowUpView(""),
+      vaccineRoute:(context) => VaccineView(""),
+      dayRoute:(context) => DaysView(),
+      weekRoute:(context) => WeeksView(),
+      customRoute:(context) => CustomView(),
+      
+ 
     };
   }
 
