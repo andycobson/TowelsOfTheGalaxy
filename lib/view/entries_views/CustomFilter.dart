@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
@@ -14,20 +13,147 @@ import '../metric_views/sleep_view.dart';
 import '../metric_views/temperature_view.dart';
 import '../metric_views/throwup_view.dart';
 
-
-
-class WeeksView extends StatefulWidget {
-  const WeeksView({super.key});
+class CustomView extends StatefulWidget {
+  const CustomView({super.key});
 
   @override
-  State<WeeksView> createState() => _WeeksViewState();
+  State<CustomView> createState() => _CustomViewState();
 }
 
-class _WeeksViewState extends State<WeeksView>{
-    DateTime start_Date = DateTime(DateTime.now().subtract(Duration(days: 6)).year,DateTime.now().subtract(Duration(days: 6)).month, DateTime.now().subtract(Duration(days: 6)).day);
-   DateTime end_Date = DateTime(DateTime.now().add(Duration(days: 1)).year,DateTime.now().add(Duration(days: 1)).month, DateTime.now().add(Duration(days: 1)).day);
+class _CustomViewState extends State<CustomView>{
+  static const List<String> feedingTypeList = <String>[
+    'Diaper',
+    'Food',
+    'Growth',
+    'Sleep',
+    'Temperature',
+    'Throwup',
+    'Vaccine',
+  ];
+  String dropdownFoodValue = feedingTypeList.first;
+  String phrase = "passed";
+  DateTime dateA = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime dateB = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  @override
 Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Filter'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+       backgroundColor: ColorPalette.backgroundRGB,
+      body: 
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+               const TextDivider(text: 'Select Category'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DropdownButton<String>(
+                    value: dropdownFoodValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: const TextStyle(color: ColorPalette.background),
+                    onChanged: (String? value) {
+                      setState(() {
+                        dropdownFoodValue = value!;
+                      });
+                    },
+                    items: feedingTypeList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+               const TextDivider(text: 'Select Start Date'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text('Date'),
+                  TextButton(
+                    child: Text(
+                     dateA.month.toString()+"/" +dateA.day.toString()+"/" +dateA.year.toString()
+                    ),
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                          context: context, initialDate: dateA, firstDate: DateTime(2016), lastDate: DateTime(2101) );
+
+                      if (newDate == null) return;
+
+                      setState(() {
+                        dateA = newDate;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const TextDivider(text: 'Select End Date'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text('Date'),
+                  TextButton(
+                    child: Text(
+                     dateB.month.toString()+"/" +dateB.day.toString()+"/" +dateB.year.toString()
+                    ),
+                    onPressed: () async {
+                      DateTime? newDate = await showDatePicker(
+                          context: context, initialDate: dateB, firstDate: DateTime(2016), lastDate: DateTime(2101) );
+
+                      if (newDate == null) return;
+
+                      setState(() {
+                        dateB = newDate;
+                      });
+                    },
+                  ),
+                ],
+              ),
+      Center(
+        child: ElevatedButton(
+          child: const Text('Search'),
+          onPressed: () {
+            phrase = dropdownFoodValue;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  SearchRoute(sentPhrase: phrase, startDate: dateA, endDate: dateB)),
+            );
+          },
+        ),
+      ),
+            ],
+      ),
+    ),
+      ),
+    );
+  }
   
+}
+
+class SearchRoute extends StatelessWidget {
+  String display = "failed";
+  DateTime start_Date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+   DateTime end_Date = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+   SearchRoute({required String sentPhrase, required startDate, required endDate})
+   {
+      display = sentPhrase;
+      start_Date = startDate;
+      end_Date = endDate;
+   }
+ 
+  Widget build(BuildContext context) {
+    if (display == "Diaper")
+    {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
@@ -37,15 +163,7 @@ Widget build(BuildContext context) {
       backgroundColor: Color.fromARGB(255, 67, 67, 209),
       body:
       
-     
-        SingleChildScrollView(
-        child: Column(
-          
-            children: [
-       Column(
-               //   height: 200.0,
-               //   width: 2000.0,       
-                  children: [StreamBuilder(
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Diaper').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -55,15 +173,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Diaper Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Occured at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -126,15 +242,21 @@ Widget build(BuildContext context) {
             }).toList(),
           );
         },
-        
       ),
-            ]),
-
-       Column(
-        //  height: 2000.0,
-        //  width: 2000.0,       
-          children: [
-      StreamBuilder(
+    );
+    }
+    else if (display == "Food")
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+      body:
+      
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Food').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -144,15 +266,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Food Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Occured at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -231,14 +351,20 @@ Widget build(BuildContext context) {
           );
         },
       ),
-            
-            ]),
+    );
+    }
+     else if (display == "Growth")
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+      body:
       
-       Column(
-       // height:2000,
-       // width: 2000,
-        children: [
-      StreamBuilder(
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Growth').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -248,15 +374,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Growth Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Occured at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -332,15 +456,21 @@ Widget build(BuildContext context) {
             }).toList(),
           );
         },
-      ),    
-            
-            ]),
+      ),
+    );
+    }
+    else if (display == "Sleep")
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+      body:
       
-       Column(
-        //height:2000,
-       // width: 2000,
-        children: [
-      StreamBuilder(
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Sleep').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -350,15 +480,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Sleep Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Entry posted at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -425,16 +553,22 @@ Widget build(BuildContext context) {
             }).toList(),
           );
         },
-      ),      
-            
-            ]),
+      ),
+    );
+    }
+
+    else if (display == "Temperature")
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+      body:
       
-       Column(
-       // height:2000,
-       // width: 2000,
-        children: [
-      StreamBuilder(
-        
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Temperature').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -444,15 +578,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Temperature Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Entry posted at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -519,15 +651,21 @@ Widget build(BuildContext context) {
             }).toList(),
           );
         },
-      ),      
-            
-            ]),
+      ),
+    );
+    }
+    else if (display == "Throwup")
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+      body:
       
-       Column(
-      //  height:2000,
-      //  width: 2000,
-        children: [
-        StreamBuilder(
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Throwup').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -537,15 +675,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Throw Up Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Entry Created at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -613,15 +749,21 @@ Widget build(BuildContext context) {
             }).toList(),
           );
         },
-      ),      
-            
-            ]),
+      ),
+    );
+    }
+    else if (display == "Vaccine")
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+      body:
       
-       Column(
-       // height:2000,
-       // width: 2000,
-        children: [
-        StreamBuilder(
+       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('Vaccine').where('timeCreated', isGreaterThanOrEqualTo: start_Date).where('timeCreated', isLessThanOrEqualTo: end_Date).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
@@ -631,15 +773,13 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
-            shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
              
-              const TextDivider(text: 'New Vaccine Entry'),  
+              const TextDivider(text: 'New Entry'),  
               const TextDivider(text: 'Entry Created at:'),    
                 Center(
                   child: Text( doc.data().toString().contains('timeCreated') ? doc.get('timeCreated').toDate().toString() : (2016).toString())
@@ -706,19 +846,22 @@ Widget build(BuildContext context) {
             }).toList(),
           );
         },
-      ),      
-            ])
-        
-        ]
       ),
-    )
-
     );
-    
     }
+    else 
+    {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Search'),
+        backgroundColor: ColorPalette.backgroundRGB,
+        elevation: 0,
+      ),
+      backgroundColor: Color.fromARGB(255, 67, 67, 209),
+    );
+    }
+  }
+}
     
 
  
-}
-    
-  
