@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/model/AppUser.dart';
@@ -9,36 +11,49 @@ import 'package:flutter/material.dart';
 import '../../component/decimal_number_input.dart';
 
 class VaccineView extends StatefulWidget {
-  const VaccineView({super.key});
+  String id = "";
+
+  VaccineView(String arg) {
+    id = arg;
+  }
 
   @override
-  State<VaccineView> createState() => _VaccineViewState();
+  State<VaccineView> createState() => _VaccineViewState(id);
 }
 
 class _VaccineViewState extends State<VaccineView> {
+  String id = "";
+  int isUpdate = 0;
   TimeOfDay time = TimeOfDay.now();
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   String notes = "";
-  String name = "";
+  String Name = "";
   String babyId = "";
   String series = "";
 
   late final TextEditingController _note;
   late final ScrollController _noteScroller;
-  late final ScrollController _vaccineNameScroller;
 
   late final AuthService _auth;
   late final DatabaseService _service;
   late final TextEditingController _vaccine;
   late final TextEditingController _series;
 
+  _VaccineViewState(String arg) {
+    if (arg == "") {
+      log("create");
+    } else {
+      id = arg;
+      isUpdate = 1;
+    }
+  }
+
   @override
   void initState() {
     _note = TextEditingController();
     _noteScroller = ScrollController();
-    _vaccineNameScroller = ScrollController();
     _auth = AuthService();
     _service = DatabaseService();
     _vaccine = TextEditingController();
@@ -57,8 +72,6 @@ class _VaccineViewState extends State<VaccineView> {
     _note.dispose();
     _noteScroller.dispose();
     _series.dispose();
-    _vaccineNameScroller.dispose();
-    _vaccine.dispose();
     super.dispose();
   }
 
@@ -73,7 +86,7 @@ class _VaccineViewState extends State<VaccineView> {
         babyId: babyId,
         timeCreated: when,
         startTime: when,
-        vaccine: name,
+        vaccine: Name,
         series: series,
         notes: notes);
 
@@ -97,8 +110,13 @@ class _VaccineViewState extends State<VaccineView> {
     //   ),
     // );
 
-    await _service.createVaccineMetric(model);
-    Navigator.pop(context);
+    if (isUpdate == 0) {
+      await _service.createVaccineMetric(model);
+      Navigator.pop(context);
+    } else {
+      log("should Edit");
+      await _service.editVaccineMetric(model, id);
+    }
   }
 
   @override
@@ -148,17 +166,17 @@ class _VaccineViewState extends State<VaccineView> {
               SizedBox(
                 height: 100,
                 child: Scrollbar(
-                  controller: _vaccineNameScroller,
+                  controller: _noteScroller,
                   child: TextField(
                     style: const TextStyle(color: Colors.white),
-                    scrollController: _vaccineNameScroller,
+                    scrollController: _noteScroller,
                     autofocus: false,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _vaccine,
                     onChanged: (String value) {
                       setState(() {
-                        name = value;
+                        Name = value;
                       });
                     },
                     decoration: const InputDecoration(
