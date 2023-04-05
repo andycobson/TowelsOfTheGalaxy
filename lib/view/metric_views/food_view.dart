@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/AppUser.dart';
@@ -8,13 +10,24 @@ import 'package:flutter/material.dart';
 import '../../constants/palette.dart';
 
 class FoodView extends StatefulWidget {
-  const FoodView({super.key});
+  String id = "";
+  
+
+   FoodView(String arg)
+   {
+    id = arg;
+   
+   }
+  
+  
 
   @override
-  State<FoodView> createState() => _FoodViewState();
+  State<FoodView> createState() => _FoodViewState(id);
 }
 
 class _FoodViewState extends State<FoodView> {
+  String id = "";
+  int isUpdate = 0;
   TimeOfDay time = TimeOfDay.now();
   TimeOfDay startTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
@@ -33,6 +46,7 @@ class _FoodViewState extends State<FoodView> {
   String amount = "";
   String feedingType = "";
   String babyId = "";
+  String metricType = "";
 
   late final TextEditingController _amount;
   late final TextEditingController _feedingType;
@@ -43,6 +57,19 @@ class _FoodViewState extends State<FoodView> {
   late final AuthService _auth;
   late final DatabaseService _service;
 
+  _FoodViewState( String arg ){
+   if ( arg == "")
+   {
+      log("create");
+   }
+   else
+   {
+    id = arg;
+    isUpdate = 1;
+  
+    
+   }
+  }
   @override
   void initState() {
     _amount = TextEditingController();
@@ -74,6 +101,7 @@ class _FoodViewState extends State<FoodView> {
   Future createInstance() async {
     note = _note.text;
     feedingType = dropdownFoodValue;
+    metricType = dropdownMetricValue;
     amount = _amount.text;
     duration = _duration.text;
     DateTime when =
@@ -88,7 +116,7 @@ class _FoodViewState extends State<FoodView> {
         startTime: startDateTime,
         endTime: endDateTime,
         feedingType: feedingType,
-        metricType: dropdownMetricValue,
+        metricType: metricType,
         amount: amount,
         duration: duration,
         notes: note);
@@ -112,7 +140,16 @@ class _FoodViewState extends State<FoodView> {
       ),
     );
 
-    await _service.updateFooodMetric(model);
+        if (isUpdate == 0)  
+    {
+      await _service.updateFoodMetric(model);
+    }
+    else
+    {
+      log("should Edit");
+      await _service.editFoodMetric(model, id);
+      
+    }
   }
 
   @override
@@ -172,7 +209,7 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Start Time'),
+                  const Text('Nursing Start Time'),
                   TextButton(
                     child: Text(
                       startTime.format(context),
@@ -193,7 +230,7 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('End Time'),
+                  const Text('Nursing End Time'),
                   TextButton(
                     child: Text(
                       endTime.format(context),
@@ -214,7 +251,7 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Duration'),
+                  const Text('Nursing Duration in Minutes'),
                   DecimalInput(controller: _duration),
                 ],
               ),
@@ -284,3 +321,4 @@ class _FoodViewState extends State<FoodView> {
     );
   }
 }
+
