@@ -125,7 +125,8 @@ class _TestViewState extends State<TestView> {
       ),
     );
 
-    await _service.updateFooodMetric(model);
+    await _service.createFoodMetric(model);
+    Navigator.pop(context);
   }
 
   @override

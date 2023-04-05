@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/view/app_home.dart';
 import 'package:baby_tracks/view/loading_view.dart';
+import 'package:baby_tracks/view/nav_views/babycreate_view.dart';
 import 'package:baby_tracks/view/register_view.dart';
 import 'package:baby_tracks/view/login_view.dart';
 import 'package:baby_tracks/view/verify_view.dart';
@@ -32,6 +35,7 @@ class MyApp extends StatelessWidget {
         registerRoute: (context) => const RegisterView(),
         apphomeRoute: (context) => const AppHomePage(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
+        babycreateRoute: (context) => const BabyCreateView(),
       },
     );
   }
@@ -49,11 +53,6 @@ class _HomePageState extends State<HomePage> {
 
   Future init() async {
     preferences = await SharedPreferences.getInstance();
-
-    String? userState = preferences.getString('userId');
-    if (userState == null) return;
-
-    setState(() {});
   }
 
   @override
@@ -71,10 +70,24 @@ class _HomePageState extends State<HomePage> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 final user = FirebaseAuth.instance.currentUser;
+
                 if (user == null) {
                   return const LoginView();
+                } else {
+                  String userId = user.uid;
+
+                  String? userState = preferences.getString(userId);
+
+                  if (userState == null) {
+                    return const BabyCreateView();
+                  } else {
+                    log(userState);
+                    return const AppHomePage();
+                  }
                 }
-                return const AppHomePage();
+
+                return const LoadingPage();
+
               default:
                 return const LoadingPage();
               //   if (user != null) {

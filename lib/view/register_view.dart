@@ -189,6 +189,10 @@ class _RegisterViewState extends State<RegisterView> {
 
                   exceptionMessage =
                       "Register Successfully! Email Veriification Sent!";
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    babycreateRoute,
+                    (route) => false,
+                  );
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
                     exceptionMessage = "Password is too weak.";

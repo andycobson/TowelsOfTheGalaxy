@@ -88,7 +88,8 @@ class _SleepViewState extends State<SleepView> {
       ),
     );
 
-    await _service.updateSleepMetric(model);
+    await _service.createSleepMetric(model);
+    Navigator.pop(context);
   }
 
   @override

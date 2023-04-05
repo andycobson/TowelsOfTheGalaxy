@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:baby_tracks/model/DiaperMetricModel.dart';
+import 'package:baby_tracks/model/babyModel.dart';
 import 'package:baby_tracks/model/FoodMetricModel.dart';
 import 'package:baby_tracks/model/GrowthMetricModel.dart';
 import 'package:baby_tracks/model/SleepMetricModel.dart';
@@ -24,32 +23,38 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('Throwup');
   final CollectionReference vaccineCollection =
       FirebaseFirestore.instance.collection('Vaccine');
+  final CollectionReference babyCollection =
+      FirebaseFirestore.instance.collection('Baby');
 
-  Future updateDiaperMetric(DiaperMetricModel model) async {
+  Future createDiaperMetric(DiaperMetricModel model) async {
     return await diaperCollection.doc().set(model.toJson());
   }
 
-  Future updateFooodMetric(FoodMetricModel model) async {
+  Future createFoodMetric(FoodMetricModel model) async {
     return await foodCollection.doc().set(model.toJson());
   }
 
-  Future updateSleepMetric(SleepMetricModel model) async {
+  Future createSleepMetric(SleepMetricModel model) async {
     return await sleepCollection.doc().set(model.toJson());
   }
 
-  Future updateGrowthMetric(GrowthMetricModel model) async {
+  Future createGrowthMetric(GrowthMetricModel model) async {
     return await growthCollection.doc().set(model.toJson());
   }
 
-  Future updateTemperatureMetric(TempMetricModel model) async {
+  Future createTemperatureMetric(TempMetricModel model) async {
     return await temperatureCollection.doc().set(model.toJson());
   }
 
-  Future updateThrowUpMetric(ThrowUpMetricModel model) async {
+  Future createThrowUpMetric(ThrowUpMetricModel model) async {
     return await throwUpCollection.doc().set(model.toJson());
   }
 
-  Future updateVaccineMetric(VaccineMetricModel model) async {
+  Future createVaccineMetric(VaccineMetricModel model) async {
     return await vaccineCollection.doc().set(model.toJson());
+  }
+
+  Future createBabyUser(BabyModel model) async {
+    return await babyCollection.doc().set(model.toJson());
   }
 }

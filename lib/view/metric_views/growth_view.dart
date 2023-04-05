@@ -101,7 +101,8 @@ class _GrowthViewState extends State<GrowthView> {
       ),
     );
 
-    await _service.updateGrowthMetric(model);
+    await _service.createGrowthMetric(model);
+    Navigator.pop(context);
     // MaterialRoutePage
   }
 

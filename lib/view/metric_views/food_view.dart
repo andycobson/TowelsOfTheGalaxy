@@ -112,7 +112,9 @@ class _FoodViewState extends State<FoodView> {
       ),
     );
 
-    await _service.updateFooodMetric(model);
+    await _service.createFoodMetric(model);
+    // ignore: use_build_context_synchronously
+    Navigator.pop(context);
   }
 
   @override

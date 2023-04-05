@@ -13,10 +13,9 @@ class TextDivider extends StatelessWidget {
         Text(
           text,
           style: const TextStyle(
-            color: ColorPalette.lightAccent,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+              color: ColorPalette.lightAccent,
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
         ),
         const SizedBox(
           width: 20,

@@ -11,7 +11,6 @@ import '../constants/routes.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
 import '../view/entries_views/TodaysEntrys.dart';
-import '../view/metric_views/babycreate_view.dart';
 
 class CardItem {
   String title = "";
@@ -38,7 +37,6 @@ class CardItem {
           const VaccineView(), vaccineRoute),
       CardItem('Test', const Color.fromARGB(255, 231, 255, 172), TestView(),
           testRoute),
-      CardItem('BABY+', Colors.blue, BabyCreateView(), babycreateRoute),
     ];
   }
 }

@@ -84,7 +84,8 @@ class _DiaperViewState extends State<DiaperView> {
       ),
     );
 
-    await _service.updateDiaperMetric(model);
+    await _service.createDiaperMetric(model);
+    Navigator.pop(context);
   }
 
   @override

@@ -97,7 +97,8 @@ class _TemperatureViewState extends State<TemperatureView> {
       ),
     );
 
-    await _service.updateTemperatureMetric(model);
+    await _service.createTemperatureMetric(model);
+    Navigator.pop(context);
   }
 
   @override

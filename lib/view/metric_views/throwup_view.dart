@@ -102,7 +102,8 @@ class _ThrowUpViewState extends State<ThrowUpView> {
       ),
     );
 
-    await _service.updateThrowUpMetric(model);
+    await _service.createThrowUpMetric(model);
+    Navigator.pop(context);
   }
 
   @override

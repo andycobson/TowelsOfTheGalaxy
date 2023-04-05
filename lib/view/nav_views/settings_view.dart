@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../model/AppUser.dart';
+import '../../model/persistentUser.dart';
+import '../../service/auth.dart';
 
 class AppSettingsPage extends StatefulWidget {
   const AppSettingsPage({super.key, required this.onPush});
@@ -13,6 +20,37 @@ class AppSettingsPage extends StatefulWidget {
 }
 
 class _AppSettingsPageState extends State<AppSettingsPage> {
+  late SharedPreferences preferences;
+  late final AuthService _auth;
+  String babyName = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _auth = AuthService();
+
+    initPerferences();
+  }
+
+  Future initPerferences() async {
+    preferences = await SharedPreferences.getInstance();
+
+    AppUser? currentUser = _auth.currentUser;
+    String userId = "";
+    if (currentUser != null) {
+      userId = currentUser.uid;
+    }
+
+    final currentData = preferences.getString(userId);
+    if (currentData != null) {
+      PersistentUser currentDataUser =
+          PersistentUser.fromJson(json.decode(currentData));
+      setState(() {
+        babyName = currentDataUser.currentBabyName;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +62,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
       backgroundColor: ColorPalette.backgroundRGB,
       body: Column(
         children: [
+          Text(babyName),
           Center(
             child: ElevatedButton(
               child: const Text('Log Out'),

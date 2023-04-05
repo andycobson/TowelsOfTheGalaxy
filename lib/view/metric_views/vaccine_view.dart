@@ -97,7 +97,8 @@ class _VaccineViewState extends State<VaccineView> {
       ),
     );
 
-    await _service.updateVaccineMetric(model);
+    await _service.createVaccineMetric(model);
+    Navigator.pop(context);
   }
 
   @override
