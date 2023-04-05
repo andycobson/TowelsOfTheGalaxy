@@ -5,6 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/palette.dart';
+import '../metric_views/Vaccine_view.dart';
+import '../metric_views/diaper_view.dart';
+import '../metric_views/food_view.dart';
+import '../metric_views/growth_view.dart';
+import '../metric_views/sleep_view.dart';
+import '../metric_views/temperature_view.dart';
+import '../metric_views/throwup_view.dart';
 
 class CustomView extends StatefulWidget {
   const CustomView({super.key});
@@ -49,35 +56,23 @@ class _CustomViewState extends State<CustomView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    width: 130,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 0.80),
-                    ),
-                    child: Center(
-                      child: DropdownButton<String>(
-                        value: dropdownFoodValue,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: ColorPalette.background),
-                        onChanged: (String? value) {
-                          setState(() {
-                            dropdownFoodValue = value!;
-                          });
-                        },
-                        items: feedingTypeList
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                  DropdownButton<String>(
+                    value: dropdownFoodValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: const TextStyle(color: ColorPalette.background),
+                    onChanged: (String? value) {
+                      setState(() {
+                        dropdownFoodValue = value!;
+                      });
+                    },
+                    items: feedingTypeList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -198,6 +193,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -219,25 +216,58 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                        children: [const Text("")],
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Diaper')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ), //
+
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DiaperView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), //
+                          ])
                     ]));
               }).toList(),
             );
@@ -269,6 +299,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -315,25 +347,59 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                        children: [const Text("")],
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            //
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Food')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              FoodView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), //
+                          ])
                     ]));
               }).toList(),
             );
@@ -365,6 +431,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -410,25 +478,58 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                        children: [const Text("")],
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Growth')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ), //
+
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              GrowthView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), //
+                          ])
                     ]));
               }).toList(),
             );
@@ -460,6 +561,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -492,25 +595,58 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                        children: [const Text("")],
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Sleep')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SleepView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), // //
+                          ])
                     ]));
               }).toList(),
             );
@@ -542,6 +678,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -562,7 +700,6 @@ class SearchRoute extends StatelessWidget {
                                   (doc.data().toString().contains('tempType')
                                       ? doc.get('tempType')
                                       : ''))),
-
                       const TextDivider(text: 'Taken at:'),
                       Center(
                           child: Text(doc.data().toString().contains('TempTime')
@@ -573,25 +710,57 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Temperature')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ),
+                            Row(
+                              children: [const Text("")],
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TemperatureView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), // //
+                          ])
                     ]));
               }).toList(),
             );
@@ -623,6 +792,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -639,7 +810,11 @@ class SearchRoute extends StatelessWidget {
                               doc.data().toString().contains('ThrowUpColor')
                                   ? doc.get('ThrowUpColor')
                                   : '')),
-
+                      const TextDivider(text: 'Amount'),
+                      Center(
+                          child: Text(doc.data().toString().contains('amount')
+                              ? doc.get('amount')
+                              : '')),
                       const TextDivider(text: 'Taken at:'),
                       Center(
                           child: Text(
@@ -651,25 +826,57 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Throwup')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ),
+                            Row(
+                              children: [const Text("")],
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ThrowUpView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), ////
+                          ])
                     ]));
               }).toList(),
             );
@@ -701,6 +908,8 @@ class SearchRoute extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docs.map((doc) {
                 return Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
                     padding: const EdgeInsets.symmetric(
                         vertical: 25.0, horizontal: 40.0),
                     child: Column(children: [
@@ -720,7 +929,6 @@ class SearchRoute extends StatelessWidget {
                               (doc.data().toString().contains('series')
                                   ? doc.get('series').toString()
                                   : 0.toString()))),
-
                       const TextDivider(text: 'Taken at:'),
                       Center(
                           child: Text(
@@ -732,25 +940,55 @@ class SearchRoute extends StatelessWidget {
                           child: Text(doc.data().toString().contains('notes')
                               ? doc.get('notes')
                               : '')),
-                      SizedBox(
-                        height: 50,
-                        width: 425,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ))),
-                          onPressed: () async {
-                            log("Todo: Create delete method");
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ), //
-                      const TextDivider(text: '')
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  final docUser = FirebaseFirestore.instance
+                                      .collection('Vaccine')
+                                      .doc(doc.id);
+                                  docUser.delete();
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ),
+
+                            SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () async {
+                                  log('Todo: update method');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              VaccineView(doc.id)));
+                                },
+                                child: const Text('Edit'),
+                              ),
+                            ), // //
+                          ])
                     ]));
               }).toList(),
             );

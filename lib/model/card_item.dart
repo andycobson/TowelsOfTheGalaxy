@@ -15,26 +15,26 @@ import '../view/entries_views/TodaysEntrys.dart';
 class CardItem {
   String title = "";
   Color color = Colors.black;
-  StatefulWidget pageview = FoodView();
+  StatefulWidget pageview = FoodView("");
   String route = "";
 
   CardItem(this.title, this.color, this.pageview, this.route);
 
   static List<CardItem> builder() {
     return [
-      CardItem('FOOD', const Color.fromARGB(255, 231, 255, 172),
-          const FoodView(), foodRoute),
-      CardItem('SLEEP', const Color.fromARGB(255, 137, 207, 240),
-          const SleepView(), sleepRoute),
+      CardItem('FOOD', const Color.fromARGB(255, 231, 255, 172), FoodView(""),
+          foodRoute),
+      CardItem('SLEEP', const Color.fromARGB(255, 137, 207, 240), SleepView(""),
+          sleepRoute),
       CardItem('DIAPER', const Color.fromARGB(255, 182, 225, 80),
-          const DiaperView(), diaperRoute),
-      CardItem('GROWTH', Colors.orange, const GrowthView(), growthRoute),
-      CardItem('TEMPERATURE', const Color.fromARGB(129, 8, 247, 227),
-          const TemperatureView(), temperatureRoute),
-      CardItem('THROWUP', const Color.fromARGB(255, 173, 185, 145),
-          const ThrowUpView(), throwupRoute),
-      CardItem('VACCINE', const Color.fromARGB(255, 185, 176, 207),
-          const VaccineView(), vaccineRoute),
+          DiaperView(""), diaperRoute),
+      CardItem('GROWTH', Colors.orange, GrowthView(""), growthRoute),
+      CardItem('TEMPERATURE', Colors.deepPurpleAccent, TemperatureView(""),
+          temperatureRoute),
+      CardItem(
+          'THROWUP', Colors.deepPurpleAccent, ThrowUpView(""), throwupRoute),
+      CardItem(
+          'VACCINE', Colors.deepPurpleAccent, VaccineView(""), vaccineRoute),
       CardItem('Test', const Color.fromARGB(255, 231, 255, 172), TestView(),
           testRoute),
     ];
