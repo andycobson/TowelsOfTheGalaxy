@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/AppUser.dart';
@@ -8,18 +10,30 @@ import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
 
 class TemperatureView extends StatefulWidget {
-  const TemperatureView({super.key});
+String id = "";
+  
+
+   TemperatureView(String arg)
+   {
+    id = arg;
+   
+   }
+  
+  
 
   @override
-  State<TemperatureView> createState() => _TemperatureViewState();
+  State<TemperatureView> createState() => _TemperatureViewState(id);
+
 }
 
 class _TemperatureViewState extends State<TemperatureView> {
+  String id = "";
+  int isUpdate = 0;
   static const List<String> temperatureList = <String>['F', 'C'];
   String temperatureDropDown = temperatureList.first;
 
   TimeOfDay time = TimeOfDay.now();
-  TimeOfDay startTime = TimeOfDay.now();
+  TimeOfDay TempTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -35,6 +49,21 @@ class _TemperatureViewState extends State<TemperatureView> {
 
   late final AuthService _auth;
   late final DatabaseService _service;
+
+  _TemperatureViewState( String arg ){
+   if ( arg == "")
+   {
+      log("create");
+   }
+   else
+   {
+    id = arg;
+    isUpdate = 1;
+  
+    
+   }
+  }
+
 
   @override
   void initState() {
@@ -67,13 +96,14 @@ class _TemperatureViewState extends State<TemperatureView> {
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
     DateTime start = DateTime(
-        date.year, date.month, date.day, startTime.hour, startTime.minute);
+        date.year, date.month, date.day, TempTime.hour, TempTime.minute);
     DateTime end =
         DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
     TempMetricModel model = TempMetricModel(
         babyId: babyId,
         timeCreated: when,
-        tempTime: start,
+        TempTime: start,
+    //    endTime: end,
         temperature: temperature,
         tempType: tempType,
         notes: note);
@@ -97,7 +127,16 @@ class _TemperatureViewState extends State<TemperatureView> {
       ),
     );
 
-    await _service.updateTemperatureMetric(model);
+    if (isUpdate == 0)  
+    {
+      await _service.updateTemperatureMetric(model);
+    }
+    else
+    {
+      log("should Edit");
+      await _service.editTemperatureMetric(model, id);
+      
+    }
   }
 
   @override
@@ -119,7 +158,7 @@ class _TemperatureViewState extends State<TemperatureView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Temperature Time'),
+                  const Text('Time Temp was taken'),
                   TextButton(
                     child: Text(time.format(context)),
                     onPressed: () async {
@@ -135,6 +174,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                   ),
                 ],
               ),
+             
               const TextDivider(text: 'Temperature'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
