@@ -19,7 +19,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('Growth');
   final CollectionReference temperatureCollection =
       FirebaseFirestore.instance.collection('Temperature');
-  final CollectionReference throwUpCollection =
+  final CollectionReference throwupCollection =
       FirebaseFirestore.instance.collection('Throwup');
   final CollectionReference vaccineCollection =
       FirebaseFirestore.instance.collection('Vaccine');
@@ -47,7 +47,7 @@ class DatabaseService {
   }
 
   Future createThrowUpMetric(ThrowUpMetricModel model) async {
-    return await throwUpCollection.doc().set(model.toJson());
+    return await throwupCollection.doc().set(model.toJson());
   }
 
   Future createVaccineMetric(VaccineMetricModel model) async {
@@ -56,5 +56,33 @@ class DatabaseService {
 
   Future createBabyUser(BabyModel model) async {
     return await babyCollection.doc().set(model.toJson());
+  }
+
+  Future editDiaperMetric(DiaperMetricModel model, String id) async {
+    return await diaperCollection.doc(id).update(model.toJson());
+  }
+
+  Future editFoodMetric(FoodMetricModel model, String id) async {
+    return await foodCollection.doc(id).update(model.toJson());
+  }
+
+  Future editSleepMetric(SleepMetricModel model, String id) async {
+    return await sleepCollection.doc(id).update(model.toJson());
+  }
+
+  Future editGrowthMetric(GrowthMetricModel model, String id) async {
+    return await growthCollection.doc(id).update(model.toJson());
+  }
+
+  Future editTemperatureMetric(TempMetricModel model, String id) async {
+    return await temperatureCollection.doc(id).update(model.toJson());
+  }
+
+  Future editThrowUpMetric(ThrowUpMetricModel model, String id) async {
+    return await throwupCollection.doc(id).update(model.toJson());
+  }
+
+  Future editVaccineMetric(VaccineMetricModel model, String id) async {
+    return await vaccineCollection.doc(id).update(model.toJson());
   }
 }
