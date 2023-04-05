@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/SleepMetricModel.dart';
@@ -7,13 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
 
 class SleepView extends StatefulWidget {
-  const SleepView({super.key});
+  String id = "";
+
+  SleepView(String arg) {
+    id = arg;
+  }
 
   @override
-  State<SleepView> createState() => _SleepViewState();
+  State<SleepView> createState() => _SleepViewState(id);
 }
 
 class _SleepViewState extends State<SleepView> {
+  String id = "";
+  int isUpdate = 0;
   TimeOfDay time = TimeOfDay.now();
   TimeOfDay startTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
@@ -28,6 +36,15 @@ class _SleepViewState extends State<SleepView> {
 
   late final AuthService _auth;
   late final DatabaseService _service;
+
+  _SleepViewState(String arg) {
+    if (arg == "") {
+      log("create");
+    } else {
+      id = arg;
+      isUpdate = 1;
+    }
+  }
 
   @override
   void initState() {
@@ -88,8 +105,13 @@ class _SleepViewState extends State<SleepView> {
     //   ),
     // );
 
-    await _service.createSleepMetric(model);
-    Navigator.pop(context);
+    if (isUpdate == 0) {
+      await _service.createSleepMetric(model);
+      Navigator.pop(context);
+    } else {
+      log("should Edit");
+      await _service.editSleepMetric(model, id);
+    }
   }
 
   @override
