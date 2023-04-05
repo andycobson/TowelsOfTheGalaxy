@@ -15,25 +15,29 @@ import '../view/metric_views/Vaccine_view.dart';
 class CardItem {
   String title = "";
   Color color = Colors.black;
-  StatefulWidget pageview = FoodView();
+  StatefulWidget pageview = FoodView("");
   String route = "";
 
   CardItem(this.title, this.color, this.pageview, this.route);
 
   static List<CardItem> builder() {
     return [
-      CardItem('FOOD', const Color.fromARGB(255, 231, 255, 172), FoodView(),
+      CardItem('FOOD', const Color.fromARGB(255, 231, 255, 172), FoodView(""),
           foodRoute),
-      CardItem('SLEEP', const Color.fromARGB(255, 137, 207, 240), SleepView(),
+      CardItem('SLEEP', const Color.fromARGB(255, 137, 207, 240), SleepView(""),
           sleepRoute),
-      CardItem('DIAPER', const Color.fromARGB(255, 182, 225, 80), DiaperView(),
+      CardItem('DIAPER', const Color.fromARGB(255, 182, 225, 80), DiaperView(""),
           diaperRoute),
-      CardItem('GROWTH', Colors.orange, GrowthView(), growthRoute),
-      CardItem('TEMPERATURE', Colors.deepPurpleAccent, TemperatureView(),
+      CardItem('GROWTH', Colors.orange, GrowthView(""), growthRoute),
+      CardItem('TEMPERATURE', Colors.deepPurpleAccent, TemperatureView(""),
           temperatureRoute),
-      CardItem('THROWUP', Colors.deepPurpleAccent, ThrowUpView(), throwupRoute),
-      CardItem('VACCINE', Colors.deepPurpleAccent, VaccineView(), vaccineRoute),
+      CardItem('THROWUP', Colors.deepPurpleAccent, ThrowUpView(""),
+          throwupRoute),
+      CardItem('VACCINE', Colors.deepPurpleAccent, VaccineView(""),
+          vaccineRoute),
     ];
+    
+    
   }
 }
 
@@ -47,12 +51,19 @@ class CardItemB {
 
   static List<CardItemB> builder() {
     return [
-      CardItemB('TODAYS ENTRIES', const Color.fromARGB(255, 231, 255, 172),
-          DaysView(), dayRoute),
-      CardItemB('THIS WEEKS ENTRIES', const Color.fromARGB(255, 137, 207, 240),
-          WeeksView(), weekRoute),
-      CardItemB('CUSTOM FILTER ENTRIES',
-          const Color.fromARGB(255, 182, 225, 80), CustomView(), customRoute),
+      CardItemB('TODAYS ENTRIES', const Color.fromARGB(255, 231, 255, 172), DaysView(),
+          dayRoute),
+      CardItemB('THIS WEEKS ENTRIES', const Color.fromARGB(255, 137, 207, 240), WeeksView(),
+          weekRoute),
+      CardItemB('CUSTOM FILTER ENTRIES', const Color.fromARGB(255, 182, 225, 80), CustomView(),
+          customRoute),
+
     ];
+    
+    
   }
 }
+
+
+
+
