@@ -127,7 +127,10 @@ class _ThrowUpViewState extends State<ThrowUpView> {
                 children: [
                   const Text(
                     'Start Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(

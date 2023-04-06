@@ -113,7 +113,10 @@ class _SleepViewState extends State<SleepView> {
                 children: [
                   const Text(
                     'Start Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(startTime.format(context)),
@@ -135,7 +138,10 @@ class _SleepViewState extends State<SleepView> {
                 children: [
                   const Text(
                     'End Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(endTime.format(context)),

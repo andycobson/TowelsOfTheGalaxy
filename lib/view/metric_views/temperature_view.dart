@@ -122,7 +122,10 @@ class _TemperatureViewState extends State<TemperatureView> {
                 children: [
                   const Text(
                     'Temperature Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(time.format(context)),

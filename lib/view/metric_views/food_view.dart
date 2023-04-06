@@ -177,8 +177,13 @@ class _FoodViewState extends State<FoodView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Start Time',
-                      style: TextStyle(color: Colors.white)),
+                  const Text(
+                    'Start Time',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   TextButton(
                     child: Text(
                       startTime.format(context),
@@ -201,7 +206,10 @@ class _FoodViewState extends State<FoodView> {
                 children: [
                   const Text(
                     'End Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(
@@ -225,7 +233,10 @@ class _FoodViewState extends State<FoodView> {
                 children: [
                   const Text(
                     'Duration',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   DecimalInput(controller: _duration),
                 ],

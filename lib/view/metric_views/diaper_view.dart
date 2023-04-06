@@ -109,7 +109,10 @@ class _DiaperViewState extends State<DiaperView> {
                 children: [
                   const Text(
                     'Start Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(

@@ -122,7 +122,10 @@ class _VaccineViewState extends State<VaccineView> {
                 children: [
                   const Text(
                     'Select Time',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   TextButton(
                     child: Text(
@@ -141,7 +144,7 @@ class _VaccineViewState extends State<VaccineView> {
                   ),
                 ],
               ),
-              const TextDivider(text: 'vaccine name'),
+              const TextDivider(text: 'Vaccine Name'),
               SizedBox(
                 height: 100,
                 child: Scrollbar(

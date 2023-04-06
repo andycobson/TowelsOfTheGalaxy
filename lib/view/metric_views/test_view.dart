@@ -269,7 +269,10 @@ class _BottleViewState extends State<BottleView> {
           children: [
             const Text(
               'Start Time',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             TextButton(
               child: Text(
