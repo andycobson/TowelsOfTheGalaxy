@@ -107,7 +107,10 @@ class _DiaperViewState extends State<DiaperView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Start Time'),
+                  const Text(
+                    'Start Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   TextButton(
                     child: Text(
                       time.format(context),

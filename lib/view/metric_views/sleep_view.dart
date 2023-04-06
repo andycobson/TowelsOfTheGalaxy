@@ -111,7 +111,10 @@ class _SleepViewState extends State<SleepView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Start Time'),
+                  const Text(
+                    'Start Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   TextButton(
                     child: Text(startTime.format(context)),
                     onPressed: () async {
@@ -130,7 +133,10 @@ class _SleepViewState extends State<SleepView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('End Time'),
+                  const Text(
+                    'End Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   TextButton(
                     child: Text(endTime.format(context)),
                     onPressed: () async {

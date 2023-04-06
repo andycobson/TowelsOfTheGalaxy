@@ -120,7 +120,10 @@ class _VaccineViewState extends State<VaccineView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Select Time'),
+                  const Text(
+                    'Select Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   TextButton(
                     child: Text(
                       time.format(context),

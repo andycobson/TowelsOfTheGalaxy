@@ -116,7 +116,6 @@ class _TestViewState extends State<TestView> {
               Navigator.of(ctx).pop();
             },
             child: Container(
-              color: Colors.green,
               padding: const EdgeInsets.all(14),
               child: const Text("okay"),
             ),
@@ -268,7 +267,10 @@ class _BottleViewState extends State<BottleView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Text('Start Time'),
+            const Text(
+              'Start Time',
+              style: TextStyle(color: Colors.white),
+            ),
             TextButton(
               child: Text(
                 widget.timeWrapper.value.format(context),

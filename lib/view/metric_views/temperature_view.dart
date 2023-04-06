@@ -120,7 +120,10 @@ class _TemperatureViewState extends State<TemperatureView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text('Temperature Time'),
+                  const Text(
+                    'Temperature Time',
+                    style: TextStyle(color: Colors.white),
+                  ),
                   TextButton(
                     child: Text(time.format(context)),
                     onPressed: () async {
