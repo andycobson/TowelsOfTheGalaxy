@@ -77,25 +77,25 @@ class _VaccineViewState extends State<VaccineView> {
         series: series,
         notes: notes);
 
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text("Alert"),
-        content: const Text("Data submitted!"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Container(
-              color: Colors.green,
-              padding: const EdgeInsets.all(14),
-              child: const Text("okay"),
-            ),
-          ),
-        ],
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (ctx) => AlertDialog(
+    //     title: const Text("Alert"),
+    //     content: const Text("Data submitted!"),
+    //     actions: <Widget>[
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.of(ctx).pop();
+    //         },
+    //         child: Container(
+    //           color: Colors.green,
+    //           padding: const EdgeInsets.all(14),
+    //           child: const Text("okay"),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
 
     await _service.createVaccineMetric(model);
     Navigator.pop(context);

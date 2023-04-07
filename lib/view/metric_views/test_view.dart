@@ -105,24 +105,24 @@ class _TestViewState extends State<TestView> {
         amount: amount,
         duration: duration,
         notes: note);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text("Alert"),
-        content: const Text("Data submitted!"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              child: const Text("okay"),
-            ),
-          ),
-        ],
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (ctx) => AlertDialog(
+    //     title: const Text("Alert"),
+    //     content: const Text("Data submitted!"),
+    //     actions: <Widget>[
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.of(ctx).pop();
+    //         },
+    //         child: Container(
+    //           padding: const EdgeInsets.all(14),
+    //           child: const Text("okay"),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
 
     await _service.createFoodMetric(model);
     Navigator.pop(context);
@@ -240,23 +240,32 @@ class _BottleViewState extends State<BottleView> {
               border: Border.all(
                   color: Colors.black, style: BorderStyle.solid, width: 0.80),
             ),
-            child: DropdownButton<String>(
-              value: widget.dropDownWrapper.value,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: ColorPalette.background),
-              onChanged: (String? value) {
-                setState(() {
-                  widget.dropDownWrapper.value = value!;
-                });
-              },
-              items: widget.metricTypeList
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                    color: Colors.black, style: BorderStyle.solid, width: 0.80),
+              ),
+              child: Center(
+                child: DropdownButton<String>(
+                  value: widget.dropDownWrapper.value,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: ColorPalette.background),
+                  onChanged: (String? value) {
+                    setState(() {
+                      widget.dropDownWrapper.value = value!;
+                    });
+                  },
+                  items: widget.metricTypeList
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
             ),
           ),
         ]),

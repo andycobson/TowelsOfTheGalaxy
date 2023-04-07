@@ -68,25 +68,25 @@ class _SleepViewState extends State<SleepView> {
         endTime: end,
         duration: duration,
         notes: note);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text("Alert"),
-        content: const Text("Data submitted!"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Container(
-              color: Colors.green,
-              padding: const EdgeInsets.all(14),
-              child: const Text("okay"),
-            ),
-          ),
-        ],
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (ctx) => AlertDialog(
+    //     title: const Text("Alert"),
+    //     content: const Text("Data submitted!"),
+    //     actions: <Widget>[
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.of(ctx).pop();
+    //         },
+    //         child: Container(
+    //           color: Colors.green,
+    //           padding: const EdgeInsets.all(14),
+    //           child: const Text("okay"),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
 
     await _service.createSleepMetric(model);
     Navigator.pop(context);

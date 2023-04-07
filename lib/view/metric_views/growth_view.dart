@@ -81,25 +81,25 @@ class _GrowthViewState extends State<GrowthView> {
         weight: weight,
         headCircumference: headCircumference,
         notes: note);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text("Alert"),
-        content: const Text("Data submitted!"),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Container(
-              color: Colors.green,
-              padding: const EdgeInsets.all(14),
-              child: const Text("okay"),
-            ),
-          ),
-        ],
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (ctx) => AlertDialog(
+    //     title: const Text("Alert"),
+    //     content: const Text("Data submitted!"),
+    //     actions: <Widget>[
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.of(ctx).pop();
+    //         },
+    //         child: Container(
+    //           color: Colors.green,
+    //           padding: const EdgeInsets.all(14),
+    //           child: const Text("okay"),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
 
     await _service.createGrowthMetric(model);
     Navigator.pop(context);
@@ -154,23 +154,35 @@ class _GrowthViewState extends State<GrowthView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   DecimalInput(controller: _weight),
-                  DropdownButton<String>(
-                    value: weightDropDown,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: ColorPalette.background),
-                    onChanged: (String? value) {
-                      setState(() {
-                        weightDropDown = value!;
-                      });
-                    },
-                    items: weightList
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                  Container(
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: Colors.black,
+                          style: BorderStyle.solid,
+                          width: 0.80),
+                    ),
+                    child: Center(
+                      child: DropdownButton<String>(
+                        value: weightDropDown,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: ColorPalette.background),
+                        onChanged: (String? value) {
+                          setState(() {
+                            weightDropDown = value!;
+                          });
+                        },
+                        items: weightList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -179,23 +191,35 @@ class _GrowthViewState extends State<GrowthView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   DecimalInput(controller: _height),
-                  DropdownButton<String>(
-                    value: lengthDropDown,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: ColorPalette.background),
-                    onChanged: (String? value) {
-                      setState(() {
-                        lengthDropDown = value!;
-                      });
-                    },
-                    items: lengthList
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                  Container(
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: Colors.black,
+                          style: BorderStyle.solid,
+                          width: 0.80),
+                    ),
+                    child: Center(
+                      child: DropdownButton<String>(
+                        value: lengthDropDown,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: ColorPalette.background),
+                        onChanged: (String? value) {
+                          setState(() {
+                            lengthDropDown = value!;
+                          });
+                        },
+                        items: lengthList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -204,23 +228,35 @@ class _GrowthViewState extends State<GrowthView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   DecimalInput(controller: _headCircumference),
-                  DropdownButton<String>(
-                    value: lengthDropDown,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: ColorPalette.background),
-                    onChanged: (String? value) {
-                      setState(() {
-                        lengthDropDown = value!;
-                      });
-                    },
-                    items: lengthList
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+                  Container(
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: Colors.black,
+                          style: BorderStyle.solid,
+                          width: 0.80),
+                    ),
+                    child: Center(
+                      child: DropdownButton<String>(
+                        value: lengthDropDown,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: ColorPalette.background),
+                        onChanged: (String? value) {
+                          setState(() {
+                            lengthDropDown = value!;
+                          });
+                        },
+                        items: lengthList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   )
                 ],
               ),

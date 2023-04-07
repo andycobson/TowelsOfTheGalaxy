@@ -23,7 +23,9 @@ class _DecimalInputState extends State<DecimalInput> {
         enableSuggestions: false,
         autocorrect: false,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        textAlign: TextAlign.center,
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(0),
           hintText: '0.0',
           filled: true,
           fillColor: Colors.white,
