@@ -14,6 +14,9 @@ class AuthService {
     final user = _auth.currentUser;
     if (user != null) {
       return AppUser(user.uid);
+      /**
+       * change
+       */
     }
   }
 
