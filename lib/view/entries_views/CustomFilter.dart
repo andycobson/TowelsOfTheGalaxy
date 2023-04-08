@@ -175,6 +175,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -193,6 +194,9 @@ class SearchRoute extends StatelessWidget {
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
                 Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -211,7 +215,7 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), //
-               Row(children: [const Text("")],),
+              
                 SizedBox( 
                 height: 50,
                 width: 100,
@@ -235,9 +239,11 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), //
-                const TextDivider(text: '')
+               
             ]
-                )    
+                )  
+            ]
+                )  
               );
             }).toList(),
           );
@@ -268,6 +274,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -298,6 +305,9 @@ class SearchRoute extends StatelessWidget {
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
                 Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [ //
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -316,7 +326,7 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ),
-               Row(children: [const Text("")],), //
+
 
                SizedBox( 
                 height: 50,
@@ -343,9 +353,11 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), //
-                const TextDivider(text: '')
+                
             ]
-                )    
+                ) 
+            ]
+                )   
               );
             }).toList(),
           );
@@ -376,6 +388,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -406,6 +419,9 @@ class SearchRoute extends StatelessWidget {
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
                 Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -424,7 +440,7 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), //
-               Row(children: [const Text("")],),
+
 
                SizedBox( 
                 height: 50,
@@ -449,9 +465,11 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), //
-                const TextDivider(text: '')
+                
             ]
                 )    
+            ]
+                )
               );
             }).toList(),
           );
@@ -482,6 +500,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -504,6 +523,9 @@ class SearchRoute extends StatelessWidget {
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
                 Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [                  
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -522,7 +544,8 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), 
-               Row(children: [const Text("")],),//
+               
+
 
               SizedBox( 
                 height: 50,
@@ -546,9 +569,11 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), // //
-                const TextDivider(text: '')
+                
             ]
-                )    
+                )  
+            ]
+                )  
               );
             }).toList(),
           );
@@ -580,6 +605,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -602,7 +628,9 @@ class SearchRoute extends StatelessWidget {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -644,9 +672,11 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), // //
-                const TextDivider(text: '')
+               
             ]
-                )    
+                ) 
+            ]
+                )   
               );
             }).toList(),
           );
@@ -677,6 +707,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -690,6 +721,10 @@ class SearchRoute extends StatelessWidget {
                 Center(
                   child: Text(doc.data().toString().contains('ThrowUpColor') ? doc.get('ThrowUpColor') : '' )
                 ),
+                const TextDivider(text: 'Amount'),      
+                Center(
+                  child: Text(doc.data().toString().contains('amount') ? doc.get('amount') : '' )
+                ),
                 
                 const TextDivider(text: 'Taken at:'),      
                 Center(
@@ -699,7 +734,9 @@ class SearchRoute extends StatelessWidget {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -742,9 +779,11 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), ////
-                const TextDivider(text: '')
+                
             ]
-                )    
+                ) 
+            ]
+                )   
               );
             }).toList(),
           );
@@ -775,6 +814,7 @@ class SearchRoute extends StatelessWidget {
           return ListView(
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -797,8 +837,11 @@ class SearchRoute extends StatelessWidget {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
-                 SizedBox( 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                
+                SizedBox( 
                 height: 50,
                 width: 100,
                 child: ElevatedButton(                   
@@ -816,7 +859,7 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ),
-              Row(children: [const Text("")],),
+            
                SizedBox( 
                 height: 50,
                 width: 100,
@@ -839,7 +882,8 @@ class SearchRoute extends StatelessWidget {
                   
                 ),
               ), // //
-                const TextDivider(text: '')
+                ]
+                )
             ]
                 )    
               );
