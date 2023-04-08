@@ -24,8 +24,8 @@ class WeeksView extends StatefulWidget {
 }
 
 class _WeeksViewState extends State<WeeksView>{
-    DateTime start_Date = DateTime(DateTime.now().subtract(Duration(days: 6)).year,DateTime.now().subtract(Duration(days: 6)).month, DateTime.now().subtract(Duration(days: 6)).day);
-   DateTime end_Date = DateTime(DateTime.now().add(Duration(days: 1)).year,DateTime.now().add(Duration(days: 1)).month, DateTime.now().add(Duration(days: 1)).day);
+  DateTime start_Date = DateTime(DateTime.now().subtract(Duration(days: 6)).year,DateTime.now().subtract(Duration(days: 6)).month, DateTime.now().subtract(Duration(days: 6)).day);
+  DateTime end_Date = DateTime(DateTime.now().add(Duration(days: 1)).year,DateTime.now().add(Duration(days: 1)).month, DateTime.now().add(Duration(days: 1)).day);
 Widget build(BuildContext context) {
   
     return Scaffold(
@@ -55,10 +55,12 @@ Widget build(BuildContext context) {
           }
   
           return ListView(
+            
             shrinkWrap: true,
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+               decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -76,8 +78,11 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
-                 SizedBox( 
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                   SizedBox( 
                 height: 50,
                 width: 100,
                 child: ElevatedButton(                   
@@ -95,8 +100,8 @@ Widget build(BuildContext context) {
                   
                 ),
               ), //
-               Row(children: [const Text("")],),
-                SizedBox( 
+             
+                    SizedBox( 
                 height: 50,
                 width: 100,
                 child: ElevatedButton(                   
@@ -119,7 +124,10 @@ Widget build(BuildContext context) {
                   
                 ),
               ), //
-                const TextDivider(text: '')
+
+                  ],
+                ),
+  
             ]
                 )    
               );
@@ -148,6 +156,7 @@ Widget build(BuildContext context) {
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -177,7 +186,10 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -196,7 +208,7 @@ Widget build(BuildContext context) {
                   
                 ),
               ),
-               Row(children: [const Text("")],), //
+              //
 
                SizedBox( 
                 height: 50,
@@ -223,9 +235,11 @@ Widget build(BuildContext context) {
                   
                 ),
               ), //
-                const TextDivider(text: '')
+                
+            ],
+                ) ,
             ]
-                )    
+                )   
               );
             }).toList(),
           );
@@ -252,6 +266,7 @@ Widget build(BuildContext context) {
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -281,7 +296,9 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -300,7 +317,7 @@ Widget build(BuildContext context) {
                   
                 ),
               ), //
-               Row(children: [const Text("")],),
+               
 
                SizedBox( 
                 height: 50,
@@ -325,7 +342,8 @@ Widget build(BuildContext context) {
                   
                 ),
               ), //
-                const TextDivider(text: '')
+               ]
+                )
             ]
                 )    
               );
@@ -354,6 +372,7 @@ Widget build(BuildContext context) {
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -376,6 +395,10 @@ Widget build(BuildContext context) {
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
                 Row(children: [const Text("")],),
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -394,7 +417,7 @@ Widget build(BuildContext context) {
                   
                 ),
               ), 
-               Row(children: [const Text("")],),//
+   
 
               SizedBox( 
                 height: 50,
@@ -418,7 +441,8 @@ Widget build(BuildContext context) {
                   
                 ),
               ), // //
-                const TextDivider(text: '')
+                  ]
+                )
             ]
                 )    
               );
@@ -448,6 +472,7 @@ Widget build(BuildContext context) {
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -470,7 +495,9 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+                                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -489,7 +516,7 @@ Widget build(BuildContext context) {
                   
                 ),
               ),
-               Row(children: [const Text("")],),
+               
                SizedBox( 
                 height: 50,
                 width: 100,
@@ -512,7 +539,8 @@ Widget build(BuildContext context) {
                   
                 ),
               ), // //
-                const TextDivider(text: '')
+                ]
+                                )
             ]
                 )    
               );
@@ -541,6 +569,7 @@ Widget build(BuildContext context) {
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -554,6 +583,10 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text(doc.data().toString().contains('ThrowUpColor') ? doc.get('ThrowUpColor') : '' )
                 ),
+                const TextDivider(text: 'Amount'),      
+                Center(
+                  child: Text(doc.data().toString().contains('amount') ? doc.get('amount') : '' )
+                ),
                 
                 const TextDivider(text: 'Taken at:'),      
                 Center(
@@ -563,7 +596,11 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+
+                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+               
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -583,7 +620,7 @@ Widget build(BuildContext context) {
                   
                 ),
               ), 
-               Row(children: [const Text("")],),
+             
                SizedBox( 
                 height: 50,
                 width: 100,
@@ -606,7 +643,9 @@ Widget build(BuildContext context) {
                   
                 ),
               ), ////
-                const TextDivider(text: '')
+                
+                  ]
+                 )
             ]
                 )    
               );
@@ -635,6 +674,7 @@ Widget build(BuildContext context) {
              physics: const NeverScrollableScrollPhysics(),
             children: snapshot.data!.docs.map((doc) {
               return Container(
+                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
                 padding: const EdgeInsets.symmetric(vertical: 25.0, horizontal: 40.0),
                 child: Column(
             children: [
@@ -657,7 +697,10 @@ Widget build(BuildContext context) {
                 Center(
                   child: Text( doc.data().toString().contains('notes') ? doc.get('notes') : '')
                 ),
-                Row(children: [const Text("")],),
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+               
                  SizedBox( 
                 height: 50,
                 width: 100,
@@ -676,7 +719,7 @@ Widget build(BuildContext context) {
                   
                 ),
               ),
-              Row(children: [const Text("")],),
+              
                SizedBox( 
                 height: 50,
                 width: 100,
@@ -699,7 +742,8 @@ Widget build(BuildContext context) {
                   
                 ),
               ), // //
-                const TextDivider(text: '')
+               ]
+                  )
             ]
                 )    
               );
