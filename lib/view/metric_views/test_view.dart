@@ -5,7 +5,9 @@ import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/FoodMetricModel.dart';
 import 'package:baby_tracks/service/auth.dart';
 import 'package:baby_tracks/service/database.dart';
+import 'package:baby_tracks/wrapperClasses/dateTimeWrapper.dart';
 import 'package:flutter/material.dart';
+import '../../component/dateTimePicker.dart';
 import '../../constants/palette.dart';
 
 class TestView extends StatefulWidget {
@@ -23,8 +25,10 @@ class _TestViewState extends State<TestView> {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   static const List<String> metricTypeList = <String>['oz', 'ml'];
 
+  DateTime thisDate = DateTime.now();
+
   StringWrapper dropdownMetricValue = StringWrapper(metricTypeList.first);
-  late TimeWrapper timeWrapper;
+  late DateTimeWrapper timeWrapper;
   String note = "";
   String duration = "";
   String amount = "";
@@ -52,7 +56,7 @@ class _TestViewState extends State<TestView> {
     _service = DatabaseService();
     nursingNote = TextEditingController();
     bottleNote = TextEditingController();
-    timeWrapper = TimeWrapper(time);
+    timeWrapper = DateTimeWrapper(thisDate, time);
 
     widgets = [
       BottleView(
@@ -192,7 +196,7 @@ class BottleView extends StatefulWidget {
 
   final StringWrapper dropDownWrapper;
 
-  final TimeWrapper timeWrapper;
+  final DateTimeWrapper timeWrapper;
 
   final List<String> metricTypeList;
 
@@ -283,25 +287,7 @@ class _BottleViewState extends State<BottleView> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            TextButton(
-              child: Text(
-                widget.timeWrapper.value.format(context),
-              ),
-              onPressed: () async {
-                TimeOfDay? newTime = await showTimePicker(
-                    context: context, initialTime: widget.timeWrapper.value);
-
-                if (newTime == null) return;
-
-                setState(() {
-                  widget.timeWrapper.value = newTime;
-                  /*
-                    Representing some change.
-                    I forgot to make this other change. And i want it on the same commit i just did.
-                  */
-                });
-              },
-            ),
+            DateTimePicker(dateTime: widget.timeWrapper),
           ],
         ),
         const TextDivider(text: 'Notes'),

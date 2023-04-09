@@ -49,6 +49,8 @@ class TabNavigator extends StatelessWidget {
           ),
       settingsRoute: (context) => AppSettingsPage(
             onPush: callB,
+            createPush: (defaultRoot) =>
+                _push(context, defaultRoot: defaultRoot),
           ),
       foodRoute: (context) => FoodView(""),
       diaperRoute: (context) => DiaperView(""),
