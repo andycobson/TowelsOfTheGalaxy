@@ -11,6 +11,7 @@ import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:baby_tracks/view/metric_views/test_view.dart';
 import 'package:baby_tracks/view/nav_views/babycreate_view.dart';
 import 'package:flutter/material.dart';
+import '../view/entries_views/Analytics.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
 import '../view/entries_views/TodaysEntrys.dart';
@@ -65,6 +66,7 @@ class TabNavigator extends StatelessWidget {
       customRoute: (context) => CustomView(),
       babycreateRoute: (context) => BabyCreateView(),
       testRoute: (context) => TestView(),
+       analyticsRoute:(context) => AnalyticsView(),
     };
   }
 

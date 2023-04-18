@@ -8,6 +8,7 @@ import 'package:baby_tracks/view/metric_views/vaccine_view.dart';
 import 'package:baby_tracks/view/metric_views/test_view.dart';
 import 'package:flutter/material.dart';
 import '../constants/routes.dart';
+import '../view/entries_views/Analytics.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
 import '../view/entries_views/TodaysEntrys.dart';
@@ -57,6 +58,8 @@ class CardItemB {
           WeeksView(), weekRoute),
       CardItemB('CUSTOM FILTER ENTRIES',
           const Color.fromARGB(255, 182, 225, 80), CustomView(), customRoute),
+      CardItemB('ANALYTICS', const Color.fromARGB(255, 182, 225, 80), AnalyticsView(),
+          analyticsRoute),
     ];
   }
 }
