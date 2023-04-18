@@ -2,22 +2,24 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/TempMetricModel.dart';
-import 'package:baby_tracks/service/auth.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
+import 'package:optional/optional.dart';
+
+import '../../wrapperClasses/pair.dart';
 
 class TemperatureView extends StatefulWidget {
-  String id = "";
+  late Optional model;
 
-  TemperatureView(String arg) {
-    id = arg;
+  TemperatureView(Optional arg, {super.key}) {
+    model = arg;
   }
 
   @override
-  State<TemperatureView> createState() => _TemperatureViewState(id);
+  State<TemperatureView> createState() => _TemperatureViewState();
 }
 
 class _TemperatureViewState extends State<TemperatureView> {
@@ -27,43 +29,44 @@ class _TemperatureViewState extends State<TemperatureView> {
   String temperatureDropDown = temperatureList.first;
 
   TimeOfDay time = TimeOfDay.now();
-  TimeOfDay TempTime = TimeOfDay.now();
+  TimeOfDay tempTime = TimeOfDay.now();
   TimeOfDay endTime = TimeOfDay.now();
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   String note = "";
   String babyId = "";
+  String babyName = "Sam";
   String tempType = "";
   String temperature = "";
 
   late final TextEditingController _temperature;
   late final TextEditingController _note;
   late final ScrollController _noteScroller;
-
-  late final AuthService _auth;
   late final DatabaseService _service;
-
-  _TemperatureViewState(String arg) {
-    if (arg == "") {
-      log("create");
-    } else {
-      id = arg;
-      isUpdate = 1;
-    }
-  }
 
   @override
   void initState() {
     _temperature = TextEditingController();
     _note = TextEditingController();
     _noteScroller = ScrollController();
-    _auth = AuthService();
     _service = DatabaseService();
 
-    AppUser? user = _auth.currentUser;
-    if (user != null) {
-      babyId = user.uid;
+    babyName = PersistentUser.instance.currentBabyName;
+    babyId = PersistentUser.instance.userId;
+
+    if (!widget.model.isPresent) {
+      log("create");
+    } else {
+      isUpdate = 1;
+      Pair idModelPair = (widget.model.value as Pair);
+      TempMetricModel modelToUpdate = idModelPair.right;
+      Map<String, dynamic> modelJson = modelToUpdate.toJson();
+      tempTime = TimeOfDay.fromDateTime(modelJson['tempTime']);
+      temperatureDropDown = modelJson['tempType'];
+      _temperature.text = modelJson['temperature'];
+      _note.text = modelJson['notes'];
+      id = idModelPair.left;
     }
 
     super.initState();
@@ -84,36 +87,16 @@ class _TemperatureViewState extends State<TemperatureView> {
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
     DateTime start = DateTime(
-        date.year, date.month, date.day, TempTime.hour, TempTime.minute);
+        date.year, date.month, date.day, tempTime.hour, tempTime.minute);
     DateTime end =
         DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
     TempMetricModel model = TempMetricModel(
-        babyId: babyId,
+        babyId: "$babyId#$babyName",
         timeCreated: when,
         tempTime: start,
-        //    endTime: end,
         temperature: temperature,
         tempType: tempType,
         notes: note);
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text("Alert"),
-    //     content: const Text("Data submitted!"),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //         child: Container(
-    //           color: Colors.green,
-    //           padding: const EdgeInsets.all(14),
-    //           child: const Text("okay"),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     if (isUpdate == 0) {
       await _service.createTemperatureMetric(model);

@@ -2,23 +2,24 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/DiaperMetricModel.dart';
-import 'package:baby_tracks/service/auth.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/service/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
+
+import '../../wrapperClasses/pair.dart';
 
 class DiaperView extends StatefulWidget {
-  String id = "";
+  late Optional model;
 
-  DiaperView(String arg) {
-    id = arg;
+  DiaperView(Optional arg, {super.key}) {
+    model = arg;
   }
 
   @override
-  State<DiaperView> createState() => _DiaperViewState(id);
+  State<DiaperView> createState() => _DiaperViewState();
 }
 
 class _DiaperViewState extends State<DiaperView> {
@@ -34,31 +35,32 @@ class _DiaperViewState extends State<DiaperView> {
   String notes = "";
   String diaperContents = "";
   String babyId = "";
+  String babyName = "Sam";
 
   late final TextEditingController _note;
   late final ScrollController _noteScroller;
 
-  late final AuthService _auth;
   late final DatabaseService _service;
 
-  _DiaperViewState(String arg) {
-    if (arg == "") {
-      log("create");
-    } else {
-      id = arg;
-      isUpdate = 1;
-    }
-  }
   @override
   void initState() {
     _note = TextEditingController();
     _noteScroller = ScrollController();
-    _auth = AuthService();
     _service = DatabaseService();
+    babyName = PersistentUser.instance.currentBabyName;
+    babyId = PersistentUser.instance.userId;
 
-    AppUser? user = _auth.currentUser;
-    if (user != null) {
-      babyId = user.uid;
+    if (!widget.model.isPresent) {
+      log("create");
+    } else {
+      isUpdate = 1;
+      Pair idModelPair = (widget.model.value as Pair);
+      DiaperMetricModel modelToUpdate = idModelPair.right;
+      id = idModelPair.left;
+      Map<String, dynamic> modelJson = modelToUpdate.toJson();
+      dropdownValue = modelJson['diaperContents'];
+      _note.text = modelJson['notes'];
+      time = TimeOfDay.fromDateTime(modelJson['startTime']);
     }
 
     super.initState();
@@ -79,38 +81,19 @@ class _DiaperViewState extends State<DiaperView> {
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
 
     DiaperMetricModel model = DiaperMetricModel(
-        babyId: babyId,
+        babyId: "$babyId#$babyName",
         timeCreated: when,
         startTime: when,
         diaperContents: diaperContents,
         notes: notes);
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text("Alert"),
-    //     content: const Text("Data submitted!"),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //         child: Container(
-    //           color: Colors.green,
-    //           padding: const EdgeInsets.all(14),
-    //           child: const Text("okay"),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     if (isUpdate == 0) {
       await _service.createDiaperMetric(model);
-      Navigator.pop(context);
     } else {
       log("should Edit");
       await _service.editDiaperMetric(model, id);
     }
+    Navigator.pop(context);
   }
 
   @override
@@ -223,7 +206,8 @@ class _DiaperViewState extends State<DiaperView> {
                   },
                   child: const Text('Submit'),
                 ),
-              ), //
+              ),
+              //
             ],
           ),
         ),

@@ -2,23 +2,24 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/VaccineMetricModel.dart';
-import 'package:baby_tracks/service/auth.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
 import '../../component/decimal_number_input.dart';
+import '../../wrapperClasses/pair.dart';
 
 class VaccineView extends StatefulWidget {
-  String id = "";
+  late Optional model;
 
-  VaccineView(String arg) {
-    id = arg;
+  VaccineView(Optional arg, {super.key}) {
+    model = arg;
   }
 
   @override
-  State<VaccineView> createState() => _VaccineViewState(id);
+  State<VaccineView> createState() => _VaccineViewState();
 }
 
 class _VaccineViewState extends State<VaccineView> {
@@ -31,37 +32,41 @@ class _VaccineViewState extends State<VaccineView> {
   String notes = "";
   String Name = "";
   String babyId = "";
+  String babyName = "Sam";
   String series = "";
 
   late final TextEditingController _note;
   late final ScrollController _noteScroller;
+  late final ScrollController _nameScroller;
 
-  late final AuthService _auth;
   late final DatabaseService _service;
   late final TextEditingController _vaccine;
   late final TextEditingController _series;
-
-  _VaccineViewState(String arg) {
-    if (arg == "") {
-      log("create");
-    } else {
-      id = arg;
-      isUpdate = 1;
-    }
-  }
 
   @override
   void initState() {
     _note = TextEditingController();
     _noteScroller = ScrollController();
-    _auth = AuthService();
+    _nameScroller = ScrollController();
     _service = DatabaseService();
     _vaccine = TextEditingController();
     _series = TextEditingController();
 
-    AppUser? user = _auth.currentUser;
-    if (user != null) {
-      babyId = user.uid;
+    babyName = PersistentUser.instance.currentBabyName;
+    babyId = PersistentUser.instance.userId;
+
+    if (!widget.model.isPresent) {
+      log("create");
+    } else {
+      isUpdate = 1;
+      Pair idModelPair = (widget.model.value as Pair);
+      VaccineMetricModel modelToUpdate = idModelPair.right;
+      Map<String, dynamic> modelJson = modelToUpdate.toJson();
+      time = TimeOfDay.fromDateTime(modelJson['startTime']);
+      _vaccine.text = modelJson['vaccine'];
+      _series.text = modelJson['series'];
+      _note.text = modelJson['notes'];
+      id = idModelPair.left;
     }
 
     super.initState();
@@ -71,6 +76,7 @@ class _VaccineViewState extends State<VaccineView> {
   void dispose() {
     _note.dispose();
     _noteScroller.dispose();
+    _nameScroller.dispose();
     _series.dispose();
     super.dispose();
   }
@@ -83,32 +89,12 @@ class _VaccineViewState extends State<VaccineView> {
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
 
     VaccineMetricModel model = VaccineMetricModel(
-        babyId: babyId,
+        babyId: "$babyId#$babyName",
         timeCreated: when,
         startTime: when,
         vaccine: Name,
         series: series,
         notes: notes);
-
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text("Alert"),
-    //     content: const Text("Data submitted!"),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //         child: Container(
-    //           color: Colors.green,
-    //           padding: const EdgeInsets.all(14),
-    //           child: const Text("okay"),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     if (isUpdate == 0) {
       await _service.createVaccineMetric(model);
@@ -166,19 +152,14 @@ class _VaccineViewState extends State<VaccineView> {
               SizedBox(
                 height: 100,
                 child: Scrollbar(
-                  controller: _noteScroller,
+                  controller: _nameScroller,
                   child: TextField(
                     style: const TextStyle(color: Colors.white),
-                    scrollController: _noteScroller,
+                    scrollController: _nameScroller,
                     autofocus: false,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _vaccine,
-                    onChanged: (String value) {
-                      setState(() {
-                        Name = value;
-                      });
-                    },
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Enter vaccine name',

@@ -2,21 +2,23 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/ThrowUpMetricModel.dart';
-import 'package:baby_tracks/service/auth.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
+
+import '../../wrapperClasses/pair.dart';
 
 class ThrowUpView extends StatefulWidget {
-  String id = "";
+  late Optional model;
 
-  ThrowUpView(String arg) {
-    id = arg;
+  ThrowUpView(Optional arg, {super.key}) {
+    model = arg;
   }
 
   @override
-  State<ThrowUpView> createState() => _ThrowUpViewState(id);
+  State<ThrowUpView> createState() => _ThrowUpViewState();
 }
 
 class _ThrowUpViewState extends State<ThrowUpView> {
@@ -27,10 +29,11 @@ class _ThrowUpViewState extends State<ThrowUpView> {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   String notes = "";
-  String Amount = "";
-  String ThrowUpColor = "";
+  String amount = "";
+  String throwUpColor = "";
   String babyId = "";
-  static const List<String> AmountList = <String>[
+  String babyName = "";
+  static const List<String> amountList = <String>[
     'A lot',
     'Slightly above normal',
     'Normal amount',
@@ -38,37 +41,40 @@ class _ThrowUpViewState extends State<ThrowUpView> {
     'A little'
   ];
 
-  String dropdownAmountValue = AmountList.first;
+  String dropdownAmountValue = amountList.first;
 
   late final TextEditingController _note;
   late final TextEditingController _color;
-  late final TextEditingController _Amount;
+  late final TextEditingController _amount;
   late final ScrollController _noteScroller;
+  late final ScrollController _colorScroller;
 
-  late final AuthService _auth;
   late final DatabaseService _service;
-
-  _ThrowUpViewState(String arg) {
-    if (arg == "") {
-      log("create");
-    } else {
-      id = arg;
-      isUpdate = 1;
-    }
-  }
 
   @override
   void initState() {
     _note = TextEditingController();
     _color = TextEditingController();
     _noteScroller = ScrollController();
-    _Amount = TextEditingController();
-    _auth = AuthService();
+    _colorScroller = ScrollController();
+    _amount = TextEditingController();
     _service = DatabaseService();
 
-    AppUser? user = _auth.currentUser;
-    if (user != null) {
-      babyId = user.uid;
+    babyName = PersistentUser.instance.currentBabyName;
+    babyId = PersistentUser.instance.userId;
+
+    if (!widget.model.isPresent) {
+      log("create");
+    } else {
+      isUpdate = 1;
+      Pair idModelPair = (widget.model.value as Pair);
+      ThrowUpMetricModel modelToUpdate = idModelPair.right;
+      Map<String, dynamic> modelJson = modelToUpdate.toJson();
+      time = TimeOfDay.fromDateTime(modelJson['startTime']);
+      _color.text = modelJson['throwUpColor'];
+      dropdownAmountValue = modelJson['amount'];
+      _note.text = modelJson['notes'];
+      id = idModelPair.left;
     }
 
     super.initState();
@@ -78,42 +84,24 @@ class _ThrowUpViewState extends State<ThrowUpView> {
   void dispose() {
     _note.dispose();
     _noteScroller.dispose();
-    _Amount.dispose();
+    _colorScroller.dispose();
+    _amount.dispose();
     super.dispose();
   }
 
   Future createInstance() async {
     notes = _note.text;
-    Amount = dropdownAmountValue;
+    amount = dropdownAmountValue;
 
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
     ThrowUpMetricModel model = ThrowUpMetricModel(
-        babyId: babyId,
+        babyId: "$babyId#$babyName",
         timeCreated: when,
         startTime: when,
-        throwUpColor: ThrowUpColor,
-        amount: Amount,
+        throwUpColor: throwUpColor,
+        amount: amount,
         notes: notes);
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text("Alert"),
-    //     content: const Text("Data submitted!"),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //         child: Container(
-    //           color: Colors.green,
-    //           padding: const EdgeInsets.all(14),
-    //           child: const Text("okay"),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     if (isUpdate == 0) {
       await _service.createThrowUpMetric(model);
@@ -175,16 +163,11 @@ class _ThrowUpViewState extends State<ThrowUpView> {
                   controller: _noteScroller,
                   child: TextField(
                     style: const TextStyle(color: Colors.white),
-                    scrollController: _noteScroller,
+                    scrollController: _colorScroller,
                     autofocus: false,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _color,
-                    onChanged: (String value) {
-                      setState(() {
-                        ThrowUpColor = value;
-                      });
-                    },
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Enter Color',
@@ -217,8 +200,8 @@ class _ThrowUpViewState extends State<ThrowUpView> {
                             dropdownAmountValue = value!;
                           });
                         },
-                        items: AmountList.map<DropdownMenuItem<String>>(
-                            (String value) {
+                        items: amountList
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -242,11 +225,6 @@ class _ThrowUpViewState extends State<ThrowUpView> {
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _note,
-                    onChanged: (String value) {
-                      setState(() {
-                        notes = value;
-                      });
-                    },
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Add notes',

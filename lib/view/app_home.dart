@@ -1,3 +1,4 @@
+import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
 import 'package:baby_tracks/view/login_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,7 +65,8 @@ class _AppHomePageState extends State<AppHomePage> {
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color.fromARGB(255, 124, 123, 223),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: ColorPalette.defaultBlue,
           selectedItemColor: Color.fromARGB(255, 255, 255, 255),
           onTap: (int index) {
             _selectTab(pageKeys[index], index);

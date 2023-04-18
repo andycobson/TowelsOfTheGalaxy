@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
+import 'package:baby_tracks/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/AppUser.dart';
 import '../../model/persistentUser.dart';
 import '../../service/auth.dart';
+import '../../wrapperClasses/pair.dart';
 
 class AppSettingsPage extends StatefulWidget {
   const AppSettingsPage(
@@ -23,35 +26,41 @@ class AppSettingsPage extends StatefulWidget {
 class _AppSettingsPageState extends State<AppSettingsPage> {
   late SharedPreferences preferences;
   late final AuthService _auth;
-  String babyName = "";
-  List<dynamic> babysOnFile = [];
+  late final DatabaseService _service;
+  late String babyName;
+  late List<dynamic> babysOnFile;
+  late String userId;
 
   @override
   void initState() {
     super.initState();
     _auth = AuthService();
+    _service = DatabaseService();
 
-    initPerferences();
+    log(PersistentUser.instance.toString());
+
+    babyName = PersistentUser.instance.currentBabyName;
+    userId = PersistentUser.instance.userId;
+    babysOnFile = PersistentUser.instance.userBabyNames;
   }
 
-  Future initPerferences() async {
-    preferences = await SharedPreferences.getInstance();
+  Future callSomeBodyThatYouUsedToKnow() async {
+    DateTime start_Date = DateTime(
+        DateTime.now().subtract(Duration(days: 18)).year,
+        DateTime.now().subtract(Duration(days: 18)).month,
+        DateTime.now().subtract(Duration(days: 18)).day);
+    DateTime end_Date = DateTime(
+        DateTime.now().add(Duration(days: 1)).year,
+        DateTime.now().add(Duration(days: 1)).month,
+        DateTime.now().add(Duration(days: 1)).day);
+    List<Pair> some = await _service.retreiveAllAsList(
+        start_Date, end_Date, "$userId#$babyName");
+    log(some.toString());
+  }
 
-    AppUser? currentUser = _auth.currentUser;
-    String userId = "";
-    if (currentUser != null) {
-      userId = currentUser.uid;
-    }
-
-    final currentData = preferences.getString(userId);
-    if (currentData != null) {
-      PersistentUser currentDataUser =
-          PersistentUser.fromJson(json.decode(currentData));
-      setState(() {
-        babyName = currentDataUser.currentBabyName;
-        babysOnFile = currentDataUser.userBabyNames;
-      });
-    }
+  Future nukeItAll() async {
+    await _service.nuke("$userId#$babyName");
+    log("nuked");
   }
 
   @override
@@ -66,6 +75,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Text(PersistentUser.instance.currentBabyName),
             ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -86,7 +96,15 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text(babyName),
+                        InkWell(
+                          child: Text(babyName),
+                          onTap: () {
+                            setState(() {
+                              PersistentUser.instance.currentBabyName =
+                                  babyName;
+                            });
+                          },
+                        ),
                       ],
                     ),
                   );
@@ -136,6 +154,36 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                     widget.onPush();
                   }
                 },
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              width: 425,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ))),
+                onPressed: () async {
+                  callSomeBodyThatYouUsedToKnow();
+                },
+                child: const Text('Get it all'),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              width: 425,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ))),
+                onPressed: () async {
+                  nukeItAll();
+                },
+                child: const Text('Nuke'),
               ),
             ),
           ],

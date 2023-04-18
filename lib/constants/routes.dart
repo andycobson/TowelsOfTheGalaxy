@@ -15,6 +15,5 @@ const vaccineRoute = '/vaccine';
 const dayRoute = '/days';
 const weekRoute = '/week';
 const customRoute = '/custom';
-const testRoute = '/test';
 const babycreateRoute = '/babycreate';
 const analyticsRoute = '/analytics';

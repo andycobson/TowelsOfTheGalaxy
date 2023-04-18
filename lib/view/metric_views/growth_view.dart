@@ -2,22 +2,24 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/AppUser.dart';
 import 'package:baby_tracks/model/GrowthMetricModel.dart';
-import 'package:baby_tracks/service/auth.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
+import 'package:optional/optional.dart';
+
+import '../../wrapperClasses/pair.dart';
 
 class GrowthView extends StatefulWidget {
-  String id = "";
+  late Optional model;
 
-  GrowthView(String arg) {
-    id = arg;
+  GrowthView(Optional arg, {super.key}) {
+    model = arg;
   }
 
   @override
-  State<GrowthView> createState() => _GrowthViewState(id);
+  State<GrowthView> createState() => _GrowthViewState();
 }
 
 class _GrowthViewState extends State<GrowthView> {
@@ -36,6 +38,7 @@ class _GrowthViewState extends State<GrowthView> {
   String height = "";
   String headCircumference = "";
   String babyId = "";
+  String babyName = "Sam";
 
   late final TextEditingController _weight;
   late final TextEditingController _height;
@@ -43,17 +46,7 @@ class _GrowthViewState extends State<GrowthView> {
   late final TextEditingController _note;
   late final ScrollController _noteScroller;
 
-  late final AuthService _auth;
   late final DatabaseService _service;
-
-  _GrowthViewState(String arg) {
-    if (arg == "") {
-      log("create");
-    } else {
-      id = arg;
-      isUpdate = 1;
-    }
-  }
 
   @override
   void initState() {
@@ -62,12 +55,23 @@ class _GrowthViewState extends State<GrowthView> {
     _headCircumference = TextEditingController();
     _note = TextEditingController();
     _noteScroller = ScrollController();
-    _auth = AuthService();
     _service = DatabaseService();
 
-    AppUser? user = _auth.currentUser;
-    if (user != null) {
-      babyId = user.uid;
+    babyName = PersistentUser.instance.currentBabyName;
+    babyId = PersistentUser.instance.userId;
+
+    if (!widget.model.isPresent) {
+      log("create");
+    } else {
+      Pair idModelPair = (widget.model.value as Pair);
+      GrowthMetricModel modelToUpdate = idModelPair.right;
+      Map<String, dynamic> modelJson = modelToUpdate.toJson();
+      id = idModelPair.left;
+      _weight.text = modelJson['weight'];
+      _height.text = modelJson['height'];
+      _headCircumference.text = modelJson['headCircumference'];
+      _note.text = modelJson['notes'];
+      isUpdate = 1;
     }
 
     super.initState();
@@ -92,31 +96,12 @@ class _GrowthViewState extends State<GrowthView> {
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
     GrowthMetricModel model = GrowthMetricModel(
-        babyId: babyId,
+        babyId: "$babyId#$babyName",
         timeCreated: when,
         height: height,
         weight: weight,
         headCircumference: headCircumference,
         notes: note);
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text("Alert"),
-    //     content: const Text("Data submitted!"),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //         child: Container(
-    //           color: Colors.green,
-    //           padding: const EdgeInsets.all(14),
-    //           child: const Text("okay"),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     if (isUpdate == 0) {
       await _service.createGrowthMetric(model);

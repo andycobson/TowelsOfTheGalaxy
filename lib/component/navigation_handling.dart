@@ -8,10 +8,10 @@ import 'package:baby_tracks/view/metric_views/temperature_view.dart';
 import 'package:baby_tracks/view/metric_views/throwup_view.dart';
 import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
-import 'package:baby_tracks/view/metric_views/test_view.dart';
 import 'package:baby_tracks/view/nav_views/babycreate_view.dart';
 import 'package:flutter/material.dart';
 import '../view/entries_views/Analytics.dart';
+import 'package:optional/optional.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
 import '../view/entries_views/TodaysEntrys.dart';
@@ -53,20 +53,19 @@ class TabNavigator extends StatelessWidget {
             createPush: (defaultRoot) =>
                 _push(context, defaultRoot: defaultRoot),
           ),
-      foodRoute: (context) => FoodView(""),
-      diaperRoute: (context) => DiaperView(""),
-      sleepRoute: (context) => SleepView(""),
+      foodRoute: (context) => FoodView(const Optional.empty()),
+      diaperRoute: (context) => DiaperView(const Optional.empty()),
+      sleepRoute: (context) => SleepView(const Optional.empty()),
       loginRoute: (context) => LoginView(),
-      growthRoute: (context) => GrowthView(""),
-      temperatureRoute: (context) => TemperatureView(""),
-      throwupRoute: (context) => ThrowUpView(""),
-      vaccineRoute: (context) => VaccineView(""),
+      growthRoute: (context) => GrowthView(const Optional.empty()),
+      temperatureRoute: (context) => TemperatureView(const Optional.empty()),
+      throwupRoute: (context) => ThrowUpView(const Optional.empty()),
+      vaccineRoute: (context) => VaccineView(const Optional.empty()),
       dayRoute: (context) => DaysView(),
       weekRoute: (context) => WeeksView(),
       customRoute: (context) => CustomView(),
       babycreateRoute: (context) => BabyCreateView(),
-      testRoute: (context) => TestView(),
-       analyticsRoute:(context) => AnalyticsView(),
+      analyticsRoute: (context) => AnalyticsView(),
     };
   }
 

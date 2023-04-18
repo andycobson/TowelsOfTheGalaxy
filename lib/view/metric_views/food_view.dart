@@ -2,78 +2,129 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/AppUser.dart';
+import 'package:baby_tracks/component/toggle_bar.dart';
 import 'package:baby_tracks/model/FoodMetricModel.dart';
-import 'package:baby_tracks/service/auth.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/service/database.dart';
+import 'package:baby_tracks/wrapperClasses/dateTimeWrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:optional/optional_internal.dart';
+import '../../component/dateTimePicker.dart';
 import '../../constants/palette.dart';
+import '../../wrapperClasses/pair.dart';
 
 class FoodView extends StatefulWidget {
-  String id = "";
+  late Optional model;
 
-  FoodView(String arg) {
-    id = arg;
+  FoodView(Optional arg, {super.key}) {
+    model = arg;
   }
 
   @override
-  State<FoodView> createState() => _FoodViewState(id);
+  State<FoodView> createState() => _FoodViewState();
 }
 
 class _FoodViewState extends State<FoodView> {
   String id = "";
   int isUpdate = 0;
   TimeOfDay time = TimeOfDay.now();
-  TimeOfDay startTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now();
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   static const List<String> metricTypeList = <String>['oz', 'ml'];
-  static const List<String> feedingTypeList = <String>[
-    'Nursing',
-    'Feeding',
-    'Both'
-  ];
-  String dropdownMetricValue = metricTypeList.first;
-  String dropdownFoodValue = feedingTypeList.first;
+
+  DateTime thisDate = DateTime.now();
+  List<String> labels = ['Bottle', 'Nursing'];
+
+  int counter = 0;
+
+  StringWrapper dropdownMetricValue = StringWrapper(metricTypeList.first);
+  late DateTimeWrapper bottleTimeWrapper;
   String note = "";
   String duration = "";
   String amount = "";
   String feedingType = "";
   String babyId = "";
+  String babyName = "Sam";
   String metricType = "";
 
-  late final TextEditingController _amount;
-  late final TextEditingController _feedingType;
-  late final TextEditingController _duration;
-  late final TextEditingController _note;
-  late final ScrollController _noteScroller;
+  TimeOfDay nursingStartTimeOfDay = TimeOfDay.now();
+  TimeOfDay nursingEndTimeOfDay = TimeOfDay.now();
+  DateTime nursingStartDateTime =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime nursingEndDateTime =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  late DateTimeWrapper nursingStartTime;
+  late DateTimeWrapper nursingEndTime;
 
-  late final AuthService _auth;
+  late final TextEditingController _amount;
+  late final TextEditingController durationController;
+  late final TextEditingController nursingNote;
+  late final TextEditingController bottleNote;
+
   late final DatabaseService _service;
 
-  _FoodViewState(String arg) {
-    if (arg == "") {
-      log("create");
-    } else {
-      id = arg;
-      isUpdate = 1;
-    }
-  }
+  late List<Widget> widgets;
+
   @override
   void initState() {
     _amount = TextEditingController();
-    _feedingType = TextEditingController();
-    _duration = TextEditingController();
-    _note = TextEditingController();
-    _noteScroller = ScrollController();
-    _auth = AuthService();
+    durationController = TextEditingController();
     _service = DatabaseService();
+    nursingNote = TextEditingController();
+    bottleNote = TextEditingController();
+    bottleTimeWrapper = DateTimeWrapper(thisDate, time);
 
-    AppUser? user = _auth.currentUser;
-    if (user != null) {
-      babyId = user.uid;
+    babyName = PersistentUser.instance.currentBabyName;
+    babyId = PersistentUser.instance.userId;
+
+    if (!widget.model.isPresent) {
+      log("create");
+      nursingStartTime =
+          DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
+      nursingEndTime = DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
+    } else {
+      Pair idModelPair = (widget.model.value as Pair);
+      FoodMetricModel modelToUpdate = idModelPair.right;
+      id = idModelPair.left;
+      Map<String, dynamic> modelJson = modelToUpdate.toJson();
+
+      if (modelJson['feedingType'] == "Nursing") {
+        counter = 1;
+        nursingNote.text = modelJson['notes'];
+        nursingStartTimeOfDay = TimeOfDay.fromDateTime(modelJson['startTime']);
+        nursingEndTimeOfDay = TimeOfDay.fromDateTime(modelJson['endTime']);
+        nursingStartDateTime = modelJson['startTime'];
+        nursingEndDateTime = modelJson['endTime'];
+        nursingStartTime =
+            DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
+        nursingEndTime =
+            DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
+      } else {
+        bottleNote.text = modelJson['notes'];
+        time = TimeOfDay.fromDateTime(modelJson['startTime']);
+        thisDate = modelJson['startTime'];
+      }
+      dropdownMetricValue.value = modelJson['metricType'];
+      _amount.text = modelJson['amount'].toString();
+      durationController.text = modelJson['duration'].toString();
+      isUpdate = 1;
     }
+
+    widgets = [
+      BottleView(
+        amount: _amount,
+        note: bottleNote,
+        metricTypeList: metricTypeList,
+        dropDownWrapper: dropdownMetricValue,
+        timeWrapper: bottleTimeWrapper,
+      ),
+      NursingView(
+        note: nursingNote,
+        startTime: nursingStartTime,
+        endTime: nursingEndTime,
+        duration: durationController,
+      )
+    ];
 
     super.initState();
   }
@@ -81,27 +132,48 @@ class _FoodViewState extends State<FoodView> {
   @override
   void dispose() {
     _amount.dispose();
-    _feedingType.dispose();
-    _duration.dispose();
-    _note.dispose();
-    _noteScroller.dispose();
     super.dispose();
   }
 
   Future createInstance() async {
-    note = _note.text;
-    feedingType = dropdownFoodValue;
-    metricType = dropdownMetricValue;
-    amount = _amount.text;
-    duration = _duration.text;
+    feedingType = labels[counter];
+    metricType = dropdownMetricValue.value;
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
-    DateTime startDateTime = DateTime(
-        date.year, date.month, date.day, startTime.hour, startTime.minute);
-    DateTime endDateTime =
-        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
+    DateTime startDateTime;
+    DateTime endDateTime;
+
+    if (feedingType == 'Bottle') {
+      amount = _amount.text;
+      note = bottleNote.text;
+      duration = "0";
+      startDateTime = DateTime(
+          bottleTimeWrapper.dateValue.year,
+          bottleTimeWrapper.dateValue.month,
+          bottleTimeWrapper.dateValue.day,
+          bottleTimeWrapper.timeValue.hour,
+          bottleTimeWrapper.timeValue.minute);
+      endDateTime = startDateTime;
+    } else {
+      amount = "0";
+      note = nursingNote.text;
+      duration = durationController.text;
+      startDateTime = DateTime(
+          nursingStartTime.dateValue.year,
+          nursingStartTime.dateValue.month,
+          nursingStartTime.dateValue.day,
+          nursingStartTime.timeValue.hour,
+          nursingStartTime.timeValue.minute);
+      endDateTime = DateTime(
+          nursingEndTime.dateValue.year,
+          nursingEndTime.dateValue.month,
+          nursingEndTime.dateValue.day,
+          nursingEndTime.timeValue.hour,
+          nursingEndTime.timeValue.minute);
+    }
+
     FoodMetricModel model = FoodMetricModel(
-        babyId: babyId,
+        babyId: "$babyId#$babyName",
         timeCreated: when,
         startTime: startDateTime,
         endTime: endDateTime,
@@ -110,25 +182,6 @@ class _FoodViewState extends State<FoodView> {
         amount: amount,
         duration: duration,
         notes: note);
-    // showDialog(
-    //   context: context,
-    //   builder: (ctx) => AlertDialog(
-    //     title: const Text("Alert"),
-    //     content: const Text("Data submitted!"),
-    //     actions: <Widget>[
-    //       TextButton(
-    //         onPressed: () {
-    //           Navigator.of(ctx).pop();
-    //         },
-    //         child: Container(
-    //           color: Colors.green,
-    //           padding: const EdgeInsets.all(14),
-    //           child: const Text("okay"),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     if (isUpdate == 0) {
       await _service.createFoodMetric(model);
@@ -154,171 +207,25 @@ class _FoodViewState extends State<FoodView> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              const TextDivider(text: 'Amount'),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                DecimalInput(controller: _amount),
-                Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                        color: Colors.black,
-                        style: BorderStyle.solid,
-                        width: 0.80),
-                  ),
-                  child: Center(
-                    // Added the Center widget
-                    child: DropdownButton<String>(
-                      value: dropdownMetricValue,
-                      icon: const Icon(Icons.arrow_downward),
-                      elevation: 16,
-                      style: const TextStyle(color: ColorPalette.background),
-                      onChanged: (String? value) {
-                        setState(() {
-                          dropdownMetricValue = value!;
-                        });
-                      },
-                      items: metricTypeList
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ]),
-              const SizedBox(
-                height: 20,
-              ),
-              const TextDivider(text: 'Time'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Nursing Start Time',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextButton(
-                    child: Text(
-                      startTime.format(context),
-                    ),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: startTime);
-
-                      if (newTime == null) return;
-
-                      setState(() {
-                        startTime = newTime;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Nursing End Time',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextButton(
-                    child: Text(
-                      endTime.format(context),
-                    ),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: endTime);
-
-                      if (newTime == null) return;
-
-                      setState(() {
-                        endTime = newTime;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    'Nursing Duration in Minutes',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  DecimalInput(controller: _duration),
-                ],
-              ),
-              const TextDivider(text: 'Feeding Type'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 0.80),
-                    ),
-                    child: Center(
-                      child: DropdownButton<String>(
-                        value: dropdownFoodValue,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: ColorPalette.background),
-                        onChanged: (String? value) {
-                          setState(() {
-                            dropdownFoodValue = value!;
-                          });
-                        },
-                        items: feedingTypeList
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const TextDivider(text: 'Notes'),
               SizedBox(
-                height: 100,
-                child: Scrollbar(
-                  controller: _noteScroller,
-                  child: TextField(
-                    style: const TextStyle(color: Colors.white),
-                    scrollController: _noteScroller,
-                    autofocus: false,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: _note,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Add notes',
-                      contentPadding: EdgeInsets.all(8),
-                    ),
-                  ),
+                width: MediaQuery.of(context).size.width - 128,
+                child: ToggleBar(
+                  labels: labels,
+                  textColor: ColorPalette.backgroundRGB,
+                  backgroundBorder: Border.all(color: ColorPalette.lightAccent),
+                  backgroundColor: ColorPalette.lightAccent,
+                  selectedTabColor: ColorPalette.backgroundRGB,
+                  labelTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                  borderPadding: 1.0,
+                  edgeAdjustment: 4,
+                  onSelectionUpdated: (index) {
+                    setState(() {
+                      counter = index;
+                    });
+                  },
                 ),
               ),
+              widgets[counter],
               SizedBox(
                 height: 50,
                 width: 425,
@@ -340,4 +247,241 @@ class _FoodViewState extends State<FoodView> {
       ),
     );
   }
+}
+
+class BottleView extends StatefulWidget {
+  final TextEditingController amount;
+
+  final TextEditingController note;
+
+  final StringWrapper dropDownWrapper;
+
+  final DateTimeWrapper timeWrapper;
+
+  final List<String> metricTypeList;
+
+  const BottleView(
+      {required this.amount,
+      required this.note,
+      required this.dropDownWrapper,
+      required this.timeWrapper,
+      required this.metricTypeList,
+      super.key});
+
+  @override
+  State<BottleView> createState() => _BottleViewState();
+}
+
+class _BottleViewState extends State<BottleView> {
+  late ScrollController _noteScroller;
+
+  @override
+  void initState() {
+    _noteScroller = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _noteScroller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const TextDivider(text: 'Amount'),
+        const SizedBox(
+          height: 20,
+        ),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          DecimalInput(controller: widget.amount),
+          Container(
+            width: 100,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                  color: Colors.black, style: BorderStyle.solid, width: 0.80),
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                    color: Colors.black, style: BorderStyle.solid, width: 0.80),
+              ),
+              child: Center(
+                child: DropdownButton<String>(
+                  value: widget.dropDownWrapper.value,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: ColorPalette.background),
+                  onChanged: (String? value) {
+                    setState(() {
+                      widget.dropDownWrapper.value = value!;
+                    });
+                  },
+                  items: widget.metricTypeList
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ]),
+        const SizedBox(
+          height: 20,
+        ),
+        const TextDivider(text: 'Time'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Start Time',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            DateTimePicker(dateTime: widget.timeWrapper),
+          ],
+        ),
+        const TextDivider(text: 'Notes'),
+        SizedBox(
+          height: 100,
+          child: Scrollbar(
+            controller: _noteScroller,
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              scrollController: _noteScroller,
+              autofocus: false,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: widget.note,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Add notes',
+                contentPadding: EdgeInsets.all(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class NursingView extends StatefulWidget {
+  final TextEditingController note;
+  final DateTimeWrapper startTime;
+  final DateTimeWrapper endTime;
+  final TextEditingController duration;
+
+  const NursingView(
+      {required this.note,
+      required this.startTime,
+      required this.endTime,
+      required this.duration,
+      super.key});
+
+  @override
+  State<NursingView> createState() => _NursingViewState();
+}
+
+class _NursingViewState extends State<NursingView> {
+  late ScrollController _noteScroller;
+
+  @override
+  void initState() {
+    _noteScroller = ScrollController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _noteScroller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const TextDivider(text: 'Time'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Nursing Start Time',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            DateTimePicker(dateTime: widget.startTime),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Nursing End Time',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            DateTimePicker(dateTime: widget.endTime),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text(
+              'Nursing Duration in Minutes',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            DecimalInput(controller: widget.duration),
+          ],
+        ),
+        const TextDivider(text: 'Notes'),
+        SizedBox(
+          height: 100,
+          child: Scrollbar(
+            controller: _noteScroller,
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              scrollController: _noteScroller,
+              autofocus: false,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: widget.note,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Add notes',
+                contentPadding: EdgeInsets.all(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class StringWrapper {
+  String value;
+  StringWrapper(this.value);
+}
+
+class TimeWrapper {
+  TimeOfDay value;
+  TimeWrapper(this.value);
 }

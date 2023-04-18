@@ -76,6 +76,7 @@ class _BabyCreateViewState extends State<BabyCreateView> {
 
     // Check persistent data from user info
     List<dynamic> babyNames = [];
+    /*
     final currentData = preferences.getString(userId);
     PersistentUser? currentDataUser;
     if (currentData != null) {
@@ -111,6 +112,7 @@ class _BabyCreateViewState extends State<BabyCreateView> {
       apphomeRoute,
       (route) => false,
     );
+    */
   }
 
   @override

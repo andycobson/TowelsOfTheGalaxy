@@ -1,6 +1,15 @@
+import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/view/metric_views/vaccine_view.dart';
+import 'package:baby_tracks/wrapperClasses/pair.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:optional/optional_internal.dart';
 
-class VaccineMetricModel extends VaccineMetric {
+import '../component/text_divider.dart';
+import '../constants/palette.dart';
+
+class VaccineMetricModel extends VaccineMetric implements MetricInterface {
   const VaccineMetricModel({
     required String babyId,
     required DateTime timeCreated,
@@ -19,10 +28,10 @@ class VaccineMetricModel extends VaccineMetric {
   factory VaccineMetricModel.fromJson(Map<String, dynamic> json) {
     return VaccineMetricModel(
       babyId: json['babyId'],
-      timeCreated: json['timeCreated'],
-      startTime: json['startTime'],
+      timeCreated: (json['timeCreated'] as Timestamp).toDate(),
+      startTime: (json['startTime'] as Timestamp).toDate(),
       vaccine: json['vaccine'],
-      series: json['series'],
+      series: json['series'].toString(),
       notes: json['notes'],
     );
   }
@@ -35,6 +44,54 @@ class VaccineMetricModel extends VaccineMetric {
         'vaccine': vaccine,
         'notes': notes
       };
+
+  @override
+  Future routeToEdit(dynamic context, String id) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return VaccineView(Optional.of(Pair(left: id, right: this)));
+    }));
+  }
+
+  @override
+  String getCollectionName() {
+    return "Vaccine";
+  }
+
+  Widget analyticsWidget() {
+    return Container(
+      child: Column(
+        children: [
+          const TextDivider(text: 'New Vaccine Entry'),
+          const TextDivider(text: 'Entry Created at:'),
+          Center(
+              child: Text(
+            "$timeCreated",
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          )),
+          const TextDivider(text: 'Vaccine'),
+          Center(
+              child: Text(
+            "$vaccine Series: $series",
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          )),
+          const TextDivider(text: 'Taken at:'),
+          Center(
+              child: Text(
+            "$timeCreated",
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          )),
+          const TextDivider(text: 'Notes'),
+          Center(child: Text(notes))
+        ],
+      ),
+    );
+  }
 }
 
 class VaccineMetric extends Equatable {

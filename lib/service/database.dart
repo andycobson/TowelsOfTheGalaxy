@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/model/DiaperMetricModel.dart';
 import 'package:baby_tracks/model/babyModel.dart';
 import 'package:baby_tracks/model/FoodMetricModel.dart';
@@ -6,7 +8,9 @@ import 'package:baby_tracks/model/SleepMetricModel.dart';
 import 'package:baby_tracks/model/TempMetricModel.dart';
 import 'package:baby_tracks/model/ThrowUpMetricModel.dart';
 import 'package:baby_tracks/model/VaccineMetricModel.dart';
+import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 class DatabaseService {
   final CollectionReference diaperCollection =
@@ -84,5 +88,133 @@ class DatabaseService {
 
   Future editVaccineMetric(VaccineMetricModel model, String id) async {
     return await vaccineCollection.doc(id).update(model.toJson());
+  }
+
+  Future deleteDiaperMetric(String id) async {
+    return await diaperCollection.doc(id).delete();
+  }
+
+  Future deleteFoodMetric(String id) async {
+    return await foodCollection.doc(id).delete();
+  }
+
+  Future deleteSleepMetric(String id) async {
+    return await sleepCollection.doc(id).delete();
+  }
+
+  Future deleteGrowthMetric(String id) async {
+    return await growthCollection.doc(id).delete();
+  }
+
+  Future deleteTemperatureMetric(String id) async {
+    return await temperatureCollection.doc(id).delete();
+  }
+
+  Future deleteThrowUpMetric(String id) async {
+    return await throwupCollection.doc(id).delete();
+  }
+
+  Future deleteVaccineMetric(String id) async {
+    return await vaccineCollection.doc(id).delete();
+  }
+
+  Future<List<Pair>> retreiveAllAsList(
+      DateTime startDate, DateTime endDate, String babyId) async {
+    List<Pair> res = [];
+    res.addAll(await timeQuery(startDate, endDate, "Diaper", babyId));
+    res.addAll(await timeQuery(startDate, endDate, "Food", babyId));
+    res.addAll(await timeQuery(startDate, endDate, "Growth", babyId));
+    res.addAll(await timeQuery(startDate, endDate, "Sleep", babyId));
+    res.addAll(await timeQuery(startDate, endDate, "Temperature", babyId));
+    res.addAll(await timeQuery(startDate, endDate, "Throwup", babyId));
+    res.addAll(await timeQuery(startDate, endDate, "Vaccine", babyId));
+    return res;
+  }
+
+  Future nuke(String babyId) async {
+    DateTime startDate = DateTime(
+        DateTime.now().subtract(const Duration(days: 60)).year,
+        DateTime.now().subtract(const Duration(days: 60)).month,
+        DateTime.now().subtract(const Duration(days: 60)).day);
+    DateTime endDate = DateTime(
+        DateTime.now().add(const Duration(days: 1)).year,
+        DateTime.now().add(const Duration(days: 1)).month,
+        DateTime.now().add(const Duration(days: 1)).day);
+    List<Pair> res = [];
+    res.addAll(await timeQuery(startDate, endDate, "Diaper", babyId));
+    res.forEach((element) {
+      deleteDiaperMetric(element.left);
+    });
+    res.addAll(await timeQuery(startDate, endDate, "Food", babyId));
+    res.clear();
+    res.forEach((element) {
+      deleteFoodMetric(element.left);
+    });
+    res.clear();
+    res.addAll(await timeQuery(startDate, endDate, "Growth", babyId));
+    res.forEach((element) {
+      deleteGrowthMetric(element.left);
+    });
+    res.clear();
+    res.addAll(await timeQuery(startDate, endDate, "Sleep", babyId));
+    res.forEach((element) {
+      deleteSleepMetric(element.left);
+    });
+    res.clear();
+    res.addAll(await timeQuery(startDate, endDate, "Temperature", babyId));
+    res.forEach((element) {
+      deleteTemperatureMetric(element.left);
+    });
+    res.clear();
+    res.addAll(await timeQuery(startDate, endDate, "Throwup", babyId));
+    res.forEach((element) {
+      deleteThrowUpMetric(element.left);
+    });
+    res.clear();
+    res.addAll(await timeQuery(startDate, endDate, "Vaccine", babyId));
+    res.forEach((element) {
+      deleteVaccineMetric(element.left);
+    });
+    res.clear();
+  }
+
+  Future<List<Pair>> timeQuery(DateTime startDate, DateTime endDate,
+      String metricType, String babyId) async {
+    Map<String, Pair> dataMap = {
+      "Diaper": Pair(left: DiaperMetricModel.fromJson, right: diaperCollection),
+      "Food": Pair(left: FoodMetricModel.fromJson, right: foodCollection),
+      "Growth": Pair(left: GrowthMetricModel.fromJson, right: growthCollection),
+      "Sleep": Pair(left: SleepMetricModel.fromJson, right: sleepCollection),
+      "Temperature":
+          Pair(left: TempMetricModel.fromJson, right: temperatureCollection),
+      "Throwup":
+          Pair(left: ThrowUpMetricModel.fromJson, right: throwupCollection),
+      "Vaccine":
+          Pair(left: VaccineMetricModel.fromJson, right: vaccineCollection),
+    };
+
+    CollectionReference colRef = dataMap[metricType]!.right;
+
+    log(babyId);
+
+    QuerySnapshot shapShots = await colRef
+        .where('timeCreated', isGreaterThanOrEqualTo: startDate)
+        .where('timeCreated', isLessThanOrEqualTo: endDate)
+        .where('babyId', isEqualTo: babyId)
+        .get();
+
+    List<Pair> res = [];
+    List<QueryDocumentSnapshot> docs = [];
+
+    final allData = shapShots.docs
+        .map((e) => Pair(left: e.id, right: e.data() as Map<String, dynamic>))
+        .toList();
+
+    Function fromJson = dataMap[metricType]!.left;
+
+    allData.forEach(
+      (pair) => res.add(Pair(left: pair.left, right: fromJson(pair.right))),
+    );
+    return res;
   }
 }

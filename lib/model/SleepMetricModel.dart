@@ -1,6 +1,15 @@
+import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/view/metric_views/sleep_view.dart';
+import 'package:baby_tracks/wrapperClasses/pair.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:optional/optional.dart';
 
-class SleepMetricModel extends SleepMetric {
+import '../component/text_divider.dart';
+import '../constants/palette.dart';
+
+class SleepMetricModel extends SleepMetric implements MetricInterface {
   const SleepMetricModel({
     required String babyId,
     required DateTime timeCreated,
@@ -19,14 +28,15 @@ class SleepMetricModel extends SleepMetric {
   factory SleepMetricModel.fromJson(Map<String, dynamic> json) {
     return SleepMetricModel(
       babyId: json['babyId'],
-      timeCreated: json['timeCreated'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
-      duration: json['Duration'],
+      timeCreated: (json['timeCreated'] as Timestamp).toDate(),
+      startTime: (json['startTime'] as Timestamp).toDate(),
+      endTime: (json['endTime'] as Timestamp).toDate(),
+      duration: (json['Duration'] ?? "").toString(),
       notes: json['notes'],
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         'babyId': babyId,
         'timeCreated': timeCreated,
@@ -35,6 +45,61 @@ class SleepMetricModel extends SleepMetric {
         'duration': double.parse('0' + duration),
         'notes': notes,
       };
+
+  @override
+  Future routeToEdit(dynamic context, String id) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return SleepView(Optional.of(Pair(left: id, right: this)));
+    }));
+  }
+
+  @override
+  String getCollectionName() {
+    return "Sleep";
+  }
+
+  @override
+  Widget analyticsWidget() {
+    return Container(
+      child: Column(
+        children: [
+          const TextDivider(text: 'New Sleep Entry'),
+          const TextDivider(text: 'Entry posted at:'),
+          Center(
+              child: Text(
+            "$timeCreated",
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          )),
+          const TextDivider(text: 'Times frame of nap'),
+          Center(
+              child: Text(
+            "$startTime to $endTime",
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          )),
+          const TextDivider(text: 'Duration'),
+          Center(
+              child: Text(
+            "$duration Hours",
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          )),
+          const TextDivider(text: 'Notes'),
+          Center(
+              child: Text(
+            notes,
+            style: const TextStyle(
+              color: ColorPalette.pText,
+            ),
+          ))
+        ],
+      ),
+    );
+  }
 }
 
 class SleepMetric extends Equatable {

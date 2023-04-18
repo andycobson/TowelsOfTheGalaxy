@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:convert';
 
 import 'package:baby_tracks/view/app_home.dart';
 import 'package:baby_tracks/view/loading_view.dart';
@@ -12,6 +13,8 @@ import 'constants/routes.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import 'model/persistentUser.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized;
@@ -81,7 +84,9 @@ class _HomePageState extends State<HomePage> {
                   if (userState == null) {
                     return const BabyCreateView();
                   } else {
-                    log(userState);
+                    Map<String, dynamic> jsonInfo = json.decode(userState);
+                    PersistentUser(jsonInfo['currentBabyName'], userId,
+                        jsonInfo['userBabyNames']);
                     return const AppHomePage();
                   }
                 }
