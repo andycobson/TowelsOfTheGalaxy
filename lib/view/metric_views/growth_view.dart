@@ -38,7 +38,13 @@ class _GrowthViewState extends State<GrowthView> {
   String height = "";
   String headCircumference = "";
   String babyId = "";
+<<<<<<< HEAD
   String babyName = "Sam";
+=======
+  String weightType = "";
+  String heightType = "";
+  String HCType = "";
+>>>>>>> d63ef75 (final commits)
 
   late final TextEditingController _weight;
   late final TextEditingController _height;
@@ -92,6 +98,9 @@ class _GrowthViewState extends State<GrowthView> {
     weight = _weight.text;
     height = _height.text;
     headCircumference = _headCircumference.text;
+    heightType = lengthDropDown;
+    HCType = lengthDropDown;
+    weightType = weightDropDown;
 
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
@@ -101,6 +110,9 @@ class _GrowthViewState extends State<GrowthView> {
         height: height,
         weight: weight,
         headCircumference: headCircumference,
+        heightType: heightType,
+        weightType: weightType,
+        HCType: HCType,
         notes: note);
 
     if (isUpdate == 0) {

@@ -16,6 +16,9 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
     required String height,
     required String weight,
     required String headCircumference,
+     required String heightType,
+    required String weightType,
+    required String HCType,
     required String notes,
   }) : super(
           babyId: babyId,
@@ -23,16 +26,26 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
           height: height,
           weight: weight,
           headCircumference: headCircumference,
+          heightType: heightType,
+          weightType: weightType,
+          HCType: HCType,
           notes: notes,
         );
 
   factory GrowthMetricModel.fromJson(Map<String, dynamic> json) {
     return GrowthMetricModel(
       babyId: json['babyId'],
+
       timeCreated: (json['timeCreated'] as Timestamp).toDate(),
       height: (json['height'] ?? 0).toString(),
       weight: (json['weight'] ?? 0).toString(),
       headCircumference: (json['headCircumference'] ?? 0).toString(),
+
+  
+      heightType: json['heightType'],
+      weightType: json['weightType'],
+      HCType: json['HCType'],
+
       notes: json['notes'],
     );
   }
@@ -44,6 +57,9 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
         'height': double.parse('0' + height),
         'weight': double.parse('0' + weight),
         'headCircumference': double.parse('0' + headCircumference),
+        'heightType': heightType,
+        'weightType': weightType,
+        'HCType': HCType,
         'notes': notes,
       };
 
@@ -116,6 +132,9 @@ class GrowthMetric extends Equatable {
   final String height;
   final String weight;
   final String headCircumference;
+  final String heightType;
+  final String weightType;
+  final String HCType;
   final String notes;
 
   const GrowthMetric({
@@ -124,10 +143,13 @@ class GrowthMetric extends Equatable {
     required this.height,
     required this.weight,
     required this.headCircumference,
+    required this.heightType,
+    required this.weightType,
+    required this.HCType,
     required this.notes,
   });
 
   @override
   List<Object?> get props =>
-      [babyId, timeCreated, height, weight, headCircumference, notes];
+      [babyId, timeCreated, height, weight, headCircumference,heightType, weightType, HCType, notes];
 }
