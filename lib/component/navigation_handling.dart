@@ -6,6 +6,7 @@ import 'package:baby_tracks/view/metric_views/growth_view.dart';
 import 'package:baby_tracks/view/metric_views/sleep_view.dart';
 import 'package:baby_tracks/view/metric_views/temperature_view.dart';
 import 'package:baby_tracks/view/metric_views/throwup_view.dart';
+import 'package:baby_tracks/view/metric_views/medicine_view.dart';
 import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:baby_tracks/view/nav_views/babycreate_view.dart';
@@ -67,6 +68,7 @@ class TabNavigator extends StatelessWidget {
       customRoute: (context) => CustomView(),
       babycreateRoute: (context) => BabyCreateView(),
       analyticsRoute: (context) => AnalyticsView(),
+      medicineRoute: (context) => MedicineView(const Optional.empty()),
     };
   }
 

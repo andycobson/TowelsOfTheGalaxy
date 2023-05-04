@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:baby_tracks/model/MedicineMetricModel.dart';
 import 'package:baby_tracks/model/DiaperMetricModel.dart';
 import 'package:baby_tracks/model/babyModel.dart';
 import 'package:baby_tracks/model/FoodMetricModel.dart';
@@ -13,6 +13,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class DatabaseService {
+  final CollectionReference medicineCollection =
+      FirebaseFirestore.instance.collection('Medicine');
   final CollectionReference diaperCollection =
       FirebaseFirestore.instance.collection('Diaper');
   final CollectionReference foodCollection =
@@ -32,6 +34,10 @@ class DatabaseService {
 
   Future createDiaperMetric(DiaperMetricModel model) async {
     return await diaperCollection.doc().set(model.toJson());
+  }
+
+  Future createMedicineMetric(MedicineMetricModel model) async {
+    return await medicineCollection.doc().set(model.toJson());
   }
 
   Future createFoodMetric(FoodMetricModel model) async {
@@ -62,6 +68,10 @@ class DatabaseService {
     return await babyCollection.doc().set(model.toJson());
   }
 
+  Future editMedicineMetric(MedicineMetricModel model, String id) async {
+    return await diaperCollection.doc(id).update(model.toJson());
+  }
+
   Future editDiaperMetric(DiaperMetricModel model, String id) async {
     return await diaperCollection.doc(id).update(model.toJson());
   }
@@ -88,6 +98,10 @@ class DatabaseService {
 
   Future editVaccineMetric(VaccineMetricModel model, String id) async {
     return await vaccineCollection.doc(id).update(model.toJson());
+  }
+
+  Future deleteMedicineMetric(String id) async {
+    return await medicineCollection.doc(id).delete();
   }
 
   Future deleteDiaperMetric(String id) async {
@@ -121,6 +135,7 @@ class DatabaseService {
   Future<List<Pair>> retreiveAllAsList(
       DateTime startDate, DateTime endDate, String babyId) async {
     List<Pair> res = [];
+    res.addAll(await timeQuery(startDate, endDate, "Medicine", babyId));
     res.addAll(await timeQuery(startDate, endDate, "Diaper", babyId));
     res.addAll(await timeQuery(startDate, endDate, "Food", babyId));
     res.addAll(await timeQuery(startDate, endDate, "Growth", babyId));
@@ -144,6 +159,10 @@ class DatabaseService {
     res.addAll(await timeQuery(startDate, endDate, "Diaper", babyId));
     res.forEach((element) {
       deleteDiaperMetric(element.left);
+    });
+    res.addAll(await timeQuery(startDate, endDate, "Medicine", babyId));
+    res.forEach((element) {
+      deleteMedicineMetric(element.left);
     });
     res.addAll(await timeQuery(startDate, endDate, "Food", babyId));
     res.clear();
@@ -181,6 +200,8 @@ class DatabaseService {
   Future<List<Pair>> timeQuery(DateTime startDate, DateTime endDate,
       String metricType, String babyId) async {
     Map<String, Pair> dataMap = {
+      "Medicine":
+          Pair(left: MedicineMetricModel.fromJson, right: medicineCollection),
       "Diaper": Pair(left: DiaperMetricModel.fromJson, right: diaperCollection),
       "Food": Pair(left: FoodMetricModel.fromJson, right: foodCollection),
       "Growth": Pair(left: GrowthMetricModel.fromJson, right: growthCollection),

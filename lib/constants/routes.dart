@@ -17,3 +17,4 @@ const weekRoute = '/week';
 const customRoute = '/custom';
 const babycreateRoute = '/babycreate';
 const analyticsRoute = '/analytics';
+const medicineRoute = '/medicine';

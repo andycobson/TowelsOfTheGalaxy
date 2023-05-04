@@ -5,6 +5,7 @@ import 'package:baby_tracks/view/metric_views/sleep_view.dart';
 import 'package:baby_tracks/view/metric_views/temperature_view.dart';
 import 'package:baby_tracks/view/metric_views/throwup_view.dart';
 import 'package:baby_tracks/view/metric_views/vaccine_view.dart';
+import 'package:baby_tracks/view/metric_views/medicine_view.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 import '../constants/routes.dart';
@@ -37,6 +38,8 @@ class CardItem {
           ThrowUpView(const Optional.empty()), throwupRoute),
       CardItem('VACCINE', Color.fromARGB(255, 12, 176, 141),
           VaccineView(const Optional.empty()), vaccineRoute),
+      CardItem('MEDICINE', Color.fromARGB(200, 0, 200, 10),
+          MedicineView(const Optional.empty()), medicineRoute),
     ];
   }
 }
@@ -57,8 +60,8 @@ class CardItemB {
           WeeksView(), weekRoute),
       CardItemB('CUSTOM FILTER ENTRIES',
           const Color.fromARGB(255, 182, 225, 80), CustomView(), customRoute),
-      CardItemB('ANALYTICS', const Color.fromARGB(255, 182, 225, 80), AnalyticsView(),
-          analyticsRoute),
+      CardItemB('ANALYTICS', const Color.fromARGB(255, 182, 225, 80),
+          AnalyticsView(), analyticsRoute),
     ];
   }
 }
