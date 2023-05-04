@@ -30,7 +30,9 @@ class _DiaperViewState extends State<DiaperView> {
   DateTime date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   static const List<String> list = <String>['Pee', 'Poo', 'Both'];
+  static const List<String> dList = <String>['Small', 'Med', 'Large'];
   String dropdownValue = list.first;
+  String diaperDropdownValue = dList.first;
 
   String notes = "";
   String diaperContents = "";
@@ -138,6 +140,36 @@ class _DiaperViewState extends State<DiaperView> {
                     },
                   ),
                 ],
+              ),
+              const TextDivider(text: 'Diaper Size'),
+              Container(
+                width: 80,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                      color: Colors.black,
+                      style: BorderStyle.solid,
+                      width: 0.80),
+                ),
+                child: Center(
+                  child: DropdownButton<String>(
+                    value: diaperDropdownValue,
+                    icon: const Icon(Icons.arrow_downward),
+                    elevation: 16,
+                    style: const TextStyle(color: ColorPalette.background),
+                    onChanged: (String? value) {
+                      setState(() {
+                        dropdownValue = value!;
+                      });
+                    },
+                    items: dList.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
               const TextDivider(text: 'Type'),
               Container(
