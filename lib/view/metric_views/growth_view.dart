@@ -38,13 +38,10 @@ class _GrowthViewState extends State<GrowthView> {
   String height = "";
   String headCircumference = "";
   String babyId = "";
-<<<<<<< HEAD
   String babyName = "Sam";
-=======
   String weightType = "";
   String heightType = "";
   String HCType = "";
->>>>>>> d63ef75 (final commits)
 
   late final TextEditingController _weight;
   late final TextEditingController _height;
