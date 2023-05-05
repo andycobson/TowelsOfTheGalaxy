@@ -30,6 +30,7 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   late String babyName;
   late List<dynamic> babysOnFile;
   late String userId;
+  List<BubbleData> bubbles = [];
 
   @override
   void initState() {
@@ -42,6 +43,26 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     babyName = PersistentUser.instance.currentBabyName;
     userId = PersistentUser.instance.userId;
     babysOnFile = PersistentUser.instance.userBabyNames;
+
+    for (var s in babysOnFile) {
+      String bName = s.toString();
+      bubbles.add(BubbleData(
+          text: Text(bName),
+          type: "text",
+          func: () {
+            PersistentUser.instance.currentBabyName = bName;
+          }));
+    }
+    bubbles.add(BubbleData(
+        text: const Text(
+          "+",
+          style: TextStyle(
+            fontSize: 46,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        type: "widget",
+        func: () => widget.createPush?.call(babycreateRoute)));
   }
 
   Future callSomeBodyThatYouUsedToKnow() async {
@@ -76,13 +97,12 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
         child: Column(
           children: [
             Text(PersistentUser.instance.currentBabyName),
-            ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: babysOnFile.length,
-                itemBuilder: (context, index) {
-                  String babyName = babysOnFile[index].toString();
+            Wrap(
+              children: bubbles.map(
+                (e) {
+                  //String babyName = e.toString();
                   return Container(
+                    margin: EdgeInsets.all(30),
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
@@ -97,18 +117,20 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         InkWell(
-                          child: Text(babyName),
-                          onTap: () {
-                            setState(() {
-                              PersistentUser.instance.currentBabyName =
-                                  babyName;
-                            });
-                          },
-                        ),
+                            child: e.text,
+                            onTap: () {
+                              if (e.type == "text") {
+                                setState(e.func as VoidCallback);
+                              } else {
+                                e.func;
+                              }
+                            }),
                       ],
                     ),
                   );
-                }),
+                },
+              ).toList(),
+            ),
             // ElevatedButton(
             //   onPressed: () => widget.createPush?.call(babycreateRoute),
             //   child: const Text('Create Baby'),
@@ -215,4 +237,11 @@ Future<bool> showLogOutDialog(BuildContext context) {
       );
     },
   ).then((value) => value ?? false);
+}
+
+class BubbleData {
+  Text text;
+  String type;
+  Function func;
+  BubbleData({required this.text, required this.type, required this.func});
 }

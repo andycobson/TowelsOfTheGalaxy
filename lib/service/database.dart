@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:baby_tracks/model/MedicineMetricModel.dart';
 import 'package:baby_tracks/model/DiaperMetricModel.dart';
@@ -8,9 +9,11 @@ import 'package:baby_tracks/model/SleepMetricModel.dart';
 import 'package:baby_tracks/model/TempMetricModel.dart';
 import 'package:baby_tracks/model/ThrowUpMetricModel.dart';
 import 'package:baby_tracks/model/VaccineMetricModel.dart';
+import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DatabaseService {
   final CollectionReference medicineCollection =
@@ -31,6 +34,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('Vaccine');
   final CollectionReference babyCollection =
       FirebaseFirestore.instance.collection('Baby');
+  final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection("Users");
 
   Future createDiaperMetric(DiaperMetricModel model) async {
     return await diaperCollection.doc().set(model.toJson());
@@ -237,5 +242,18 @@ class DatabaseService {
       (pair) => res.add(Pair(left: pair.left, right: fromJson(pair.right))),
     );
     return res;
+  }
+
+  Future updateUserState() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String userId = PersistentUser.instance.userId;
+    var currentLocalState = preferences.getString(userId);
+
+    preferences.setString(
+        userId, json.encode(PersistentUser.instance.toJson()));
+
+    var doc = await userCollection.doc(userId).get();
+    bool exists = doc.exists;
+    
   }
 }

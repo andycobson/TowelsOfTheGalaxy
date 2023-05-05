@@ -32,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: ColorPalette.backgroundRGB,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -57,6 +57,19 @@ class _LoginViewState extends State<LoginView> {
               style: TextStyle(
                 color: ColorPalette.offWhite,
                 fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 25),
+            const SizedBox(
+              width: 280,
+              child: Text(
+                "Sign In",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: ColorPalette.offWhite,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 32,
+                ),
               ),
             ),
             const SizedBox(height: 25),
@@ -168,10 +181,10 @@ class _LoginViewState extends State<LoginView> {
                     );
                     exceptionMessage = "Successfully Signed In";
                   } on FirebaseAuthException catch (e) {
-                    if (e.code == 'user-not-found') {
-                      exceptionMessage = "Error: User not found.";
-                    } else if (e.code == 'wrong-password') {
-                      exceptionMessage = "Error: Wrong Password.";
+                    if (e.code == 'user-not-found' ||
+                        e.code == 'wrong-password') {
+                      exceptionMessage =
+                          "The Email and/or Password was not found.";
                     }
                   }
 
@@ -179,14 +192,6 @@ class _LoginViewState extends State<LoginView> {
                     messageText = exceptionMessage;
                   });
                 },
-                child: const Text(
-                  'Log In',
-                  style: TextStyle(
-                    color: ColorPalette.backgroundRGB,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
-                  ),
-                ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
                       ColorPalette.lightAccent),
@@ -194,6 +199,14 @@ class _LoginViewState extends State<LoginView> {
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
+                  ),
+                ),
+                child: const Text(
+                  'Log In',
+                  style: TextStyle(
+                    color: ColorPalette.backgroundRGB,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
                   ),
                 ),
               ),

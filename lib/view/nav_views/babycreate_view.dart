@@ -76,14 +76,14 @@ class _BabyCreateViewState extends State<BabyCreateView> {
 
     // Check persistent data from user info
     List<dynamic> babyNames = [];
-    /*
+
     final currentData = preferences.getString(userId);
-    PersistentUser? currentDataUser;
+    Map<String, dynamic> currentDataUser;
     if (currentData != null) {
-      currentDataUser = PersistentUser.fromJson(json.decode(currentData));
+      currentDataUser = json.decode(currentData);
 
       // Check if requested baby name is already a baby account.
-      babyNames = currentDataUser.userBabyNames;
+      babyNames = currentDataUser['userBabyNames'];
       if (babyNames.contains(babyName)) {
         setState(() {
           messageText = "That baby name already exist for this user.";
@@ -94,9 +94,11 @@ class _BabyCreateViewState extends State<BabyCreateView> {
 
     // Set User Psersistence
     babyNames.add(babyName);
-    final PersistentUser user = PersistentUser(
-        currentBabyName: _babyName.text, userBabyNames: babyNames);
-    final userJson = json.encode(user.toJson());
+    PersistentUser.instance.currentBabyName = babyName;
+    PersistentUser.instance.userBabyNames = babyNames;
+    PersistentUser.instance.userId = userId;
+
+    final userJson = json.encode(PersistentUser.instance.toJson());
     preferences.setString(userId, userJson);
 
     BabyModel model = BabyModel(
@@ -112,7 +114,6 @@ class _BabyCreateViewState extends State<BabyCreateView> {
       apphomeRoute,
       (route) => false,
     );
-    */
   }
 
   @override

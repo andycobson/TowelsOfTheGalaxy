@@ -34,7 +34,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorPalette.backgroundRGB,
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -77,6 +77,19 @@ class _RegisterViewState extends State<RegisterView> {
                     color: ColorPalette.offWhite,
                     fontWeight: FontWeight.w400,
                   ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 25),
+            const SizedBox(
+              width: 280,
+              child: Text(
+                "Register",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: ColorPalette.offWhite,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 32,
                 ),
               ),
             ),

@@ -85,13 +85,12 @@ class _HomePageState extends State<HomePage> {
                     return const BabyCreateView();
                   } else {
                     Map<String, dynamic> jsonInfo = json.decode(userState);
+                    log("In from loading");
                     PersistentUser(jsonInfo['currentBabyName'], userId,
                         jsonInfo['userBabyNames']);
                     return const AppHomePage();
                   }
                 }
-
-                return const LoadingPage();
 
               default:
                 return const LoadingPage();
