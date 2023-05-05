@@ -13,7 +13,6 @@ import 'package:baby_tracks/view/nav_views/babycreate_view.dart';
 import 'package:flutter/material.dart';
 import '../view/entries_views/Analytics.dart';
 import 'package:optional/optional.dart';
-import '../view/entries_views/Analytics.dart';
 import '../view/entries_views/CustomFilter.dart';
 import '../view/entries_views/PastSvnDays.dart';
 import '../view/entries_views/TodaysEntrys.dart';

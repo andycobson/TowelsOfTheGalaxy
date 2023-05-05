@@ -84,6 +84,15 @@ class _BabyCreateViewState extends State<BabyCreateView> {
 
       // Check if requested baby name is already a baby account.
       babyNames = currentDataUser['userBabyNames'];
+
+      // Only Supports up to 5 baby
+      if (babyNames.length == 5) {
+        setState(() {
+          messageText = "Currently we only support up to 5 baby profiles.";
+        });
+        return;
+      }
+
       if (babyNames.contains(babyName)) {
         setState(() {
           messageText = "That baby name already exist for this user.";

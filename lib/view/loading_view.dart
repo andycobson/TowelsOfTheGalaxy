@@ -6,18 +6,16 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         backgroundColor: ColorPalette.backgroundRGB,
         body: SizedBox.expand(
           child: Center(
-            child: Container(
-              child: Text(
-                "Baby Tracks",
-                style: TextStyle(
-                  fontSize: 42,
-                  color: ColorPalette.lightAccent,
-                  fontWeight: FontWeight.w700,
-                ),
+            child: Text(
+              "Baby Tracks",
+              style: TextStyle(
+                fontSize: 42,
+                color: ColorPalette.lightAccent,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),

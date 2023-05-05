@@ -12,7 +12,6 @@ import 'package:baby_tracks/model/VaccineMetricModel.dart';
 import 'package:baby_tracks/model/persistentUser.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DatabaseService {
@@ -151,57 +150,6 @@ class DatabaseService {
     return res;
   }
 
-  Future nuke(String babyId) async {
-    DateTime startDate = DateTime(
-        DateTime.now().subtract(const Duration(days: 60)).year,
-        DateTime.now().subtract(const Duration(days: 60)).month,
-        DateTime.now().subtract(const Duration(days: 60)).day);
-    DateTime endDate = DateTime(
-        DateTime.now().add(const Duration(days: 1)).year,
-        DateTime.now().add(const Duration(days: 1)).month,
-        DateTime.now().add(const Duration(days: 1)).day);
-    List<Pair> res = [];
-    res.addAll(await timeQuery(startDate, endDate, "Diaper", babyId));
-    res.forEach((element) {
-      deleteDiaperMetric(element.left);
-    });
-    res.addAll(await timeQuery(startDate, endDate, "Medicine", babyId));
-    res.forEach((element) {
-      deleteMedicineMetric(element.left);
-    });
-    res.addAll(await timeQuery(startDate, endDate, "Food", babyId));
-    res.clear();
-    res.forEach((element) {
-      deleteFoodMetric(element.left);
-    });
-    res.clear();
-    res.addAll(await timeQuery(startDate, endDate, "Growth", babyId));
-    res.forEach((element) {
-      deleteGrowthMetric(element.left);
-    });
-    res.clear();
-    res.addAll(await timeQuery(startDate, endDate, "Sleep", babyId));
-    res.forEach((element) {
-      deleteSleepMetric(element.left);
-    });
-    res.clear();
-    res.addAll(await timeQuery(startDate, endDate, "Temperature", babyId));
-    res.forEach((element) {
-      deleteTemperatureMetric(element.left);
-    });
-    res.clear();
-    res.addAll(await timeQuery(startDate, endDate, "Throwup", babyId));
-    res.forEach((element) {
-      deleteThrowUpMetric(element.left);
-    });
-    res.clear();
-    res.addAll(await timeQuery(startDate, endDate, "Vaccine", babyId));
-    res.forEach((element) {
-      deleteVaccineMetric(element.left);
-    });
-    res.clear();
-  }
-
   Future<List<Pair>> timeQuery(DateTime startDate, DateTime endDate,
       String metricType, String babyId) async {
     Map<String, Pair> dataMap = {
@@ -221,8 +169,6 @@ class DatabaseService {
 
     CollectionReference colRef = dataMap[metricType]!.right;
 
-    log(babyId);
-
     QuerySnapshot shapShots = await colRef
         .where('timeCreated', isGreaterThanOrEqualTo: startDate)
         .where('timeCreated', isLessThanOrEqualTo: endDate)
@@ -230,7 +176,6 @@ class DatabaseService {
         .get();
 
     List<Pair> res = [];
-    List<QueryDocumentSnapshot> docs = [];
 
     final allData = shapShots.docs
         .map((e) => Pair(left: e.id, right: e.data() as Map<String, dynamic>))
@@ -254,6 +199,5 @@ class DatabaseService {
 
     var doc = await userCollection.doc(userId).get();
     bool exists = doc.exists;
-    
   }
 }

@@ -224,14 +224,6 @@ class _RegisterViewState extends State<RegisterView> {
                     messageText = exceptionMessage;
                   });
                 },
-                child: const Text(
-                  'Register',
-                  style: TextStyle(
-                    color: ColorPalette.backgroundRGB,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.0,
-                  ),
-                ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
                       ColorPalette.lightAccent),
@@ -239,6 +231,14 @@ class _RegisterViewState extends State<RegisterView> {
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
+                  ),
+                ),
+                child: const Text(
+                  'Register',
+                  style: TextStyle(
+                    color: ColorPalette.backgroundRGB,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16.0,
                   ),
                 ),
               ),

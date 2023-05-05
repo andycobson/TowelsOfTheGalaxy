@@ -1,7 +1,6 @@
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
 import 'package:baby_tracks/view/login_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../component/navigation_handling.dart';
@@ -55,7 +54,7 @@ class _AppHomePageState extends State<AppHomePage> {
       },
       child: Scaffold(
         body: Container(
-          color: Color.fromARGB(214, 3, 3, 26),
+          color: const Color.fromARGB(214, 3, 3, 26),
           child: Stack(
             children: <Widget>[
               _buildOffstageNavigator(appListViewRoute),
@@ -67,12 +66,12 @@ class _AppHomePageState extends State<AppHomePage> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: ColorPalette.defaultBlue,
-          selectedItemColor: Color.fromARGB(255, 255, 255, 255),
+          selectedItemColor: const Color.fromARGB(255, 255, 255, 255),
           onTap: (int index) {
             _selectTab(pageKeys[index], index);
           },
           currentIndex: _selectedIndex,
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.account_box), label: "Home"),
             BottomNavigationBarItem(
@@ -97,7 +96,7 @@ class _AppHomePageState extends State<AppHomePage> {
 
   void _logout() {
     Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => LoginView()),
+        MaterialPageRoute(builder: (context) => const LoginView()),
         (Route<dynamic> route) => false);
   }
 }

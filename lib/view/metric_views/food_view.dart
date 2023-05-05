@@ -95,15 +95,14 @@ class _FoodViewState extends State<FoodView> {
         nursingEndTimeOfDay = TimeOfDay.fromDateTime(modelJson['endTime']);
         nursingStartDateTime = modelJson['startTime'];
         nursingEndDateTime = modelJson['endTime'];
-        nursingStartTime =
-            DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
-        nursingEndTime =
-            DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
       } else {
         bottleNote.text = modelJson['notes'];
         time = TimeOfDay.fromDateTime(modelJson['startTime']);
         thisDate = modelJson['startTime'];
       }
+      nursingStartTime =
+          DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
+      nursingEndTime = DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
       dropdownMetricValue.value = modelJson['metricType'];
       _amount.text = modelJson['amount'].toString();
       durationController.text = modelJson['duration'].toString();

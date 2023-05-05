@@ -141,7 +141,7 @@ class _CustomViewState extends State<CustomView> {
                         builder: (context) => SearchRoute(
                             sentPhrase: phrase,
                             startDate: dateA,
-                            endDate: dateB),
+                            endDate: dateB.add(const Duration(days: 1))),
                       ),
                     );
                   },
@@ -157,9 +157,9 @@ class _CustomViewState extends State<CustomView> {
 
 class SearchRoute extends StatelessWidget {
   String display = "failed";
-  DateTime startDate =
+  DateTime defualtStartDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime endDate =
+  DateTime defualtEndDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   SearchRoute(
       {super.key,
@@ -167,8 +167,8 @@ class SearchRoute extends StatelessWidget {
       required startDate,
       required endDate}) {
     display = sentPhrase;
-    startDate = startDate;
-    endDate = endDate;
+    defualtStartDate = startDate;
+    defualtEndDate = endDate;
   }
 
   final DatabaseService _service = DatabaseService();
@@ -192,8 +192,8 @@ class SearchRoute extends StatelessWidget {
               children: [
                 StreamBuilder(
                   stream: _service
-                      .timeQuery(
-                          startDate, endDate, display, "$userId#$babyName")
+                      .timeQuery(defualtStartDate, defualtEndDate, display,
+                          "$userId#$babyName")
                       .asStream(),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Pair>> snapshots) {

@@ -12,7 +12,6 @@ class AppMetricPage extends StatefulWidget {
 }
 
 class _AppMetricPageState extends State<AppMetricPage> {
-  @override
   List<CardItemB> tiles = CardItemB.builder();
 
   @override
@@ -21,7 +20,6 @@ class _AppMetricPageState extends State<AppMetricPage> {
       itemCount: tiles.length,
       itemBuilder: (context, index) {
         final tile = tiles[index];
-        String keyTitle = tiles[index].title;
         String route = tiles[index].route;
 
         return Padding(
@@ -36,7 +34,7 @@ class _AppMetricPageState extends State<AppMetricPage> {
                         color: Colors.black.withOpacity(0.5),
                         spreadRadius: 1,
                         blurRadius: 2,
-                        offset: Offset(4, 6))
+                        offset: const Offset(4, 6))
                   ]),
               child: Card(
                 color: tile.color,

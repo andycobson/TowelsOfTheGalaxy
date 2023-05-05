@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
       child: FutureBuilder(
           future: Future.wait([
             init(),
@@ -73,7 +72,6 @@ class _HomePageState extends State<HomePage> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 final user = FirebaseAuth.instance.currentUser;
-
                 if (user == null) {
                   return const LoginView();
                 } else {
@@ -91,21 +89,8 @@ class _HomePageState extends State<HomePage> {
                     return const AppHomePage();
                   }
                 }
-
               default:
                 return const LoadingPage();
-              //   if (user != null) {
-              //     if (user.emailVerified) {
-              //       print('Email is verified.');
-              //     } else {
-              //       return const VerifyEmailView();
-              //     }
-              //   } else {
-              //     return const LoginView();
-              //   }
-              //   return const AppHomePage();
-              // default:
-              //   return const LoadingPage();
             }
           }),
     );
