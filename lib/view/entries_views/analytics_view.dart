@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/growth_metric_model.dart';
 import 'package:baby_tracks/model/sleep_metric_model.dart';
@@ -110,18 +108,18 @@ class _AnalyticsViewState extends State<AnalyticsView> {
 }
 
 class SearchRoute extends StatefulWidget {
-  DateTime start_Date =
+  DateTime defaultStartDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime end_Date =
+  DateTime defaultEndDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
           .add(const Duration(days: 1));
 
-  int AmtofDays = 0;
+  int amtOfDays = 0;
 
   SearchRoute({super.key, required startDate, required endDate}) {
-    start_Date = startDate;
-    end_Date = endDate;
-    AmtofDays = ((end_Date.difference(start_Date)).inDays) + 1;
+    defaultStartDate = startDate;
+    defaultEndDate = endDate;
+    amtOfDays = ((defaultEndDate.difference(defaultStartDate)).inDays) + 1;
   }
 
   @override
@@ -147,17 +145,17 @@ class _SearchRouteState extends State<SearchRoute> {
 
   int x = 1;
 
-  int AmtofDaysGrowth = 0;
+  int amtOfDaysGrowth = 0;
 
-  double TotSleep = 0;
+  double totSleep = 0;
 
-  double TotFeeding = 0;
+  double totFeeding = 0;
 
-  double TotLiquid = 0;
+  double totLiquid = 0;
 
-  double TotNursing = 0;
+  double totNursing = 0;
 
-  double TotTemp = 0;
+  double totTemp = 0;
 
   int sleepRan = 0;
 
@@ -167,11 +165,11 @@ class _SearchRouteState extends State<SearchRoute> {
 
   int growthRan = 0;
 
-  double ChangeHeight = 0;
+  double changeHeight = 0;
 
-  double ChangeWeight = 0;
+  double changeWeight = 0;
 
-  double ChangeHead = 0;
+  double changeHead = 0;
 
   double feedingAvg = 0;
 
@@ -212,40 +210,47 @@ class _SearchRouteState extends State<SearchRoute> {
   }
 
   Future calculateDiaperAnalytics() async {
-    List<Pair> diaperMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Diaper", "$userId#$babyName");
+    List<Pair> diaperMetrics = await _service.timeQuery(widget.defaultStartDate,
+        widget.defaultEndDate, "Diaper", "$userId#$babyName");
 
     numOfDiaperEntrys = diaperMetrics.length;
   }
 
   Future calculateFoodAnalytics() async {
-    List<Pair> foodMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Food", "$userId#$babyName");
+    List<Pair> foodMetrics = await _service.timeQuery(widget.defaultStartDate,
+        widget.defaultEndDate, "Food", "$userId#$babyName");
     numOfFoodEntrys = foodMetrics.length;
+    int numOfNursing = 0;
+    int numOfMlFeed = 0;
+    int numOfOzFeed = 0;
     for (var i = 0; i < numOfFoodEntrys; i++) {
       Map<String, dynamic> element =
           (foodMetrics.elementAt(i).right as FoodMetricModel).toJson();
 
       if ((element['metricType'] == "oz")) {
-        TotFeeding = TotFeeding + (element['amount']);
+        totFeeding = totFeeding + (element['amount']);
+        numOfOzFeed++;
       } else if ((element['metricType'] == "ml")) {
-        TotLiquid = TotLiquid + (element['amount']);
+        totLiquid = totLiquid + (element['amount']);
+        numOfMlFeed++;
       }
-
-      TotNursing = TotNursing + (element['duration']);
+      if (element['feedingType'] == "Nursing") {
+        numOfNursing++;
+        totNursing = totNursing + (element['duration']);
+      }
     }
 
-    feedingAvg = TotFeeding / numOfFoodEntrys;
-    liquidAvg = TotLiquid / numOfFoodEntrys;
-    nursingAvg = TotNursing / numOfFoodEntrys;
-    dailyFeed = TotFeeding / widget.AmtofDays;
-    dailyNurse = TotNursing / widget.AmtofDays;
-    dailyLiquid = TotLiquid / widget.AmtofDays;
+    feedingAvg = totFeeding / numOfOzFeed;
+    liquidAvg = totLiquid / numOfMlFeed;
+    nursingAvg = totNursing / numOfNursing;
+    dailyFeed = totFeeding / widget.amtOfDays;
+    dailyNurse = totNursing / widget.amtOfDays;
+    dailyLiquid = totLiquid / widget.amtOfDays;
   }
 
   Future calculateGrowthAnalytics() async {
-    List<Pair> growthMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Growth", "$userId#$babyName");
+    List<Pair> growthMetrics = await _service.timeQuery(widget.defaultStartDate,
+        widget.defaultEndDate, "Growth", "$userId#$babyName");
 
     numOfGrowthEntrys = growthMetrics.length;
 
@@ -310,63 +315,75 @@ class _SearchRouteState extends State<SearchRoute> {
         // earliestHC = (snapshot.data?.docs[i]['headCircumference']);
       }
     }
-    ChangeHead = latestHC - earliestHC;
-    ChangeHeight = latestHeight - earliestHeight;
-    ChangeWeight = latestWeight - earliestWeight;
-    AmtofDaysGrowth = ((latestDate.difference(earliestDate)).inDays) + 1;
+    changeHead = latestHC - earliestHC;
+    changeHeight = latestHeight - earliestHeight;
+    changeWeight = latestWeight - earliestWeight;
+    amtOfDaysGrowth = ((latestDate.difference(earliestDate)).inDays) + 1;
 
-    dailyGrowthHeight = ChangeHeight / AmtofDaysGrowth;
-    dailyGrowthWeight = ChangeWeight / AmtofDaysGrowth;
-    dailyGrowthHC = ChangeHead / AmtofDaysGrowth;
+    dailyGrowthHeight = changeHeight / amtOfDaysGrowth;
+    dailyGrowthWeight = changeWeight / amtOfDaysGrowth;
+    dailyGrowthHC = changeHead / amtOfDaysGrowth;
   }
 
   Future calculateMedicineAnalytics() async {
     List<Pair> medicineMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Medicine", "$userId#$babyName");
+        widget.defaultStartDate,
+        widget.defaultEndDate,
+        "Medicine",
+        "$userId#$babyName");
     numOfMedicineEntrys = medicineMetrics.length;
   }
 
   Future calculateSleepAnalytics() async {
-    List<Pair> sleepMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Sleep", "$userId#$babyName");
+    List<Pair> sleepMetrics = await _service.timeQuery(widget.defaultStartDate,
+        widget.defaultEndDate, "Sleep", "$userId#$babyName");
     numOfSleepEntrys = sleepMetrics.length;
 
     for (var i = 0; i < numOfSleepEntrys; i++) {
       Map<String, dynamic> element =
           (sleepMetrics.elementAt(i).right as SleepMetricModel).toJson();
-      TotSleep = TotSleep + (element['duration']);
+      totSleep = totSleep + (element['duration']);
     }
 
-    sleepAvg = TotSleep / numOfSleepEntrys;
-    dailySleep = TotSleep / widget.AmtofDays;
+    sleepAvg = totSleep / numOfSleepEntrys;
+    dailySleep = totSleep / widget.amtOfDays;
   }
 
   Future calculateTemperatureAnalystics() async {
     List<Pair> temperatureMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Temperature", "$userId#$babyName");
+        widget.defaultStartDate,
+        widget.defaultEndDate,
+        "Temperature",
+        "$userId#$babyName");
     numOfTempEntrys = temperatureMetrics.length;
     for (var i = 0; i < numOfTempEntrys; i++) {
       Map<String, dynamic> element =
           (temperatureMetrics.elementAt(i).right as TempMetricModel).toJson();
       if ((element['tempType']) == 'F') {
-        TotTemp = TotTemp + (element['temperature']);
+        totTemp = totTemp + (element['temperature']);
       } else if ((element['tempType']) == 'C') {
-        TotTemp = TotTemp + (((element['temperature']) * 1.8) + 32);
+        totTemp = totTemp + (((element['temperature']) * 1.8) + 32);
       }
     }
 
-    tempAvg = TotTemp / numOfTempEntrys;
+    tempAvg = totTemp / numOfTempEntrys;
   }
 
   Future calculateThrowUpAnalytics() async {
     List<Pair> throwupMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Throwup", "$userId#$babyName");
+        widget.defaultStartDate,
+        widget.defaultEndDate,
+        "Throwup",
+        "$userId#$babyName");
     numOfThrowupEntrys = throwupMetrics.length;
   }
 
   Future calculateVaccineAnalytics() async {
     List<Pair> vaccineMetrics = await _service.timeQuery(
-        widget.start_Date, widget.end_Date, "Vaccine", "$userId#$babyName");
+        widget.defaultStartDate,
+        widget.defaultEndDate,
+        "Vaccine",
+        "$userId#$babyName");
 
     numOfVaccineEntrys = vaccineMetrics.length;
   }

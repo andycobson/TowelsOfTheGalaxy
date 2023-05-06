@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/notes_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
@@ -9,6 +7,7 @@ import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:baby_tracks/wrapperClasses/datetime_wrap.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:optional/optional_internal.dart';
 import '../../component/date_timepicker.dart';
 import '../../constants/palette.dart';
@@ -47,6 +46,7 @@ class _FoodViewState extends State<FoodView> {
   String babyId = "";
   String babyName = "Sam";
   String metricType = "";
+  String message = "";
 
   TimeOfDay nursingStartTimeOfDay = TimeOfDay.now();
   TimeOfDay nursingEndTimeOfDay = TimeOfDay.now();
@@ -169,6 +169,18 @@ class _FoodViewState extends State<FoodView> {
           nursingEndTime.timeValue.minute);
     }
 
+    double numDuration = double.parse(duration);
+    if (numDuration < 0) {
+      setState(() {
+        message =
+            "Start time should be before End time or duration should be positive";
+      });
+      return;
+    } else {
+      setState(() {
+        message = "";
+      });
+    }
     FoodMetricModel model = FoodMetricModel(
         babyId: "$babyId#$babyName",
         timeCreated: when,
@@ -222,6 +234,10 @@ class _FoodViewState extends State<FoodView> {
                 ),
               ),
               widgets[counter],
+              Text(
+                message,
+                style: const TextStyle(color: Colors.red),
+              ),
               SizedBox(
                 height: 50,
                 width: 425,
@@ -373,6 +389,7 @@ class NursingView extends StatefulWidget {
 
 class _NursingViewState extends State<NursingView> {
   late ScrollController _noteScroller;
+  String message = "";
 
   @override
   void initState() {
@@ -384,6 +401,35 @@ class _NursingViewState extends State<NursingView> {
   void dispose() {
     _noteScroller.dispose();
     super.dispose();
+  }
+
+  void calculateDuration() {
+    DateTime startTime = DateTime(
+        widget.startTime.dateValue.year,
+        widget.startTime.dateValue.month,
+        widget.startTime.dateValue.day,
+        widget.startTime.timeValue.hour,
+        widget.startTime.timeValue.minute);
+
+    DateTime endTime = DateTime(
+        widget.endTime.dateValue.year,
+        widget.endTime.dateValue.month,
+        widget.endTime.dateValue.day,
+        widget.endTime.timeValue.hour,
+        widget.endTime.timeValue.minute);
+
+    if (startTime.isAfter(endTime)) {
+      setState(() {
+        message = "Start time should be before end time.";
+      });
+    } else {
+      setState(() {
+        message = "";
+      });
+    }
+
+    Duration difference = endTime.difference(startTime);
+    widget.duration.text = difference.inMinutes.toString();
   }
 
   @override
@@ -401,7 +447,8 @@ class _NursingViewState extends State<NursingView> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            DateTimePicker(dateTime: widget.startTime),
+            LocalDateTimePicker(
+                dateTime: widget.startTime, callback: calculateDuration),
           ],
         ),
         Row(
@@ -414,7 +461,10 @@ class _NursingViewState extends State<NursingView> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            DateTimePicker(dateTime: widget.endTime),
+            LocalDateTimePicker(
+              dateTime: widget.endTime,
+              callback: calculateDuration,
+            ),
           ],
         ),
         Row(
@@ -430,6 +480,9 @@ class _NursingViewState extends State<NursingView> {
             DecimalInput(controller: widget.duration),
           ],
         ),
+        Center(
+            child:
+                Text(message, style: const TextStyle(color: Colors.redAccent))),
         const TextDivider(text: 'Notes'),
         NotesInput(
             scrollController: _noteScroller, editingController: widget.note),
@@ -446,4 +499,74 @@ class StringWrapper {
 class TimeWrapper {
   TimeOfDay value;
   TimeWrapper(this.value);
+}
+
+class LocalDateTimePicker extends StatefulWidget {
+  const LocalDateTimePicker(
+      {super.key, required this.dateTime, required this.callback});
+
+  final DateTimeWrapper dateTime;
+  final VoidCallback callback;
+
+  @override
+  State<LocalDateTimePicker> createState() => _LocalDateTimePickerState();
+}
+
+class _LocalDateTimePickerState extends State<LocalDateTimePicker> {
+  late DateTime newDateTime;
+  final DateFormat formatter = DateFormat("MM-dd-yyyy hh:mm a");
+
+  @override
+  void initState() {
+    newDateTime = DateTime(
+        widget.dateTime.dateValue.year,
+        widget.dateTime.dateValue.month,
+        widget.dateTime.dateValue.day,
+        widget.dateTime.timeValue.hour,
+        widget.dateTime.timeValue.minute);
+    super.initState();
+  }
+
+  Future pickDateTime() async {
+    DateTime? date = await pickDate();
+    if (date == null) {
+      return;
+    }
+
+    TimeOfDay? time = await pickTime();
+    if (time == null) {
+      return;
+    }
+
+    setState(() {
+      widget.dateTime.dateValue = date;
+      widget.dateTime.timeValue = time;
+      newDateTime =
+          DateTime(date.year, date.month, date.day, time.hour, time.minute);
+
+      widget.callback.call();
+    });
+  }
+
+  Future<DateTime?> pickDate() => showDatePicker(
+        context: context,
+        initialDate: widget.dateTime.dateValue,
+        firstDate: DateTime(2010),
+        lastDate: DateTime(2100),
+      );
+
+  Future<TimeOfDay?> pickTime() => showTimePicker(
+        context: context,
+        initialTime: widget.dateTime.timeValue,
+      );
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: pickDateTime,
+      child:
+          //Text(
+          //    "${widget.dateTime.dateValue.month}/${widget.dateTime.dateValue.day}/${widget.dateTime.dateValue.year} ${widget.dateTime.timeValue.hour}:${widget.dateTime.timeValue.minute}"),
+          Text(formatter.format(newDateTime)),
+    );
+  }
 }

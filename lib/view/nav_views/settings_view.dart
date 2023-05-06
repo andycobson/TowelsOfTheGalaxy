@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
 import 'package:baby_tracks/service/database.dart';
@@ -36,8 +34,6 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
     babyName = PersistentUser.instance.currentBabyName;
     userId = PersistentUser.instance.userId;
     babysOnFile = PersistentUser.instance.userBabyNames;
-
-    log(PersistentUser.instance.toString());
 
     for (var s in babysOnFile) {
       String bName = s.toString();

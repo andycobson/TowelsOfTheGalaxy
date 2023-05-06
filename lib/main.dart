@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:convert';
 
 import 'package:baby_tracks/view/app_home.dart';
@@ -83,7 +82,6 @@ class _HomePageState extends State<HomePage> {
                     return const BabyCreateView();
                   } else {
                     Map<String, dynamic> jsonInfo = json.decode(userState);
-                    log("In from loading");
                     PersistentUser(jsonInfo['currentBabyName'], userId,
                         jsonInfo['userBabyNames']);
                     return const AppHomePage();

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:baby_tracks/component/date_timepicker.dart';
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/notes_input.dart';
