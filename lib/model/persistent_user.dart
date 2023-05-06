@@ -1,5 +1,5 @@
 class PersistentUser {
-  late String currentBabyName;
+  late String currentBabyName = "";
   late String userId;
   late List<dynamic> userBabyNames;
 

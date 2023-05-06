@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/persistent_user.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -175,6 +180,27 @@ class _LoginViewState extends State<LoginView> {
                   try {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: email, password: password);
+
+                    if (PersistentUser.instance.currentBabyName == "") {
+                      final String? userId =
+                          FirebaseAuth.instance.currentUser?.uid;
+                      if (userId != null) {
+                        SharedPreferences preferences =
+                            await SharedPreferences.getInstance();
+
+                        String? userState = preferences.getString(userId);
+
+                        if (userState == null) {
+                          exceptionMessage = "something went wrong";
+                        } else {
+                          Map<String, dynamic> jsonInfo =
+                              json.decode(userState);
+                          PersistentUser(jsonInfo['currentBabyName'], userId,
+                              jsonInfo['userBabyNames']);
+                        }
+                      }
+                    }
+
                     if (context.mounted) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         apphomeRoute,
