@@ -239,10 +239,18 @@ class _SearchRouteState extends State<SearchRoute> {
         totNursing = totNursing + (element['duration']);
       }
     }
-
-    feedingAvg = totFeeding / numOfOzFeed;
-    liquidAvg = totLiquid / numOfMlFeed;
-    nursingAvg = totNursing / numOfNursing;
+    if(numOfOzFeed != 0)
+      {
+        feedingAvg = totFeeding / numOfOzFeed;
+      }
+    if(numOfMlFeed != 0)
+    {
+      liquidAvg = totLiquid / numOfMlFeed;
+    }
+    if(numOfNursing != 0)
+    {
+      nursingAvg = totNursing / numOfNursing;
+    }
     dailyFeed = totFeeding / widget.amtOfDays;
     dailyNurse = totNursing / widget.amtOfDays;
     dailyLiquid = totLiquid / widget.amtOfDays;

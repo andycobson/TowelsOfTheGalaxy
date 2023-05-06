@@ -154,13 +154,15 @@ class _ThrowUpViewState extends State<ThrowUpView> {
                 child: Scrollbar(
                   controller: _colorScroller,
                   child: TextField(
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     scrollController: _colorScroller,
                     autofocus: false,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _color,
                     decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(),
                       hintText: 'Enter Color',
                       contentPadding: EdgeInsets.all(8),

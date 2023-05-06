@@ -132,12 +132,14 @@ class _MedicineViewState extends State<MedicineView> {
               SizedBox(
                 height: 100,
                 child: TextField(
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black),
                   autofocus: false,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
                   controller: _medName,
                   decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
                     border: OutlineInputBorder(),
                     hintText: 'Type Medicine Name Here',
                     contentPadding: EdgeInsets.all(8),

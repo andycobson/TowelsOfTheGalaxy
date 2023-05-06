@@ -148,13 +148,15 @@ class _VaccineViewState extends State<VaccineView> {
                 child: Scrollbar(
                   controller: _nameScroller,
                   child: TextField(
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     scrollController: _nameScroller,
                     autofocus: false,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: _vaccine,
                     decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(),
                       hintText: 'Enter vaccine name',
                       contentPadding: EdgeInsets.all(8),

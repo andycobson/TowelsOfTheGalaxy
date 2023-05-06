@@ -21,13 +21,15 @@ class _NotesInputState extends State<NotesInput> {
       child: Scrollbar(
         controller: widget.scrollController,
         child: TextField(
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           scrollController: widget.scrollController,
           autofocus: false,
           keyboardType: TextInputType.multiline,
           maxLines: null,
           controller: widget.editingController,
           decoration: const InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
             border: OutlineInputBorder(),
             hintText: 'Add notes',
             contentPadding: EdgeInsets.all(8),
