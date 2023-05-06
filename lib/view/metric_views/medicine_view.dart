@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
-import 'package:baby_tracks/model/MedicineMetricModel.dart';
+import 'package:baby_tracks/model/medicine_metric_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
@@ -13,7 +13,7 @@ import '../../component/decimal_number_input.dart';
 import '../../wrapperClasses/pair.dart';
 
 class MedicineView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   MedicineView(Optional arg, {super.key}) {
     model = arg;
@@ -53,16 +53,16 @@ class _MedicineViewState extends State<MedicineView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-    } else {
+    if (widget.model.isPresent) {
       isUpdate = 1;
       Pair idModelPair = (widget.model.value as Pair);
       MedicineMetricModel modelToUpdate = idModelPair.right;
       id = idModelPair.left;
       Map<String, dynamic> modelJson = modelToUpdate.toJson();
       _note.text = modelJson['notes'];
-      time = TimeOfDay.fromDateTime(modelJson['Time Taken']);
+      _dose.text = modelJson['dose'];
+      _medName.text = modelJson['medicineName'];
+      time = TimeOfDay.fromDateTime(modelJson['startTime']);
     }
 
     super.initState();
@@ -81,14 +81,15 @@ class _MedicineViewState extends State<MedicineView> {
     notes = _note.text;
     doseAmount = _dose.text;
     medicineName = _medName.text;
-    // diaperContents = dropdownValue;
 
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
 
+    DateTime now = DateTime.now();
+
     MedicineMetricModel model = MedicineMetricModel(
         babyId: "$babyId#$babyName",
-        timeCreated: when,
+        timeCreated: now,
         startTime: when,
         dose: doseAmount,
         medicineName: medicineName,
@@ -97,10 +98,9 @@ class _MedicineViewState extends State<MedicineView> {
     if (isUpdate == 0) {
       await _service.createMedicineMetric(model);
     } else {
-      log("should Edit");
       await _service.editMedicineMetric(model, id);
     }
-    Navigator.pop(context);
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override
@@ -171,7 +171,7 @@ class _MedicineViewState extends State<MedicineView> {
               ),
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 DecimalInput(controller: _dose),
-                Text('ml', style: const TextStyle(color: Colors.white)),
+                const Text('ml', style: TextStyle(color: Colors.white)),
               ]),
               const SizedBox(
                 height: 20,

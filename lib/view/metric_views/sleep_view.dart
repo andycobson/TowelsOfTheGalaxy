@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/SleepMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/sleep_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
@@ -11,7 +11,7 @@ import 'package:optional/optional.dart';
 import '../../wrapperClasses/pair.dart';
 
 class SleepView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   SleepView(Optional arg, {super.key}) {
     model = arg;
@@ -48,9 +48,7 @@ class _SleepViewState extends State<SleepView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-    } else {
+    if (widget.model.isPresent) {
       Pair idModelPair = (widget.model.value as Pair);
       SleepMetricModel modelToUpdate = idModelPair.right;
       Map<String, dynamic> modelJson = modelToUpdate.toJson();
@@ -91,11 +89,10 @@ class _SleepViewState extends State<SleepView> {
 
     if (isUpdate == 0) {
       await _service.createSleepMetric(model);
-      Navigator.pop(context);
     } else {
-      log("should Edit");
       await _service.editSleepMetric(model, id);
     }
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override

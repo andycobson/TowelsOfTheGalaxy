@@ -14,7 +14,7 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'model/persistentUser.dart';
+import 'model/persistent_user.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized;

@@ -7,8 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../model/persistentUser.dart';
-import '../../service/auth.dart';
+import '../../model/persistent_user.dart';
 
 class AppSettingsPage extends StatefulWidget {
   const AppSettingsPage(
@@ -23,7 +22,6 @@ class AppSettingsPage extends StatefulWidget {
 
 class _AppSettingsPageState extends State<AppSettingsPage> {
   late SharedPreferences preferences;
-  late final AuthService _auth;
   late final DatabaseService _service;
   late String babyName;
   late List<dynamic> babysOnFile;
@@ -33,7 +31,6 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
   @override
   void initState() {
     super.initState();
-    _auth = AuthService();
     _service = DatabaseService();
 
     babyName = PersistentUser.instance.currentBabyName;
@@ -109,8 +106,6 @@ class _AppSettingsPageState extends State<AppSettingsPage> {
                 child: const Text('Log Out'),
                 onPressed: () async {
                   final shouldLogout = await showLogOutDialog(context);
-                  print(FirebaseAuth.instance.currentUser.toString());
-                  print(shouldLogout);
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     widget.onPush();

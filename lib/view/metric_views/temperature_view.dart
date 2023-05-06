@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/TempMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/temp_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
@@ -12,7 +12,7 @@ import 'package:optional/optional.dart';
 import '../../wrapperClasses/pair.dart';
 
 class TemperatureView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   TemperatureView(Optional arg, {super.key}) {
     model = arg;
@@ -55,17 +55,16 @@ class _TemperatureViewState extends State<TemperatureView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-    } else {
+    if (widget.model.isPresent) {
       isUpdate = 1;
       Pair idModelPair = (widget.model.value as Pair);
       TempMetricModel modelToUpdate = idModelPair.right;
       Map<String, dynamic> modelJson = modelToUpdate.toJson();
       tempTime = TimeOfDay.fromDateTime(modelJson['tempTime']);
       temperatureDropDown = modelJson['tempType'];
-      _temperature.text = modelJson['temperature'];
+      _temperature.text = modelJson['temperature'].toString();
       _note.text = modelJson['notes'];
+      date = modelJson['tempTime'];
       id = idModelPair.left;
     }
 
@@ -88,8 +87,6 @@ class _TemperatureViewState extends State<TemperatureView> {
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
     DateTime start = DateTime(
         date.year, date.month, date.day, tempTime.hour, tempTime.minute);
-    DateTime end =
-        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
     TempMetricModel model = TempMetricModel(
         babyId: "$babyId#$babyName",
         timeCreated: when,
@@ -100,11 +97,10 @@ class _TemperatureViewState extends State<TemperatureView> {
 
     if (isUpdate == 0) {
       await _service.createTemperatureMetric(model);
-      Navigator.pop(context);
     } else {
-      log("should Edit");
       await _service.editTemperatureMetric(model, id);
     }
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override
@@ -134,7 +130,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                     ),
                   ),
                   TextButton(
-                    child: Text(time.format(context)),
+                    child: Text(tempTime.format(context)),
                     onPressed: () async {
                       TimeOfDay? newTime = await showTimePicker(
                           context: context, initialTime: time);
@@ -142,7 +138,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                       if (newTime == null) return;
 
                       setState(() {
-                        time = newTime;
+                        tempTime = newTime;
                       });
                     },
                   ),

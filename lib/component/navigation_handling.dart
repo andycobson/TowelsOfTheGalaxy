@@ -11,16 +11,16 @@ import 'package:baby_tracks/view/nav_views/metrics_view.dart';
 import 'package:baby_tracks/view/nav_views/settings_view.dart';
 import 'package:baby_tracks/view/nav_views/babycreate_view.dart';
 import 'package:flutter/material.dart';
-import '../view/entries_views/Analytics.dart';
+import '../view/entries_views/analytics_view.dart';
 import 'package:optional/optional.dart';
-import '../view/entries_views/CustomFilter.dart';
-import '../view/entries_views/PastSvnDays.dart';
-import '../view/entries_views/TodaysEntrys.dart';
+import '../view/entries_views/customer_filter_view.dart';
+import '../view/entries_views/weeks_entrys_view.dart';
+import '../view/entries_views/todays_entrys_view.dart';
 import '../view/metric_views/vaccine_view.dart';
 import '../view/nav_views/list_view.dart';
 
 class TabNavigator extends StatelessWidget {
-  TabNavigator(
+  const TabNavigator(
       {super.key,
       required this.navigatorKey,
       required this.tabItem,
@@ -57,16 +57,16 @@ class TabNavigator extends StatelessWidget {
       foodRoute: (context) => FoodView(const Optional.empty()),
       diaperRoute: (context) => DiaperView(const Optional.empty()),
       sleepRoute: (context) => SleepView(const Optional.empty()),
-      loginRoute: (context) => LoginView(),
+      loginRoute: (context) => const LoginView(),
       growthRoute: (context) => GrowthView(const Optional.empty()),
       temperatureRoute: (context) => TemperatureView(const Optional.empty()),
       throwupRoute: (context) => ThrowUpView(const Optional.empty()),
       vaccineRoute: (context) => VaccineView(const Optional.empty()),
-      dayRoute: (context) => DaysView(),
-      weekRoute: (context) => WeeksView(),
-      customRoute: (context) => CustomView(),
-      babycreateRoute: (context) => BabyCreateView(),
-      analyticsRoute: (context) => AnalyticsView(),
+      dayRoute: (context) => const DaysView(),
+      weekRoute: (context) => const WeeksView(),
+      customRoute: (context) => const CustomView(),
+      babycreateRoute: (context) => const BabyCreateView(),
+      analyticsRoute: (context) => const AnalyticsView(),
       medicineRoute: (context) => MedicineView(const Optional.empty()),
     };
   }

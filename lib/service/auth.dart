@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../model/AppUser.dart';
+import '../model/app_user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,7 +28,6 @@ class AuthService {
       dynamic user = result.user;
       return user;
     } catch (error) {
-      print(error.toString());
       return null;
     }
   }
@@ -42,7 +41,6 @@ class AuthService {
       // create a new document for the user with the uid
       return _userFromFirebaseUser(user);
     } catch (error) {
-      print(error.toString());
       return null;
     }
   }
@@ -52,7 +50,6 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (error) {
-      print(error.toString());
       return null;
     }
   }

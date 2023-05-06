@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +15,14 @@ class DiaperMetricModel extends DiaperMetric implements MetricInterface {
     required DateTime timeCreated,
     required DateTime startTime,
     required String diaperContents,
+    required String diaperSize,
     required String notes,
   }) : super(
             babyId: babyId,
             timeCreated: timeCreated,
             startTime: startTime,
             diaperContents: diaperContents,
+            diaperSize: diaperSize,
             notes: notes);
 
   factory DiaperMetricModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class DiaperMetricModel extends DiaperMetric implements MetricInterface {
       timeCreated: (json['timeCreated'] as Timestamp).toDate(),
       startTime: (json['startTime'] as Timestamp).toDate(),
       diaperContents: json['diaperContents'],
+      diaperSize: json['diaperSize'],
       notes: json['notes'],
     );
   }
@@ -39,12 +42,13 @@ class DiaperMetricModel extends DiaperMetric implements MetricInterface {
         'timeCreated': timeCreated,
         'startTime': startTime,
         'diaperContents': diaperContents,
+        'diaperSize': diaperSize,
         'notes': notes
       };
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return DiaperView(Optional.of(Pair(left: id, right: this)));
     }));
   }
@@ -56,36 +60,42 @@ class DiaperMetricModel extends DiaperMetric implements MetricInterface {
 
   @override
   Widget analyticsWidget() {
-    return Container(
-      child: Column(
-        children: [
-          const TextDivider(text: 'New Diaper Entry'),
-          const TextDivider(text: 'Occured at:'),
-          Center(
-              child: Text(
-            timeCreated.toString(),
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Status'),
-          Center(
-              child: Text(
-            diaperContents,
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Notes'),
-          Center(
-              child: Text(
-            notes,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          )),
-        ],
-      ),
+    return Column(
+      children: [
+        const TextDivider(text: 'New Diaper Entry'),
+        const TextDivider(text: 'Occured at:'),
+        Center(
+            child: Text(
+          timeCreated.toString(),
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Mess Size'),
+        Center(
+            child: Text(
+          diaperSize,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Contents'),
+        Center(
+            child: Text(
+          diaperContents,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Notes'),
+        Center(
+            child: Text(
+          notes,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        )),
+      ],
     );
   }
 }
@@ -95,6 +105,7 @@ class DiaperMetric extends Equatable {
   final DateTime timeCreated;
   final DateTime startTime;
   final String diaperContents;
+  final String diaperSize;
   final String notes;
 
   const DiaperMetric({
@@ -102,10 +113,11 @@ class DiaperMetric extends Equatable {
     required this.timeCreated,
     required this.startTime,
     required this.diaperContents,
+    required this.diaperSize,
     required this.notes,
   });
 
   @override
   List<Object?> get props =>
-      [babyId, timeCreated, startTime, diaperContents, notes];
+      [babyId, timeCreated, startTime, diaperContents, diaperSize, notes];
 }

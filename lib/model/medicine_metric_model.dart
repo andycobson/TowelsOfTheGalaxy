@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:optional/optional.dart';
 
 import '../component/text_divider.dart';
 import '../constants/palette.dart';
-import '../view/metric_views/diaper_view.dart';
+import '../view/metric_views/medicine_view.dart';
 import '../wrapperClasses/pair.dart';
 
 class MedicineMetricModel extends MedicineMetric implements MetricInterface {
@@ -30,7 +30,7 @@ class MedicineMetricModel extends MedicineMetric implements MetricInterface {
       babyId: json['babyId'] ?? "null",
       timeCreated: (json['timeCreated'] as Timestamp).toDate(),
       startTime: (json['startTime'] as Timestamp).toDate(),
-      dose: json['dose'],
+      dose: (json['dose'] ?? 0).toString(),
       medicineName: json['medicineName'],
       notes: json['notes'],
     );
@@ -48,41 +48,62 @@ class MedicineMetricModel extends MedicineMetric implements MetricInterface {
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return DiaperView(Optional.of(Pair(left: id, right: this)));
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return MedicineView(Optional.of(Pair(left: id, right: this)));
     }));
   }
 
   @override
   String getCollectionName() {
-    return "Diaper";
+    return "Medicine";
   }
 
   @override
   Widget analyticsWidget() {
-    return Container(
-      child: Column(
-        children: [
-          const TextDivider(text: 'New Diaper Entry'),
-          const TextDivider(text: 'Occured at:'),
-          Center(
-              child: Text(
-            timeCreated.toString(),
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Status'),
-          const TextDivider(text: 'Notes'),
-          Center(
-              child: Text(
-            notes,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          )),
-        ],
-      ),
+    return Column(
+      children: [
+        const TextDivider(text: 'New Medicine Entry'),
+        const TextDivider(text: 'Occured at:'),
+        Center(
+            child: Text(
+          timeCreated.toString(),
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Medicine Name'),
+        Center(
+            child: Text(
+          medicineName,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        )),
+        const TextDivider(text: 'Dosage'),
+        Center(
+            child: Text(
+          "$dose ml",
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        )),
+        const TextDivider(text: 'Time Taken'),
+        Center(
+            child: Text(
+          startTime.toString(),
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        )),
+        const TextDivider(text: 'Notes'),
+        Center(
+            child: Text(
+          notes,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        )),
+      ],
     );
   }
 }

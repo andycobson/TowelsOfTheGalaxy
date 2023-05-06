@@ -3,18 +3,18 @@ import 'dart:developer';
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/component/toggle_bar.dart';
-import 'package:baby_tracks/model/FoodMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/food_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
-import 'package:baby_tracks/wrapperClasses/dateTimeWrapper.dart';
+import 'package:baby_tracks/wrapperClasses/datetime_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional_internal.dart';
-import '../../component/dateTimePicker.dart';
+import '../../component/date_timepicker.dart';
 import '../../constants/palette.dart';
 import '../../wrapperClasses/pair.dart';
 
 class FoodView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   FoodView(Optional arg, {super.key}) {
     model = arg;
@@ -77,12 +77,7 @@ class _FoodViewState extends State<FoodView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-      nursingStartTime =
-          DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
-      nursingEndTime = DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
-    } else {
+    if (widget.model.isPresent) {
       Pair idModelPair = (widget.model.value as Pair);
       FoodMetricModel modelToUpdate = idModelPair.right;
       id = idModelPair.left;
@@ -103,6 +98,7 @@ class _FoodViewState extends State<FoodView> {
       nursingStartTime =
           DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
       nursingEndTime = DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
+      bottleTimeWrapper = DateTimeWrapper(thisDate, time);
       dropdownMetricValue.value = modelJson['metricType'];
       _amount.text = modelJson['amount'].toString();
       durationController.text = modelJson['duration'].toString();
@@ -184,11 +180,10 @@ class _FoodViewState extends State<FoodView> {
 
     if (isUpdate == 0) {
       await _service.createFoodMetric(model);
-      Navigator.pop(context);
     } else {
-      log("should Edit");
       await _service.editFoodMetric(model, id);
     }
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override

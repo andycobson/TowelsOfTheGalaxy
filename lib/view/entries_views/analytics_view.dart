@@ -39,11 +39,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 children: [
                   const Text('Date'),
                   TextButton(
-                    child: Text(dateA.month.toString() +
-                        "/" +
-                        dateA.day.toString() +
-                        "/" +
-                        dateA.year.toString()),
+                    child: Text("${dateA.month}/${dateA.day}/${dateA.year}"),
                     onPressed: () async {
                       DateTime? newDate = await showDatePicker(
                           context: context,
@@ -66,11 +62,7 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                 children: [
                   const Text('Date'),
                   TextButton(
-                    child: Text(dateB.month.toString() +
-                        "/" +
-                        dateB.day.toString() +
-                        "/" +
-                        dateB.year.toString()),
+                    child: Text("${dateB.month}/${dateB.day}/${dateB.year}"),
                     onPressed: () async {
                       DateTime? newDate = await showDatePicker(
                           context: context,
@@ -166,7 +158,7 @@ class SearchRoute extends StatelessWidget {
           backgroundColor: ColorPalette.backgroundRGB,
           elevation: 0,
         ),
-        backgroundColor: Color.fromARGB(255, 67, 67, 209),
+        backgroundColor: ColorPalette.backgroundRGB,
         body: SingleChildScrollView(
           child: Column(children: [
             Column(children: [
@@ -178,7 +170,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -190,7 +182,7 @@ class SearchRoute extends StatelessWidget {
                       itemBuilder: (context, index) {
                         DiaperEntrys =
                             int.parse((snapshot.data?.docs.length).toString());
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
 
                         //log((DiaperEntrys).toString());
                       },
@@ -206,7 +198,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -245,7 +237,7 @@ class SearchRoute extends StatelessWidget {
                         // //log((FoodEntrys).toString());
                         // //log((TotFeeding).toString());
                         // //log((TotNursing).toString());
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
                       },
                     );
                   })
@@ -259,7 +251,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -376,7 +368,7 @@ class SearchRoute extends StatelessWidget {
                           growthRan = 1;
                         }
 
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
                       },
                     );
                   })
@@ -390,7 +382,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -416,7 +408,7 @@ class SearchRoute extends StatelessWidget {
                         //log((SleepEntrys).toString());
                         //log((TotSleep).toString());
 
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
                       },
                     );
                   })
@@ -430,7 +422,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -462,7 +454,7 @@ class SearchRoute extends StatelessWidget {
                         //log((TempEntrys).toString());
                         //log(TotTemp.toString());
 
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
                       },
                     );
                   })
@@ -476,7 +468,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -491,7 +483,7 @@ class SearchRoute extends StatelessWidget {
 
                         //log((VomitEntrys).toString());
 
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
                       },
                     );
                   })
@@ -505,7 +497,7 @@ class SearchRoute extends StatelessWidget {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -518,172 +510,7 @@ class SearchRoute extends StatelessWidget {
                         VaccineEntrys =
                             int.parse((snapshot.data?.docs.length).toString());
 
-                        /** 
-          if(x == 1)
-          {
-             x = x +1;
-            return Column(
-              children: [
-              
-              
-              const TextDivider(text:"Amount of Entries" ),
-
-              Row(children: [
-                
-                Text("Diaper entries:"),
-                Text(
-                (DiaperEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Feeding entries:"),
-                Text(
-                (FoodEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Growth entries:"),
-                Text(
-                (GrowthEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Sleep entries:"),
-                Text(
-                (SleepEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Temperature entries:"),
-                Text(
-                (TempEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Throw Up entries: "),
-                Text(
-                (VomitEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Vaccine entries:"),
-                Text(
-                (VaccineEntrys).toString(),
-                  textAlign: TextAlign.center,
-                  )
-              ]),    
-              const TextDivider(text:"Average of Entries" ),
-              Row(children: [
-                Text("Feeding (amount in ounces/ entry):"),
-                Text(
-                (feedingAvg).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-               Row(children: [
-                Text("Liquid Intake (amount in ml/ entry):"),
-                Text(
-                (liquidAvg).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Feeding (duration of nursing in minutes/ entry):"),
-                Text(
-                (nursingAvg).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Sleep Duration (hours/entry): "),
-                Text(
-                (sleepAvg).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Temperature in farenheit: "),
-                Text(
-                (tempAvg).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              const TextDivider(text:"Daily averages" ),
-              Row(children: [
-                Text("Feeding (amount in ounces/ day):"),
-                Text(
-                (dailyFeed).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-              Text("Liquid intake (amount in ml/ day):"),
-                Text(
-                (dailyLiquid).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-              Row(children: [
-                Text("Feeding (duration of nursing/ day):"),
-                Text(
-                (dailyNurse).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-                        ]),
-              Row(children: [
-                Text("Sleep Duration in hours/ day: "),
-                Text(
-                (dailySleep).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-               Row(children: [
-                Text("Change in height in inches/ day: "),
-                Text(
-                (dailyGrowthHeight).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  
-                  )
-              ]),
-               Row(
-              //  mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Text("Change in weight in pounds/ day: "),
-                Text(
-                (dailyGrowthWeight).toStringAsFixed(2),
-                  
-                  textAlign: TextAlign.center,
-
-                  )
-              ]),
-               Row(children: [
-                Text("Change in head circumference in inches/ day: "),
-                Text(
-                (dailyGrowthHC).toStringAsFixed(2),
-                  textAlign: TextAlign.center,
-                  )
-              ]),
-          
-            ]
-          
-
-            );
-          
-           
-          }
-          else{
-            return SizedBox(height: 0);
-          }
-      */
-                        //log((VaccineEntrys).toString());
-
-                        return SizedBox(height: 0);
+                        return const SizedBox(height: 0);
                       },
                     );
                   }),
@@ -694,7 +521,7 @@ class SearchRoute extends StatelessWidget {
                       FirebaseFirestore.instance.collection('Baby').snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
@@ -709,147 +536,221 @@ class SearchRoute extends StatelessWidget {
                           return Column(children: [
                             const TextDivider(text: "Amount of Entries"),
                             Row(children: [
-                              Text("Diaper entries:"),
+                              const Text(
+                                "Diaper entries:",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (DiaperEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Feeding entries:"),
+                              const Text(
+                                "Feeding entries:",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (FoodEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Growth entries:"),
+                              const Text(
+                                "Growth entries:",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (GrowthEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Sleep entries:"),
+                              const Text(
+                                "Sleep entries:",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (SleepEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Temperature entries:"),
+                              const Text(
+                                "Temperature entries:",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (TempEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Throw Up entries: "),
+                              const Text(
+                                "Throw Up entries: ",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (VomitEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Vaccine entries:"),
+                              const Text(
+                                "Vaccine entries:",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (VaccineEntrys).toString(),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             const TextDivider(text: "Average of Entries"),
                             Row(children: [
-                              Text("Feeding (amount in ounces/ entry):"),
+                              const Text(
+                                "Feeding (amount in ounces/ entry):",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (feedingAvg).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Liquid Intake (amount in ml/ entry):"),
+                              const Text(
+                                "Liquid Intake (amount in ml/ entry):",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (liquidAvg).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text(
-                                  "Feeding (duration of nursing in minutes/ entry):"),
+                              const Text(
+                                "Feeding (duration of nursing in minutes/ entry):",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (nursingAvg).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Sleep Duration (hours/entry): "),
+                              const Text(
+                                "Sleep Duration (hours/entry): ",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (sleepAvg).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Temperature in farenheit: "),
+                              const Text(
+                                "Temperature in farenheit: ",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (tempAvg).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             const TextDivider(text: "Daily averages"),
                             Row(children: [
-                              Text("Feeding (amount in ounces/ day):"),
+                              const Text(
+                                "Feeding (amount in ounces/ day):",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (dailyFeed).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Liquid intake (amount in ml/ day):"),
+                              const Text(
+                                "Liquid intake (amount in ml/ day):",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (dailyLiquid).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Feeding (duration of nursing/ day):"),
+                              const Text(
+                                "Feeding (duration of nursing/ day):",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (dailyNurse).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Sleep Duration in hours/ day: "),
+                              const Text(
+                                "Sleep Duration in hours/ day: ",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (dailySleep).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(children: [
-                              Text("Change in height in inches/ day: "),
+                              const Text(
+                                "Change in height in inches/ day: ",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (dailyGrowthHeight).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                             Row(
                                 //  mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("Change in weight in pounds/ day: "),
+                                  const Text(
+                                    "Change in weight in pounds/ day: ",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                   Text(
                                     (dailyGrowthWeight).toStringAsFixed(2),
                                     textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.white),
                                   )
                                 ]),
                             Row(children: [
-                              Text(
-                                  "Change in head circumference in inches/ day: "),
+                              const Text(
+                                "Change in head circumference in inches/ day: ",
+                                style: TextStyle(color: Colors.white),
+                              ),
                               Text(
                                 (dailyGrowthHC).toStringAsFixed(2),
                                 textAlign: TextAlign.center,
+                                style: const TextStyle(color: Colors.white),
                               )
                             ]),
                           ]);
                         } else {
-                          return SizedBox(height: 0);
+                          return const SizedBox(height: 0);
                         }
 
                         //log((VaccineEntrys).toString());

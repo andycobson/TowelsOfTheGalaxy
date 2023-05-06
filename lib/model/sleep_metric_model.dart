@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:baby_tracks/view/metric_views/sleep_view.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,13 +42,13 @@ class SleepMetricModel extends SleepMetric implements MetricInterface {
         'timeCreated': timeCreated,
         'startTime': startTime,
         'endTime': endTime,
-        'duration': double.parse('0' + duration),
+        'duration': double.parse('0$duration'),
         'notes': notes,
       };
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return SleepView(Optional.of(Pair(left: id, right: this)));
     }));
   }
@@ -60,44 +60,42 @@ class SleepMetricModel extends SleepMetric implements MetricInterface {
 
   @override
   Widget analyticsWidget() {
-    return Container(
-      child: Column(
-        children: [
-          const TextDivider(text: 'New Sleep Entry'),
-          const TextDivider(text: 'Entry posted at:'),
-          Center(
-              child: Text(
-            "$timeCreated",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Times frame of nap'),
-          Center(
-              child: Text(
-            "$startTime to $endTime",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Duration'),
-          Center(
-              child: Text(
-            "$duration Hours",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Notes'),
-          Center(
-              child: Text(
-            notes,
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          ))
-        ],
-      ),
+    return Column(
+      children: [
+        const TextDivider(text: 'New Sleep Entry'),
+        const TextDivider(text: 'Entry posted at:'),
+        Center(
+            child: Text(
+          "$timeCreated",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Times frame of nap'),
+        Center(
+            child: Text(
+          "$startTime to $endTime",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Duration'),
+        Center(
+            child: Text(
+          "$duration Hours",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Notes'),
+        Center(
+            child: Text(
+          notes,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        ))
+      ],
     );
   }
 }

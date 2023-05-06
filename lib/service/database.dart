@@ -1,15 +1,14 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:baby_tracks/model/MedicineMetricModel.dart';
-import 'package:baby_tracks/model/DiaperMetricModel.dart';
-import 'package:baby_tracks/model/babyModel.dart';
-import 'package:baby_tracks/model/FoodMetricModel.dart';
-import 'package:baby_tracks/model/GrowthMetricModel.dart';
-import 'package:baby_tracks/model/SleepMetricModel.dart';
-import 'package:baby_tracks/model/TempMetricModel.dart';
-import 'package:baby_tracks/model/ThrowUpMetricModel.dart';
-import 'package:baby_tracks/model/VaccineMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/medicine_metric_model.dart';
+import 'package:baby_tracks/model/diaper_metric_model.dart';
+import 'package:baby_tracks/model/baby_model.dart';
+import 'package:baby_tracks/model/food_metric_model.dart';
+import 'package:baby_tracks/model/growth_metric_model.dart';
+import 'package:baby_tracks/model/sleep_metric_model.dart';
+import 'package:baby_tracks/model/temp_metric_model.dart';
+import 'package:baby_tracks/model/throwup_metric_model.dart';
+import 'package:baby_tracks/model/vaccine_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,7 +72,7 @@ class DatabaseService {
   }
 
   Future editMedicineMetric(MedicineMetricModel model, String id) async {
-    return await diaperCollection.doc(id).update(model.toJson());
+    return await medicineCollection.doc(id).update(model.toJson());
   }
 
   Future editDiaperMetric(DiaperMetricModel model, String id) async {
@@ -183,21 +182,18 @@ class DatabaseService {
 
     Function fromJson = dataMap[metricType]!.left;
 
-    allData.forEach(
-      (pair) => res.add(Pair(left: pair.left, right: fromJson(pair.right))),
-    );
+    for (Pair pair in allData) {
+      res.add(Pair(left: pair.left, right: fromJson(pair.right)));
+    }
+
     return res;
   }
 
   Future updateUserState() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String userId = PersistentUser.instance.userId;
-    var currentLocalState = preferences.getString(userId);
 
     preferences.setString(
         userId, json.encode(PersistentUser.instance.toJson()));
-
-    var doc = await userCollection.doc(userId).get();
-    bool exists = doc.exists;
   }
 }

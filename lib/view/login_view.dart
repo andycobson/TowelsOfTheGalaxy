@@ -163,7 +163,7 @@ class _LoginViewState extends State<LoginView> {
             /*
                 Login Button Handling
             */
-            Container(
+            SizedBox(
               width: 295,
               height: 55,
               child: ElevatedButton(
@@ -175,10 +175,12 @@ class _LoginViewState extends State<LoginView> {
                   try {
                     await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: email, password: password);
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      apphomeRoute,
-                      (route) => false,
-                    );
+                    if (context.mounted) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        apphomeRoute,
+                        (route) => false,
+                      );
+                    }
                     exceptionMessage = "Successfully Signed In";
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found' ||

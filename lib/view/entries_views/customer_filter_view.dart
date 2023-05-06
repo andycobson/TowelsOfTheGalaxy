@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/palette.dart';
-import '../../model/MetricInterface.dart';
-import '../../model/persistentUser.dart';
+import '../../model/metric_interface.dart';
+import '../../model/persistent_user.dart';
 import '../../service/database.dart';
 import '../../wrapperClasses/pair.dart';
 
@@ -155,7 +155,7 @@ class _CustomViewState extends State<CustomView> {
   }
 }
 
-class SearchRoute extends StatelessWidget {
+class SearchRoute extends StatefulWidget {
   String display = "failed";
   DateTime defualtStartDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -171,9 +171,15 @@ class SearchRoute extends StatelessWidget {
     defualtEndDate = endDate;
   }
 
+  @override
+  State<SearchRoute> createState() => _SearchRouteState();
+}
+
+class _SearchRouteState extends State<SearchRoute> {
   final DatabaseService _service = DatabaseService();
 
   String babyName = PersistentUser.instance.currentBabyName;
+
   String userId = PersistentUser.instance.userId;
 
   @override
@@ -192,8 +198,8 @@ class SearchRoute extends StatelessWidget {
               children: [
                 StreamBuilder(
                   stream: _service
-                      .timeQuery(defualtStartDate, defualtEndDate, display,
-                          "$userId#$babyName")
+                      .timeQuery(widget.defualtStartDate, widget.defualtEndDate,
+                          widget.display, "$userId#$babyName")
                       .asStream(),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<Pair>> snapshots) {
@@ -264,7 +270,12 @@ class SearchRoute extends StatelessWidget {
                                       ),
                                       onPressed: () async {
                                         await (pairs.right as MetricInterface)
-                                            .routeToEdit(context, pairs.left);
+                                            .routeToEdit(context, pairs.left)
+                                            .then(
+                                          (_) {
+                                            setState(() {});
+                                          },
+                                        );
                                       },
                                       child: const Text('Edit'),
                                     ),

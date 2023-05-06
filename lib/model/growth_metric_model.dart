@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:baby_tracks/view/metric_views/growth_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -16,9 +16,9 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
     required String height,
     required String weight,
     required String headCircumference,
-     required String heightType,
+    required String heightType,
     required String weightType,
-    required String HCType,
+    required String headCircumferenceType,
     required String notes,
   }) : super(
           babyId: babyId,
@@ -28,24 +28,20 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
           headCircumference: headCircumference,
           heightType: heightType,
           weightType: weightType,
-          HCType: HCType,
+          headCircumferenceType: headCircumferenceType,
           notes: notes,
         );
 
   factory GrowthMetricModel.fromJson(Map<String, dynamic> json) {
     return GrowthMetricModel(
       babyId: json['babyId'],
-
       timeCreated: (json['timeCreated'] as Timestamp).toDate(),
       height: (json['height'] ?? 0).toString(),
       weight: (json['weight'] ?? 0).toString(),
       headCircumference: (json['headCircumference'] ?? 0).toString(),
-
-  
       heightType: json['heightType'],
       weightType: json['weightType'],
-      HCType: json['HCType'],
-
+      headCircumferenceType: json['headCircumferenceType'],
       notes: json['notes'],
     );
   }
@@ -54,18 +50,18 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
   Map<String, dynamic> toJson() => {
         'babyId': babyId,
         'timeCreated': timeCreated,
-        'height': double.parse('0' + height),
-        'weight': double.parse('0' + weight),
-        'headCircumference': double.parse('0' + headCircumference),
+        'height': double.parse('0$height'),
+        'weight': double.parse('0$weight'),
+        'headCircumference': double.parse('0$headCircumference'),
         'heightType': heightType,
         'weightType': weightType,
-        'HCType': HCType,
+        'headCircumferenceType': headCircumferenceType,
         'notes': notes,
       };
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return GrowthView(Optional.of(Pair(left: id, right: this)));
     }));
   }
@@ -77,8 +73,7 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
 
   @override
   Widget analyticsWidget() {
-    return Container(
-        child: Column(
+    return Column(
       children: [
         const TextDivider(text: 'New Growth Entry'),
         const TextDivider(text: 'Occured at:'),
@@ -122,7 +117,7 @@ class GrowthMetricModel extends GrowthMetric implements MetricInterface {
           ),
         ))
       ],
-    ));
+    );
   }
 }
 
@@ -134,7 +129,7 @@ class GrowthMetric extends Equatable {
   final String headCircumference;
   final String heightType;
   final String weightType;
-  final String HCType;
+  final String headCircumferenceType;
   final String notes;
 
   const GrowthMetric({
@@ -145,11 +140,20 @@ class GrowthMetric extends Equatable {
     required this.headCircumference,
     required this.heightType,
     required this.weightType,
-    required this.HCType,
+    required this.headCircumferenceType,
     required this.notes,
   });
 
   @override
-  List<Object?> get props =>
-      [babyId, timeCreated, height, weight, headCircumference,heightType, weightType, HCType, notes];
+  List<Object?> get props => [
+        babyId,
+        timeCreated,
+        height,
+        weight,
+        headCircumference,
+        heightType,
+        weightType,
+        headCircumferenceType,
+        notes
+      ];
 }

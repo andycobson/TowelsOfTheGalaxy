@@ -1,27 +1,22 @@
-import 'dart:developer';
-
-import 'package:baby_tracks/model/MetricInterface.dart';
-import 'package:baby_tracks/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/palette.dart';
-import '../../model/persistentUser.dart';
+import '../../model/metric_interface.dart';
+import '../../model/persistent_user.dart';
+import '../../service/database.dart';
 import '../../wrapperClasses/pair.dart';
-import '../metric_views/diaper_view.dart';
 
-class WeeksView extends StatefulWidget {
-  const WeeksView({super.key});
+class DaysView extends StatefulWidget {
+  const DaysView({super.key});
 
   @override
-  State<WeeksView> createState() => _WeeksViewState();
+  State<DaysView> createState() => _DaysViewState();
 }
 
-class _WeeksViewState extends State<WeeksView> {
-  DateTime startDate = DateTime(
-      DateTime.now().subtract(const Duration(days: 6)).year,
-      DateTime.now().subtract(const Duration(days: 6)).month,
-      DateTime.now().subtract(const Duration(days: 6)).day);
+class _DaysViewState extends State<DaysView> {
+  DateTime startDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime endDate = DateTime(
       DateTime.now().add(const Duration(days: 1)).year,
       DateTime.now().add(const Duration(days: 1)).month,
@@ -47,7 +42,7 @@ class _WeeksViewState extends State<WeeksView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('7-Day Metrics'),
+        title: const Text('Today\'s Entries'),
         backgroundColor: ColorPalette.backgroundRGB,
         elevation: 0,
       ),
@@ -109,6 +104,7 @@ class _WeeksViewState extends State<WeeksView> {
                                                     .getCollectionName())
                                             .doc(pairs.left);
                                         docUser.delete();
+                                        setState(() {});
                                       },
                                       child: const Text('Delete'),
                                     ),
@@ -131,7 +127,10 @@ class _WeeksViewState extends State<WeeksView> {
                                       ),
                                       onPressed: () async {
                                         await (pairs.right as MetricInterface)
-                                            .routeToEdit(context, pairs.left);
+                                            .routeToEdit(context, pairs.left)
+                                            .then((_) {
+                                          setState(() {});
+                                        });
                                       },
                                       child: const Text('Edit'),
                                     ),

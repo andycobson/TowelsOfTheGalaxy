@@ -9,10 +9,10 @@ import 'package:baby_tracks/view/metric_views/medicine_view.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
 import '../constants/routes.dart';
-import '../view/entries_views/Analytics.dart';
-import '../view/entries_views/CustomFilter.dart';
-import '../view/entries_views/PastSvnDays.dart';
-import '../view/entries_views/TodaysEntrys.dart';
+import '../view/entries_views/analytics_view.dart';
+import '../view/entries_views/customer_filter_view.dart';
+import '../view/entries_views/weeks_entrys_view.dart';
+import '../view/entries_views/todays_entrys_view.dart';
 
 class CardItem {
   String title = "";
@@ -38,7 +38,7 @@ class CardItem {
           ThrowUpView(const Optional.empty()), throwupRoute),
       CardItem('VACCINE', const Color.fromARGB(255, 12, 176, 141),
           VaccineView(const Optional.empty()), vaccineRoute),
-      CardItem('MEDICINE', Color.fromARGB(200, 0, 200, 10),
+      CardItem('MEDICINE', const Color.fromARGB(200, 0, 200, 10),
           MedicineView(const Optional.empty()), medicineRoute),
     ];
   }

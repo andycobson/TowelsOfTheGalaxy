@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/model/ThrowUpMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/throwup_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:optional/optional.dart';
@@ -11,7 +11,7 @@ import 'package:optional/optional.dart';
 import '../../wrapperClasses/pair.dart';
 
 class ThrowUpView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   ThrowUpView(Optional arg, {super.key}) {
     model = arg;
@@ -63,9 +63,7 @@ class _ThrowUpViewState extends State<ThrowUpView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-    } else {
+    if (widget.model.isPresent) {
       isUpdate = 1;
       Pair idModelPair = (widget.model.value as Pair);
       ThrowUpMetricModel modelToUpdate = idModelPair.right;
@@ -92,6 +90,7 @@ class _ThrowUpViewState extends State<ThrowUpView> {
   Future createInstance() async {
     notes = _note.text;
     amount = dropdownAmountValue;
+    throwUpColor = _color.text;
 
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
@@ -105,11 +104,10 @@ class _ThrowUpViewState extends State<ThrowUpView> {
 
     if (isUpdate == 0) {
       await _service.createThrowUpMetric(model);
-      Navigator.pop(context);
     } else {
-      log("should Edit");
       await _service.editThrowUpMetric(model, id);
     }
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override

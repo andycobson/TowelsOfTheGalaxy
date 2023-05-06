@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:baby_tracks/view/metric_views/throwup_view.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -48,7 +48,7 @@ class ThrowUpMetricModel extends ThrowUpMetric implements MetricInterface {
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ThrowUpView(Optional.of(Pair(left: id, right: this)));
     }));
   }
@@ -60,46 +60,50 @@ class ThrowUpMetricModel extends ThrowUpMetric implements MetricInterface {
 
   @override
   Widget analyticsWidget() {
-    return Container(
-      child: Column(
-        children: [
-          const TextDivider(text: 'New Throw Up Entry'),
-          const TextDivider(text: 'Entry Created at:'),
-          Center(
-              child: Text(
-            "$timeCreated",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Color'),
-          Center(
-              child: Text(
-            throwUpColor,
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Amount'),
-          Center(child: Text(amount)),
-          const TextDivider(text: 'Taken at:'),
-          Center(
-              child: Text(
-            "$startTime",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Notes'),
-          Center(
-              child: Text(
-            notes,
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          ))
-        ],
-      ),
+    return Column(
+      children: [
+        const TextDivider(text: 'New Throw Up Entry'),
+        const TextDivider(text: 'Entry Created at:'),
+        Center(
+            child: Text(
+          "$timeCreated",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Color'),
+        Center(
+            child: Text(
+          throwUpColor,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Amount'),
+        Center(
+            child: Text(
+          amount,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Taken at:'),
+        Center(
+            child: Text(
+          "$startTime",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Notes'),
+        Center(
+            child: Text(
+          notes,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        ))
+      ],
     );
   }
 }

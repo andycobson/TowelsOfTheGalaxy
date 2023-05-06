@@ -41,8 +41,9 @@ class ToggleBar extends StatefulWidget {
   /// This will adjust how the inside contianer fits the ends
   final int edgeAdjustment;
 
-  ToggleBar(
-      {required this.labels,
+  const ToggleBar(
+      {super.key,
+      required this.labels,
       this.borderPadding = 8.0,
       this.edgeAdjustment = 16,
       this.backgroundColor = Colors.black,
@@ -87,7 +88,7 @@ class _ToggleBarState extends State<ToggleBar> {
           child: ListView.builder(
             itemCount: widget.labels.length,
             scrollDirection: Axis.horizontal,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return GestureDetector(
                 child: Container(

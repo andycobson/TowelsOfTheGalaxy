@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/constants/palette.dart';
-import 'package:baby_tracks/model/DiaperMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/diaper_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ import 'package:optional/optional.dart';
 import '../../wrapperClasses/pair.dart';
 
 class DiaperView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   DiaperView(Optional arg, {super.key}) {
     model = arg;
@@ -36,6 +36,7 @@ class _DiaperViewState extends State<DiaperView> {
 
   String notes = "";
   String diaperContents = "";
+  String diaperSize = "";
   String babyId = "";
   String babyName = "Sam";
 
@@ -52,15 +53,14 @@ class _DiaperViewState extends State<DiaperView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-    } else {
+    if (widget.model.isPresent) {
       isUpdate = 1;
       Pair idModelPair = (widget.model.value as Pair);
       DiaperMetricModel modelToUpdate = idModelPair.right;
       id = idModelPair.left;
       Map<String, dynamic> modelJson = modelToUpdate.toJson();
       dropdownValue = modelJson['diaperContents'];
+      diaperDropdownValue = modelJson['diaperSize'];
       _note.text = modelJson['notes'];
       time = TimeOfDay.fromDateTime(modelJson['startTime']);
     }
@@ -78,6 +78,7 @@ class _DiaperViewState extends State<DiaperView> {
   Future createInstance() async {
     notes = _note.text;
     diaperContents = dropdownValue;
+    diaperSize = diaperDropdownValue;
 
     DateTime when =
         DateTime(date.year, date.month, date.day, time.hour, time.minute);
@@ -87,15 +88,15 @@ class _DiaperViewState extends State<DiaperView> {
         timeCreated: when,
         startTime: when,
         diaperContents: diaperContents,
+        diaperSize: diaperSize,
         notes: notes);
 
     if (isUpdate == 0) {
       await _service.createDiaperMetric(model);
     } else {
-      log("should Edit");
       await _service.editDiaperMetric(model, id);
     }
-    Navigator.pop(context);
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override
@@ -159,7 +160,7 @@ class _DiaperViewState extends State<DiaperView> {
                     style: const TextStyle(color: ColorPalette.background),
                     onChanged: (String? value) {
                       setState(() {
-                        dropdownValue = value!;
+                        diaperDropdownValue = value!;
                       });
                     },
                     items: dList.map<DropdownMenuItem<String>>((String value) {

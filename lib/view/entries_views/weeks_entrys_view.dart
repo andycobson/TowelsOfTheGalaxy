@@ -1,37 +1,28 @@
-import 'dart:developer';
-
-import 'package:baby_tracks/component/text_divider.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
+import 'package:baby_tracks/service/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:optional/optional.dart';
 
 import '../../constants/palette.dart';
-import '../../model/MetricInterface.dart';
-import '../../model/persistentUser.dart';
-import '../../service/database.dart';
+import '../../model/persistent_user.dart';
 import '../../wrapperClasses/pair.dart';
-import '../metric_views/diaper_view.dart';
-import '../metric_views/food_view.dart';
-import '../metric_views/growth_view.dart';
-import '../metric_views/sleep_view.dart';
-import '../metric_views/temperature_view.dart';
-import '../metric_views/throwup_view.dart';
-import '../metric_views/vaccine_view.dart';
 
-class DaysView extends StatefulWidget {
-  const DaysView({super.key});
+class WeeksView extends StatefulWidget {
+  const WeeksView({super.key});
 
   @override
-  State<DaysView> createState() => _DaysViewState();
+  State<WeeksView> createState() => _WeeksViewState();
 }
 
-class _DaysViewState extends State<DaysView> {
-  DateTime startDate =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+class _WeeksViewState extends State<WeeksView> {
+  DateTime startDate = DateTime(
+      DateTime.now().subtract(const Duration(days: 6)).year,
+      DateTime.now().subtract(const Duration(days: 6)).month,
+      DateTime.now().subtract(const Duration(days: 6)).day);
   DateTime endDate = DateTime(
-      DateTime.now().add(Duration(days: 1)).year,
-      DateTime.now().add(Duration(days: 1)).month,
-      DateTime.now().add(Duration(days: 1)).day);
+      DateTime.now().add(const Duration(days: 1)).year,
+      DateTime.now().add(const Duration(days: 1)).month,
+      DateTime.now().add(const Duration(days: 1)).day);
 
   late DatabaseService _service;
 
@@ -49,10 +40,11 @@ class _DaysViewState extends State<DaysView> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Today\'s Entries'),
+        title: const Text('7-Day Metrics'),
         backgroundColor: ColorPalette.backgroundRGB,
         elevation: 0,
       ),
@@ -136,7 +128,10 @@ class _DaysViewState extends State<DaysView> {
                                       ),
                                       onPressed: () async {
                                         await (pairs.right as MetricInterface)
-                                            .routeToEdit(context, pairs.left);
+                                            .routeToEdit(context, pairs.left)
+                                            .then((_) {
+                                          setState(() {});
+                                        });
                                       },
                                       child: const Text('Edit'),
                                     ),

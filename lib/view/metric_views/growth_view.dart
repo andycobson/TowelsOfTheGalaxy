@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:baby_tracks/component/decimal_number_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/GrowthMetricModel.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/growth_metric_model.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
@@ -12,7 +12,7 @@ import 'package:optional/optional.dart';
 import '../../wrapperClasses/pair.dart';
 
 class GrowthView extends StatefulWidget {
-  late Optional model;
+  late final Optional model;
 
   GrowthView(Optional arg, {super.key}) {
     model = arg;
@@ -41,7 +41,7 @@ class _GrowthViewState extends State<GrowthView> {
   String babyName = "Sam";
   String weightType = "";
   String heightType = "";
-  String HCType = "";
+  String headCircumferenceType = "";
 
   late final TextEditingController _weight;
   late final TextEditingController _height;
@@ -63,17 +63,16 @@ class _GrowthViewState extends State<GrowthView> {
     babyName = PersistentUser.instance.currentBabyName;
     babyId = PersistentUser.instance.userId;
 
-    if (!widget.model.isPresent) {
-      log("create");
-    } else {
+    if (widget.model.isPresent) {
       Pair idModelPair = (widget.model.value as Pair);
       GrowthMetricModel modelToUpdate = idModelPair.right;
       Map<String, dynamic> modelJson = modelToUpdate.toJson();
       id = idModelPair.left;
-      _weight.text = modelJson['weight'];
-      _height.text = modelJson['height'];
-      _headCircumference.text = modelJson['headCircumference'];
+      _weight.text = modelJson['weight'].toString();
+      _height.text = modelJson['height'].toString();
+      _headCircumference.text = modelJson['headCircumference'].toString();
       _note.text = modelJson['notes'];
+      time = TimeOfDay.fromDateTime(modelJson['timeCreated']);
       isUpdate = 1;
     }
 
@@ -96,7 +95,7 @@ class _GrowthViewState extends State<GrowthView> {
     height = _height.text;
     headCircumference = _headCircumference.text;
     heightType = lengthDropDown;
-    HCType = lengthDropDown;
+    headCircumferenceType = lengthDropDown;
     weightType = weightDropDown;
 
     DateTime when =
@@ -109,16 +108,15 @@ class _GrowthViewState extends State<GrowthView> {
         headCircumference: headCircumference,
         heightType: heightType,
         weightType: weightType,
-        HCType: HCType,
+        headCircumferenceType: headCircumferenceType,
         notes: note);
 
     if (isUpdate == 0) {
       await _service.createGrowthMetric(model);
-      Navigator.pop(context);
     } else {
-      log("should Edit");
       await _service.editGrowthMetric(model, id);
     }
+    if (context.mounted) Navigator.of(context).pop();
   }
 
   @override

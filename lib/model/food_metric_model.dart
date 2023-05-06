@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:baby_tracks/view/metric_views/food_view.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,14 +54,14 @@ class FoodMetricModel extends FoodMetric implements MetricInterface {
         'endTime': endTime,
         'feedingType': feedingType,
         'metricType': metricType,
-        'amount': double.parse('0' + amount),
-        'duration': double.parse('0' + duration),
+        'amount': double.parse('0$amount'),
+        'duration': double.parse('0$duration'),
         'notes': notes,
       };
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return FoodView(Optional.of(Pair(left: id, right: this)));
     }));
   }
@@ -73,59 +73,57 @@ class FoodMetricModel extends FoodMetric implements MetricInterface {
 
   @override
   Widget analyticsWidget() {
-    return Container(
-      child: Column(children: [
-        const TextDivider(text: 'New Food Entry'),
-        const TextDivider(text: 'Occured at:'),
-        Center(
-            child: Text(
-          timeCreated.toString(),
-          style: const TextStyle(
-            color: ColorPalette.pText,
-          ),
-        )),
-        const TextDivider(text: 'Nursing, Feeding, or Both?'),
-        Center(
-            child: Text(
-          feedingType,
-          style: const TextStyle(
-            color: ColorPalette.pText,
-          ),
-        )),
-        const TextDivider(text: 'Feeding Amount'),
-        Center(
-            child: Text(
-          "$amount $metricType",
-          style: const TextStyle(
-            color: ColorPalette.pText,
-          ),
-        )),
-        const TextDivider(text: 'Times of Nursing'),
-        Center(
-            child: Text(
-          '$startTime to $endTime',
-          style: const TextStyle(
-            color: ColorPalette.pText,
-          ),
-        )),
-        const TextDivider(text: 'Nursing Duration'),
-        Center(
-            child: Text(
-          "$duration Minutes",
-          style: const TextStyle(
-            color: ColorPalette.pText,
-          ),
-        )),
-        const TextDivider(text: 'Notes'),
-        Center(
-            child: Text(
-          notes,
-          style: const TextStyle(
-            color: ColorPalette.pText,
-          ),
-        ))
-      ]),
-    );
+    return Column(children: [
+      const TextDivider(text: 'New Food Entry'),
+      const TextDivider(text: 'Occured at:'),
+      Center(
+          child: Text(
+        timeCreated.toString(),
+        style: const TextStyle(
+          color: ColorPalette.pText,
+        ),
+      )),
+      const TextDivider(text: 'Nursing, Feeding, or Both?'),
+      Center(
+          child: Text(
+        feedingType,
+        style: const TextStyle(
+          color: ColorPalette.pText,
+        ),
+      )),
+      const TextDivider(text: 'Feeding Amount'),
+      Center(
+          child: Text(
+        "$amount $metricType",
+        style: const TextStyle(
+          color: ColorPalette.pText,
+        ),
+      )),
+      const TextDivider(text: 'Times of Nursing'),
+      Center(
+          child: Text(
+        '$startTime to $endTime',
+        style: const TextStyle(
+          color: ColorPalette.pText,
+        ),
+      )),
+      const TextDivider(text: 'Nursing Duration'),
+      Center(
+          child: Text(
+        "$duration Minutes",
+        style: const TextStyle(
+          color: ColorPalette.pText,
+        ),
+      )),
+      const TextDivider(text: 'Notes'),
+      Center(
+          child: Text(
+        notes,
+        style: const TextStyle(
+          color: ColorPalette.pText,
+        ),
+      ))
+    ]);
   }
 }
 

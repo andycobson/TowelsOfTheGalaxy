@@ -1,4 +1,4 @@
-import 'package:baby_tracks/model/MetricInterface.dart';
+import 'package:baby_tracks/model/metric_interface.dart';
 import 'package:baby_tracks/view/metric_views/vaccine_view.dart';
 import 'package:baby_tracks/wrapperClasses/pair.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,18 +36,19 @@ class VaccineMetricModel extends VaccineMetric implements MetricInterface {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         'babyId': babyId,
         'timeCreated': timeCreated,
         'startTime': startTime,
-        'series': double.parse('0' + series),
+        'series': double.parse('0$series'),
         'vaccine': vaccine,
         'notes': notes
       };
 
   @override
   Future routeToEdit(dynamic context, String id) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
       return VaccineView(Optional.of(Pair(left: id, right: this)));
     }));
   }
@@ -57,39 +58,42 @@ class VaccineMetricModel extends VaccineMetric implements MetricInterface {
     return "Vaccine";
   }
 
+  @override
   Widget analyticsWidget() {
-    return Container(
-      child: Column(
-        children: [
-          const TextDivider(text: 'New Vaccine Entry'),
-          const TextDivider(text: 'Entry Created at:'),
-          Center(
-              child: Text(
-            "$timeCreated",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Vaccine'),
-          Center(
-              child: Text(
-            "$vaccine Series: $series",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Taken at:'),
-          Center(
-              child: Text(
-            "$timeCreated",
-            style: const TextStyle(
-              color: ColorPalette.pText,
-            ),
-          )),
-          const TextDivider(text: 'Notes'),
-          Center(child: Text(notes))
-        ],
-      ),
+    return Column(
+      children: [
+        const TextDivider(text: 'New Vaccine Entry'),
+        const TextDivider(text: 'Entry Created at:'),
+        Center(
+            child: Text(
+          "$timeCreated",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Vaccine'),
+        Center(
+            child: Text(
+          "$vaccine Series: $series",
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        )),
+        const TextDivider(text: 'Taken at:'),
+        Center(
+            child: Text(
+          "$startTime",
+          style: const TextStyle(color: ColorPalette.pText),
+        )),
+        const TextDivider(text: 'Notes'),
+        Center(
+            child: Text(
+          notes,
+          style: const TextStyle(
+            color: ColorPalette.pText,
+          ),
+        ))
+      ],
     );
   }
 }

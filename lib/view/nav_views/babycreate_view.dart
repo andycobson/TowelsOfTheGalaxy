@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:baby_tracks/component/text_divider.dart';
-import 'package:baby_tracks/model/persistentUser.dart';
+import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
@@ -9,8 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/routes.dart';
-import '../../model/AppUser.dart';
-import '../../model/babyModel.dart';
+import '../../model/app_user.dart';
+import '../../model/baby_model.dart';
 import '../../service/auth.dart';
 
 class BabyCreateView extends StatefulWidget {
@@ -129,133 +129,128 @@ class _BabyCreateViewState extends State<BabyCreateView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Baby+'),
+        title: const Text('Create a Baby Profile'),
         backgroundColor: ColorPalette.backgroundRGB,
         elevation: 0,
       ),
+      resizeToAvoidBottomInset: true,
       backgroundColor: ColorPalette.backgroundRGB,
-      body: Container(
-        padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 50.0),
-        child: Column(
-          children: [
-            const TextDivider(text: "Name"),
-            Padding(
-              padding: const EdgeInsets.only(top: 5, left: 60.0, right: 60.0),
-              child: TextField(
-                style: const TextStyle(color: Colors.white),
-                controller: _babyName,
-                obscureText: false,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration: InputDecoration(
-                  hintText: 'Enter baby name',
-                  hintStyle: const TextStyle(color: Colors.white),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 92, 92, 94),
-                      width: 2,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 50.0),
+          child: Column(
+            children: [
+              const TextDivider(text: "Name"),
+              Padding(
+                padding: const EdgeInsets.only(top: 5, left: 60.0, right: 60.0),
+                child: TextField(
+                  style: const TextStyle(color: Colors.white),
+                  controller: _babyName,
+                  obscureText: false,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                    hintText: 'Enter baby name',
+                    hintStyle: const TextStyle(color: Colors.white),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 92, 92, 94),
+                        width: 2,
+                      ),
                     ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 92, 92, 94),
-                      width: 2,
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 92, 92, 94),
+                        width: 2,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Text(
-              messageText,
-              style: const TextStyle(
-                color: Colors.red,
+              Text(
+                messageText,
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
               ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            const TextDivider(text: "Birthday"),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: []),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                    padding: EdgeInsets.all(15),
-                    height: 150,
-                    width: 200,
-                    child: Center(
-                        child: TextField(
-                      controller:
-                          _dateOfBirth, //editing controller of this TextField
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.calendar_today),
-                      ),
-                      readOnly:
-                          true, //set it true, so that user will not able to edit text
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(
-                                2000), //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2101));
+              const SizedBox(
+                width: 20,
+              ),
+              const TextDivider(text: "Birthday"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.all(15),
+                      height: 150,
+                      width: 200,
+                      child: Center(
+                          child: TextField(
+                        controller:
+                            _dateOfBirth, //editing controller of this TextField
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.calendar_today),
+                        ),
+                        readOnly:
+                            true, //set it true, so that user will not able to edit text
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(
+                                  2000), //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101));
 
-                        if (pickedDate != null) {
-                          print(
-                              pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                          String formattedDate =
-                              DateFormat('yyyy-MM-dd').format(pickedDate);
-                          print(
-                              formattedDate); //formatted date output using intl package =>  2021-03-16
-                          //you can implement different kind of Date Format here according to your requirement
-
-                          setState(() {
-                            _dateOfBirth.text =
-                                formattedDate; //set output date to TextField value.
-                          });
-                        } else {
-                          print("Date is not selected");
-                        }
-                      },
-                    ))),
-              ],
-            ),
-            const TextDivider(text: "Gender"),
-            DropdownButton<String>(
-              value: dropdownValue,
-              icon: const Icon(Icons.arrow_downward),
-              elevation: 16,
-              style: const TextStyle(color: ColorPalette.background),
-              onChanged: (String? value) {
-                setState(() {
-                  dropdownValue = value!;
-                });
-              },
-              items: list.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            SizedBox(
-              height: 50,
-              width: 425,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ))),
-                onPressed: () async {
-                  createInstance();
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            setState(() {
+                              _dateOfBirth.text =
+                                  formattedDate; //set output date to TextField value.
+                            });
+                          }
+                        },
+                      ))),
+                ],
+              ),
+              const TextDivider(text: "Gender"),
+              DropdownButton<String>(
+                value: dropdownValue,
+                icon: const Icon(Icons.arrow_downward),
+                elevation: 16,
+                style: const TextStyle(color: ColorPalette.background),
+                onChanged: (String? value) {
+                  setState(() {
+                    dropdownValue = value!;
+                  });
                 },
-                child: const Text('Submit'),
+                items: list.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
-            ),
-          ],
+              SizedBox(
+                height: 50,
+                width: 425,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ))),
+                  onPressed: () async {
+                    createInstance();
+                  },
+                  child: const Text('Submit'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
