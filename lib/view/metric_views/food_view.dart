@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:baby_tracks/component/decimal_number_input.dart';
+import 'package:baby_tracks/component/notes_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/component/toggle_bar.dart';
 import 'package:baby_tracks/model/food_metric_model.dart';
@@ -95,15 +96,16 @@ class _FoodViewState extends State<FoodView> {
         time = TimeOfDay.fromDateTime(modelJson['startTime']);
         thisDate = modelJson['startTime'];
       }
-      nursingStartTime =
-          DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
-      nursingEndTime = DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
+
       bottleTimeWrapper = DateTimeWrapper(thisDate, time);
       dropdownMetricValue.value = modelJson['metricType'];
       _amount.text = modelJson['amount'].toString();
       durationController.text = modelJson['duration'].toString();
       isUpdate = 1;
     }
+    nursingStartTime =
+        DateTimeWrapper(nursingStartDateTime, nursingStartTimeOfDay);
+    nursingEndTime = DateTimeWrapper(nursingEndDateTime, nursingEndTimeOfDay);
 
     widgets = [
       BottleView(
@@ -345,25 +347,8 @@ class _BottleViewState extends State<BottleView> {
           ],
         ),
         const TextDivider(text: 'Notes'),
-        SizedBox(
-          height: 100,
-          child: Scrollbar(
-            controller: _noteScroller,
-            child: TextField(
-              style: const TextStyle(color: Colors.white),
-              scrollController: _noteScroller,
-              autofocus: false,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              controller: widget.note,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Add notes',
-                contentPadding: EdgeInsets.all(8),
-              ),
-            ),
-          ),
-        ),
+        NotesInput(
+            scrollController: _noteScroller, editingController: widget.note),
       ],
     );
   }
@@ -446,25 +431,8 @@ class _NursingViewState extends State<NursingView> {
           ],
         ),
         const TextDivider(text: 'Notes'),
-        SizedBox(
-          height: 100,
-          child: Scrollbar(
-            controller: _noteScroller,
-            child: TextField(
-              style: const TextStyle(color: Colors.white),
-              scrollController: _noteScroller,
-              autofocus: false,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              controller: widget.note,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Add notes',
-                contentPadding: EdgeInsets.all(8),
-              ),
-            ),
-          ),
-        ),
+        NotesInput(
+            scrollController: _noteScroller, editingController: widget.note),
       ],
     );
   }

@@ -14,7 +14,7 @@ class DateTimePicker extends StatefulWidget {
 
 class _DateTimePickerState extends State<DateTimePicker> {
   late DateTime newDateTime;
-  final DateFormat formatter = DateFormat("MM-dd-yyyy H:m");
+  final DateFormat formatter = DateFormat("MM-dd-yyyy hh:mm a");
 
   @override
   void initState() {
@@ -41,12 +41,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
     setState(() {
       widget.dateTime.dateValue = date;
       widget.dateTime.timeValue = time;
-      newDateTime = DateTime(
-          widget.dateTime.dateValue.year,
-          widget.dateTime.dateValue.month,
-          widget.dateTime.dateValue.day,
-          widget.dateTime.timeValue.hour,
-          widget.dateTime.timeValue.minute);
+      newDateTime =
+          DateTime(date.year, date.month, date.day, time.hour, time.minute);
     });
   }
 

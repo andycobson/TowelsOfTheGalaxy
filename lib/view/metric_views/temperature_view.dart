@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:baby_tracks/component/date_timepicker.dart';
 import 'package:baby_tracks/component/decimal_number_input.dart';
+import 'package:baby_tracks/component/notes_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/temp_metric_model.dart';
 import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
+import 'package:baby_tracks/wrapperClasses/datetime_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:optional/optional.dart';
@@ -28,11 +31,9 @@ class _TemperatureViewState extends State<TemperatureView> {
   static const List<String> temperatureList = <String>['F', 'C'];
   String temperatureDropDown = temperatureList.first;
 
-  TimeOfDay time = TimeOfDay.now();
   TimeOfDay tempTime = TimeOfDay.now();
-  TimeOfDay endTime = TimeOfDay.now();
-  DateTime date =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime tempDate = DateTime.now();
+  late DateTimeWrapper tempTimeWrapper;
 
   String note = "";
   String babyId = "";
@@ -64,9 +65,11 @@ class _TemperatureViewState extends State<TemperatureView> {
       temperatureDropDown = modelJson['tempType'];
       _temperature.text = modelJson['temperature'].toString();
       _note.text = modelJson['notes'];
-      date = modelJson['tempTime'];
+      tempDate = modelJson['tempTime'];
       id = idModelPair.left;
     }
+
+    tempTimeWrapper = DateTimeWrapper(tempDate, tempTime);
 
     super.initState();
   }
@@ -83,10 +86,13 @@ class _TemperatureViewState extends State<TemperatureView> {
     note = _note.text;
     tempType = temperatureDropDown;
     temperature = _temperature.text;
-    DateTime when =
-        DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    DateTime when = DateTime.now();
     DateTime start = DateTime(
-        date.year, date.month, date.day, tempTime.hour, tempTime.minute);
+        tempTimeWrapper.dateValue.year,
+        tempTimeWrapper.dateValue.month,
+        tempTimeWrapper.dateValue.day,
+        tempTimeWrapper.timeValue.hour,
+        tempTimeWrapper.timeValue.minute);
     TempMetricModel model = TempMetricModel(
         babyId: "$babyId#$babyName",
         timeCreated: when,
@@ -129,19 +135,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
-                    child: Text(tempTime.format(context)),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: time);
-
-                      if (newTime == null) return;
-
-                      setState(() {
-                        tempTime = newTime;
-                      });
-                    },
-                  ),
+                  DateTimePicker(dateTime: tempTimeWrapper),
                 ],
               ),
 
@@ -183,25 +177,8 @@ class _TemperatureViewState extends State<TemperatureView> {
                 ],
               ),
               const TextDivider(text: 'Notes'),
-              SizedBox(
-                height: 100,
-                child: Scrollbar(
-                  controller: _noteScroller,
-                  child: TextField(
-                    style: const TextStyle(color: Colors.white),
-                    scrollController: _noteScroller,
-                    autofocus: false,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: _note,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Add notes',
-                      contentPadding: EdgeInsets.all(8),
-                    ),
-                  ),
-                ),
-              ),
+              NotesInput(
+                  scrollController: _noteScroller, editingController: _note),
               SizedBox(
                 height: 50,
                 width: 425,

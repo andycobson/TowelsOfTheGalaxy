@@ -66,7 +66,7 @@ class DiaperMetricModel extends DiaperMetric implements MetricInterface {
         const TextDivider(text: 'Occured at:'),
         Center(
             child: Text(
-          timeCreated.toString(),
+          startTime.toString(),
           style: const TextStyle(
             color: ColorPalette.pText,
           ),

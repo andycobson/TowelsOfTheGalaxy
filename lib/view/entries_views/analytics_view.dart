@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/growth_metric_model.dart';
 import 'package:baby_tracks/model/sleep_metric_model.dart';
@@ -92,8 +94,9 @@ class _AnalyticsViewState extends State<AnalyticsView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              SearchRoute(startDate: dateA, endDate: dateB)),
+                          builder: (context) => SearchRoute(
+                              startDate: dateA,
+                              endDate: dateB.add(const Duration(days: 1)))),
                     );
                   },
                 ),
@@ -110,11 +113,12 @@ class SearchRoute extends StatefulWidget {
   DateTime start_Date =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime end_Date =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+          .add(const Duration(days: 1));
 
   int AmtofDays = 0;
 
-  SearchRoute({required startDate, required endDate}) {
+  SearchRoute({super.key, required startDate, required endDate}) {
     start_Date = startDate;
     end_Date = endDate;
     AmtofDays = ((end_Date.difference(start_Date)).inDays) + 1;
@@ -340,7 +344,6 @@ class _SearchRouteState extends State<SearchRoute> {
   Future calculateTemperatureAnalystics() async {
     List<Pair> temperatureMetrics = await _service.timeQuery(
         widget.start_Date, widget.end_Date, "Temperature", "$userId#$babyName");
-
     numOfTempEntrys = temperatureMetrics.length;
     for (var i = 0; i < numOfTempEntrys; i++) {
       Map<String, dynamic> element =
@@ -369,13 +372,13 @@ class _SearchRouteState extends State<SearchRoute> {
   }
 
   Future calculateAnalytics() async {
+    await calculateThrowUpAnalytics();
     await calculateDiaperAnalytics();
     await calculateFoodAnalytics();
     await calculateGrowthAnalytics();
     await calculateMedicineAnalytics();
     await calculateSleepAnalytics();
     await calculateTemperatureAnalystics();
-    await calculateThrowUpAnalytics();
     await calculateVaccineAnalytics();
   }
 

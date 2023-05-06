@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:baby_tracks/component/date_timepicker.dart';
+import 'package:baby_tracks/component/notes_input.dart';
 import 'package:baby_tracks/component/text_divider.dart';
 import 'package:baby_tracks/model/sleep_metric_model.dart';
 import 'package:baby_tracks/model/persistent_user.dart';
 import 'package:baby_tracks/service/database.dart';
+import 'package:baby_tracks/wrapperClasses/datetime_wrap.dart';
 import 'package:flutter/material.dart';
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:optional/optional.dart';
@@ -24,11 +27,13 @@ class SleepView extends StatefulWidget {
 class _SleepViewState extends State<SleepView> {
   String id = "";
   int isUpdate = 0;
-  TimeOfDay time = TimeOfDay.now();
   TimeOfDay startTime = TimeOfDay.now();
+  DateTime startDate = DateTime.now();
+  late DateTimeWrapper startTimeWrapper;
   TimeOfDay endTime = TimeOfDay.now();
-  DateTime date =
+  DateTime endDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  late DateTimeWrapper endTimeWrapper;
 
   String note = "";
   String babyId = "";
@@ -53,11 +58,16 @@ class _SleepViewState extends State<SleepView> {
       SleepMetricModel modelToUpdate = idModelPair.right;
       Map<String, dynamic> modelJson = modelToUpdate.toJson();
       startTime = TimeOfDay.fromDateTime(modelJson['startTime']);
+      startDate = modelJson['startTime'];
       endTime = TimeOfDay.fromDateTime(modelJson['endTime']);
+      endDate = modelJson['endTime'];
       _note.text = modelJson['notes'];
       id = idModelPair.left;
       isUpdate = 1;
     }
+
+    startTimeWrapper = DateTimeWrapper(startDate, startTime);
+    endTimeWrapper = DateTimeWrapper(endDate, endTime);
 
     super.initState();
   }
@@ -71,12 +81,19 @@ class _SleepViewState extends State<SleepView> {
 
   Future createInstance() async {
     note = _note.text;
-    DateTime when =
-        DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    DateTime when = DateTime.now();
     DateTime start = DateTime(
-        date.year, date.month, date.day, startTime.hour, startTime.minute);
-    DateTime end =
-        DateTime(date.year, date.month, date.day, endTime.hour, endTime.minute);
+        startTimeWrapper.dateValue.year,
+        startTimeWrapper.dateValue.month,
+        startTimeWrapper.dateValue.day,
+        startTimeWrapper.timeValue.hour,
+        startTimeWrapper.timeValue.minute);
+    DateTime end = DateTime(
+        endTimeWrapper.dateValue.year,
+        endTimeWrapper.dateValue.month,
+        endTimeWrapper.dateValue.day,
+        endTimeWrapper.timeValue.hour,
+        endTimeWrapper.timeValue.minute);
     Duration durationTime = end.difference(start);
     String duration = ((durationTime.inMinutes) / 60).toString();
     SleepMetricModel model = SleepMetricModel(
@@ -121,19 +138,7 @@ class _SleepViewState extends State<SleepView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
-                    child: Text(startTime.format(context)),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: startTime);
-
-                      if (newTime == null) return;
-
-                      setState(() {
-                        startTime = newTime;
-                      });
-                    },
-                  ),
+                  DateTimePicker(dateTime: startTimeWrapper),
                 ],
               ),
               Row(
@@ -146,41 +151,12 @@ class _SleepViewState extends State<SleepView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
-                    child: Text(endTime.format(context)),
-                    onPressed: () async {
-                      TimeOfDay? newTime = await showTimePicker(
-                          context: context, initialTime: endTime);
-
-                      if (newTime == null) return;
-
-                      setState(() {
-                        endTime = newTime;
-                      });
-                    },
-                  ),
+                  DateTimePicker(dateTime: endTimeWrapper),
                 ],
               ),
               const TextDivider(text: 'Notes'),
-              SizedBox(
-                height: 100,
-                child: Scrollbar(
-                  controller: _noteScroller,
-                  child: TextField(
-                    style: const TextStyle(color: Colors.white),
-                    scrollController: _noteScroller,
-                    autofocus: false,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: _note,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Add notes',
-                      contentPadding: EdgeInsets.all(8),
-                    ),
-                  ),
-                ),
-              ),
+              NotesInput(
+                  scrollController: _noteScroller, editingController: _note),
               SizedBox(
                 height: 50,
                 width: 425,

@@ -31,7 +31,7 @@ class SleepMetricModel extends SleepMetric implements MetricInterface {
       timeCreated: (json['timeCreated'] as Timestamp).toDate(),
       startTime: (json['startTime'] as Timestamp).toDate(),
       endTime: (json['endTime'] as Timestamp).toDate(),
-      duration: (json['Duration'] ?? "").toString(),
+      duration: (json['duration'] ?? 0).toString(),
       notes: json['notes'],
     );
   }
@@ -82,7 +82,7 @@ class SleepMetricModel extends SleepMetric implements MetricInterface {
         const TextDivider(text: 'Duration'),
         Center(
             child: Text(
-          "$duration Hours",
+          "${double.parse(duration).floor()} Hours ${((double.parse(duration) - double.parse(duration).floor()) * 60).toInt()} Min",
           style: const TextStyle(
             color: ColorPalette.pText,
           ),
