@@ -195,5 +195,30 @@ class DatabaseService {
 
     preferences.setString(
         userId, json.encode(PersistentUser.instance.toJson()));
+
+    var user = await userCollection.doc(userId).get();
+    bool userExist = user.exists;
+    if (userExist) {
+      await userCollection.doc(userId).update(PersistentUser.instance.toJson());
+    } else {
+      await userCollection.doc(userId).set(PersistentUser.instance.toJson());
+    }
+  }
+
+  Future<String> getUserState(String userId) async {
+    var user = await userCollection.doc(userId).get();
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    bool userExist = user.exists;
+    if (userExist) {
+      Map<String, dynamic> userData = user.data() as Map<String, dynamic>;
+      PersistentUser(
+          userData['currentBabyName'], userId, userData['userBabyNames']);
+      preferences.setString(
+          userId, json.encode(PersistentUser.instance.toJson()));
+      return "usr";
+    }
+
+    return "nan";
   }
 }

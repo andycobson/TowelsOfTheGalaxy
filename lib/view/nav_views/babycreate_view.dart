@@ -106,6 +106,7 @@ class _BabyCreateViewState extends State<BabyCreateView> {
     PersistentUser.instance.currentBabyName = babyName;
     PersistentUser.instance.userBabyNames = babyNames;
     PersistentUser.instance.userId = userId;
+    _service.updateUserState();
 
     final userJson = json.encode(PersistentUser.instance.toJson());
     preferences.setString(userId, userJson);

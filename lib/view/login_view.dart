@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:baby_tracks/constants/palette.dart';
 import 'package:baby_tracks/constants/routes.dart';
+import 'package:baby_tracks/service/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,11 +20,13 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   String messageText = "";
+  late DatabaseService _service;
 
   @override
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
+    _service = DatabaseService();
     super.initState();
   }
 
@@ -192,6 +195,11 @@ class _LoginViewState extends State<LoginView> {
 
                         if (userState == null) {
                           exceptionMessage = "something went wrong";
+                          String someState =
+                              await _service.getUserState(userId);
+                          if (someState == "nan") {
+                            print("something went really wrong");
+                          }
                         } else {
                           Map<String, dynamic> jsonInfo =
                               json.decode(userState);
